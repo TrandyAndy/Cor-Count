@@ -1,12 +1,11 @@
 # Corona-Ampel
 
-Ein System zum Zählen von Personenfluss durch Türen. Insbensondere um die Corona-Beschränkungen erfüllen zu können.   
+Ein System zum Zählen von Personenfluss durch Türen. Insbensondere um die Corona-Beschränkungen erfüllen zu können. Als Steuerung wird ein ESP32 der Firma Espressif eingesetzt.
 
 ## Getting Started
 
 ### Verwendete Bibliotheken
-* **Arduino.h** 
-* **WiFi.h** - [Link](https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFi)
+* **Arduino core for the ESP32** - [Link](https://github.com/espressif/arduino-esp32)
 * **ESPAsyncWebServer.h** - [Link](https://github.com/me-no-dev/ESPAsyncWebServer?utm_source=platformio&utm_medium=piohome)
 * **ArduinoJson.h** - [Link](https://github.com/bblanchon/ArduinoJson)
 
