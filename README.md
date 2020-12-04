@@ -2,6 +2,14 @@
 
 Ein System zum Zählen von Personenfluss durch Türen. Insbensondere um die Corona-Beschränkungen erfüllen zu können.   
 
+## Getting Started
+
+### Verwendete Bibliotheken
+* **Arduino.h** 
+* **WiFi.h** - [Link](https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFi)
+* **ESPAsyncWebServer.h** - [Link](https://github.com/me-no-dev/ESPAsyncWebServer?utm_source=platformio&utm_medium=piohome)
+* **ArduinoJson.h** - [Link](https://github.com/bblanchon/ArduinoJson)
+
 ## Versionen
 
 0.1 &nbsp;&nbsp;&nbsp;&nbsp;Erste Version.
@@ -16,3 +24,5 @@ Ein System zum Zählen von Personenfluss durch Türen. Insbensondere um die Coro
 * **Tim B.** - 
 
 See also the list of [contributors](https://github.com/TrandyAndy/Cor-Count/graphs/contributors) who participated in this project.
+
+
