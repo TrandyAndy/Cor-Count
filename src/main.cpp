@@ -5,7 +5,8 @@
 #include "Arduino.h"
 
 
-void setup() {
+void setup()
+{
 
   Serial.begin(115200);
   Serial.println("Setup Abgeschlossen !");
@@ -13,7 +14,8 @@ void setup() {
 }
 
 
-void loop() { //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
+void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
+{  
   Serial.println("Hallo Team");
   delay(1000);
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
