@@ -2,7 +2,7 @@
 Allgemeine Funktionen 
 Autor: Andy
 */
-
+#pragma once
 #include <EEPROM.h>     //Speichern des Zaehlers
 
 void print_wakeup_reason(){
