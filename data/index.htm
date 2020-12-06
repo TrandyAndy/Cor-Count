@@ -5,7 +5,7 @@
             
             <title>Corona-Ampel</title>
             <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-            <style >
+            <style>
                 
                 *{
                     padding: 0;
@@ -29,30 +29,39 @@
                 {
                     font-size: 3vmin;
                 }
+                #wrapper_anzeige
+                {
+                    height: 100%;
+                }
+                #wrapper_einstellungen
+                {
+                    height: 100%;
+                }
                 
             </style>
                 <script src="script.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
            
         </head>
         <body>
-            <h1>Stop and Govid</h1>
-            ✋⛔️❌🚷
-            <br>
-            ✅👍
-            <br>
-            <p>8 / 20 Personen anwesend.</p>
-           
-            <p id="p1">Bitte halten Sie den Sicherheitsabstand von mind. 1,5 m ein. Vielen Dank!</p>
-            <h1>Einstellungen</h1>
-            <h2>Einstellungen</h2>
-            <form oninput="x.value=parseInt(volume.value)">
-                <input type="range" id="volume" name="volume" min="0" max="100" step="1">
-                <label for="volume">maximale Personenzahl</label>
-                <div>
-                    
-                    <output name="x" for="volume">80</output>
-                </div>
-            </form>
-            
+            <div id="wrapper_anzeige">
+                <h1>Stop and Govid</h1>
+                ✋⛔️❌🚷
+                <br>
+                ✅👍
+                <br>
+                <p>8 / 20 Personen anwesend.</p>
+                <p id="p1">Bitte halten Sie den Sicherheitsabstand von mind. 1,5 m ein. Vielen Dank!</p>
+            </div>
+            <div id="wrapper_einstellungen">
+                <h1>Einstellungen</h1>
+                <h2>Einstellungen</h2>
+                <form oninput="x.value=parseInt(volume.value)">
+                    <input type="range" id="volume" name="volume" min="0" max="100" step="1">
+                    <label for="volume">maximale Personenzahl</label>
+                    <div>   
+                        <output name="x" for="volume">80</output>
+                    </div>
+                </form>
+            </div>
         </body>
     </html>
