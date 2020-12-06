@@ -35,4 +35,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   delay(800);
   //ESP_schlaf.resetSleepTime();
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep
+
+  Serial.println("Hallo Corona Team");
+
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
