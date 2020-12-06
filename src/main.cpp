@@ -32,7 +32,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
 {  
   Serial.println("Hallo Team Cor-Count");
   Serial.println(menschenImRaum++);
-  delay(500);
+  delay(800);
   //ESP_schlaf.resetSleepTime();
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende

@@ -23,5 +23,8 @@ int menschenImRaum =0;
 
 
 //Defines:
-#define Schalfenszeit 2000              //Wartezeit für DeepSleep in ms
+#define Schalfenszeit 4000              //Wartezeit für DeepSleep in ms
 #define AdresseMesnchenZaehler  0       //Speicherort ! Nur 0 geht???
+#define PersonErkannt 1
+#define NiemandDa 0
+#define ImProzess 2
