@@ -3,8 +3,8 @@ Sensor Basisklasse
 Definiert die Grundfunktionen eines Sensors ToF oder Kamera
 Autor: Andy
 */
-
-#include <Global.h>
+#pragma once
+//#include <Global.h>
 
 class CSensor{
     public:
@@ -24,4 +24,4 @@ class CSensor{
     //Variablen
     double interneBeispielVar=0;   
 
-}
+};

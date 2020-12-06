@@ -8,8 +8,10 @@ Version: 0.1  Datum: 05.12.20
 */
 #include "Global.h"   //Global wird überall includiert.
 #include "CorCount.h"
+#include "CSensor.h"
 
-CSchalfen ESP_schlaf;
+CSchalfen ESP_schlaf; //Oder in Global?
+CSensor ToF_innen(24);
 
 void setup()
 {
