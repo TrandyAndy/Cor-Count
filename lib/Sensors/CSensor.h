@@ -19,7 +19,7 @@ class CSensor{
 
     private:
     //Interne Main Funktion
-    int SensorMain();        
+    int SensorMain();      
 
     //Variablen
     double interneBeispielVar=0;   

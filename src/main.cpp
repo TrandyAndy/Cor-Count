@@ -40,4 +40,6 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
 
   Serial.println("Hallo Corona Team");
 
+  Serial.println("Hallo Corona Team TEAM TEAM");
+
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
