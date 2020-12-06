@@ -48,10 +48,60 @@ class CSchalfen{
     long unsigned leerlaufZeit=0;
     long unsigned altleerlaufZeit=0;
     void datensichern(int *Data1){  //private damit das niemand zu schnell macht.
-        EEPROM.write(AdresseMesnchenZaehler,*Data1);
+        EEPROM.write(AdresseMesnchenZaehler,*Data1); //Läuft bei 255 Über
         EEPROM.commit();
         //Serial.println("Daten gesichert");
     };
 };
 
+class CSignalLicht{
+    public:
+    CSignalLicht(int LED_PIN){
+        init(LED_PIN);
+    };
+    CSignalLicht(int LED_PIN, int I2C_Adresse){
+        init(LED_PIN);
+        //Lichtsensor suchen
+            LDR_verbunden=true;
+    };
+    void setLicht(bool Zustand)     //Licht An oder Aus
+    { 
+        if(!Zustand){
+            ledcWrite(0, 0);
+        }
+        else{
+            int duty=LDR_pruefen();
+            duty=255*duty/100;
+            ledcWrite(channel, duty);
+        }
 
+    };
+    int LDR_pruefen(){
+        Serial.println(channel); //Test
+        Serial.println("T5");
+        if(LDR_verbunden==false)
+            return Grundhelligkeit;
+        //Sensorabfrage
+        //Mitteln?
+        return Grundhelligkeit-helligkeit*HelligkeitGain;
+    };
+    private:
+    void init(int LED_PIN){
+        channel=CSignalZaehler++;                 //Channel zuweisen + Instanz hochzählen
+        Serial.println("T1");
+        Serial.println(channel);
+        ledcSetup(channel, 5000, aufloesung);     //Channel,Frequenz,Auflösung
+        Serial.println("T2");
+        ledcAttachPin(LED_PIN,channel);           //Nur im Setup???
+        Serial.println("T3");
+        //ledcWrite(channel, 0); Rastet aus                   //Channel,Duty  Erstmal Aus
+        Serial.println("T4");
+    };
+    bool LDR_verbunden=false;
+    int helligkeit=1;
+    const int aufloesung=13;
+    int channel=0;  //0-15
+    //int CSignalZaehler=5;
+    static int CSignalZaehler;    //public?                  //Instanzen Zählen Nur Deklatration möglich!
+};
+int CSignalLicht::CSignalZaehler=0;

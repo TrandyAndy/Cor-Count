@@ -3,8 +3,8 @@ CorCount Projekt der HSKA
 1. Keinen nicht Compilierbaren Code hochladen!!!
 2. Fremden Code nicht ungefragt ändern!
 3. Header files besonders gut Kommentieren!
-4. 
-
+4. Kein Delay() nutzen. 
+5. 
 
 
 
