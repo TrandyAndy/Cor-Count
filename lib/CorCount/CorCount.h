@@ -1,4 +1,9 @@
-//#include "Global.h"
+/*
+Allgemeine Funktionen 
+Autor: Andy
+*/
+
+#include <EEPROM.h>     //Speichern des Zaehlers
 
 void print_wakeup_reason(){
   esp_sleep_wakeup_cause_t wakeup_reason;
@@ -32,11 +37,21 @@ class CSchalfen{
         Serial.println("ESP muede, ESP schlafen");
         esp_sleep_enable_ext0_wakeup(gpio_num_t (WakeupPin),1); //1 = High, 0 = Low
         esp_sleep_enable_timer_wakeup(6000000);
-        //Daten Sichern
-        esp_deep_sleep_start();
+        datensichern(&menschenImRaum);//Daten Sichern
+        esp_deep_sleep_start(); 
         Serial.println("This will never be printed");
+    };
+    int getData(){
+        return EEPROM.read(AdresseMesnchenZaehler);
     };
     private:
     long unsigned leerlaufZeit=0;
     long unsigned altleerlaufZeit=0;
+    void datensichern(int *Data1){  //private damit das niemand zu schnell macht.
+        EEPROM.write(AdresseMesnchenZaehler,*Data1);
+        EEPROM.commit();
+        //Serial.println("Daten gesichert");
+    };
 };
+
+

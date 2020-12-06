@@ -22,12 +22,16 @@ void setup()
   Serial.println("Setup Abgeschlossen. Neustart");
   }
   aufwachZaehler++;
+  //Daten Rücklesen
+  EEPROM.begin(1); //Warum 1? Andy
+  menschenImRaum=ESP_schlaf.getData();
 }
 
 
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
 {  
   Serial.println("Hallo Team Cor-Count");
+  Serial.println(menschenImRaum++);
   delay(500);
   //ESP_schlaf.resetSleepTime();
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep
