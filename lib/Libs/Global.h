@@ -12,6 +12,8 @@ Autor: Andy
 
 //Pin Map:
 #define WakeupPin 33    //RTC Fähiger Pin 
+#define LED_Rot 5       //GPIO
+#define LED_Gruen 6
 
 //Global Veriablen:
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
@@ -28,3 +30,6 @@ int menschenImRaum =0;
 #define PersonErkannt 1
 #define NiemandDa 0
 #define ImProzess 2
+#define LichtAn true
+#define Grundhelligkeit 50               //Grundwert für die LEDs in %
+#define HelligkeitGain 10
