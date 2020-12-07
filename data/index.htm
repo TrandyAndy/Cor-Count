@@ -136,12 +136,21 @@
                     justify-content: space-evenly;
                     border-bottom: 1px solid #3c3c3c;
                 }
+                #wrapper_einstellungen_personenzahl_anzeige{
+                    display: flex;
+                    flex-direction: row;
+                }
                 #einstellungen_personenzahl_title{
                     
-                    width: 100%;
+                    width: 60%;
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    justify-content: flex-end;
+                }
+                #einstellungen_personenzahl_label{
+                    
+                    width: 10%;
+                    display: flex;
+                    justify-content: flex-end;
                 }
                 /*
                 #einstellungen_personenzahl_slider{
@@ -202,17 +211,18 @@
                     <h1>Einstellungen</h1>
                 </div>
                 <div id="einstellungen_personenzahl">
-                    <div id="einstellungen_personenzahl_title">
-                        Maximale Personenzahl:
-                    </div>
-                    
-                    <form oninput="x.value=parseInt(personenzahl.value)">
-                        <div id="einstellungen_personenzahl_slider">
-                            <input type="range" id="personenzahl" name="personenzahl" min="0" max="1000" step="1">
-                            <!--label for="personenzahl">maximale Personenzahl</label-->
+                    <div id="wrapper_einstellungen_personenzahl_anzeige">
+                        <div id="einstellungen_personenzahl_title">
+                            Maximale Personenzahl:
                         </div>
                         <div id="einstellungen_personenzahl_label">   
-                            <output name="x" for="personenzahl">80</output>
+                                333
+                        </div>
+                    </div>
+                    <form >
+                        <div id="einstellungen_personenzahl_slider">
+                            <input oninput="updateSlider(personenzahl.value)" onchange="updateSliderRealeased(personenzahl.value)" type="range" id="personenzahl" name="personenzahl" min="0" max="1000" step="1">
+                            <!--label for="personenzahl">maximale Personenzahl</label-->
                         </div>
                     </form>
                 </div>
@@ -243,7 +253,7 @@
                 <h1>Stop and Govid</h1>
                 ✋⛔️❌🚷
                 <br>
-                ✅👍
+                ✅👍🚶‍♀️🚶‍♂️🏃‍♀️🏃‍♂️
                 <br>
                 <p>8 / 20 Personen anwesend.</p>
                 <p id="p1">Bitte halten Sie den Sicherheitsabstand von mind. 1,5 m ein. Vielen Dank!</p>

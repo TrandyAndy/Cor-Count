@@ -1,6 +1,9 @@
-var maxPeresonenzahl
-var sliderPersonenzahl = document.getElementById("personenzahl");
 
+window.onload = function(){
+    // Slider Laber aktualisieren
+    var wert = document.getElementById("personenzahl").value;
+    document.getElementById("einstellungen_personenzahl_label").innerHTML = wert;
+}
 
 function scrollToEinstellungen(){
     document.getElementById('wrapper_einstellungen').scrollIntoView();
@@ -8,19 +11,33 @@ function scrollToEinstellungen(){
 
 function button_reset_func(){
     alert("Zähler wurde erfolgreich resettet.");
-    var defaultVal = sliderPersonenzahl.defaultValue;
-    var currentVal = sliderPersonenzahl.value;
-    sliderPersonenzahl.value = 50;
-    console.log(defaultVal);
-    console.log(currentVal);
 }
 
+function updateSlider(wert){
+    console.log(wert);
+    document.getElementById("einstellungen_personenzahl_label").innerHTML = wert;
+}
 
+function updateSliderRealeased(wert){
+    console.log(wert);
+}
 function scrollToTop() {
     //window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     document.getElementById('wrapper_anzeige').scrollIntoView();
+    go();
 }
 
+function go(){
+    document.getElementById("anzeige_nachricht").innerHTML = "Bitte eintreten und Abstand halten"
+    document.getElementById("anzeige_icon").innerHTML = "🏃‍♀️↔️🏃‍♂️";
+    document.getElementById("anzeige_hinweis").innerHTML = "32 / 120 Personen"
+}
+
+function stop(){
+    document.getElementById("anzeige_nachricht").innerHTML = "Stopp! Bitte warten!"
+    document.getElementById("anzeige_icon").innerHTML = "✋";
+    document.getElementById("anzeige_hinweis").innerHTML = "120 / 120 Personen"
+}
 
 
 /*
