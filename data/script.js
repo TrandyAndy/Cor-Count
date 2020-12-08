@@ -20,6 +20,8 @@ function updateSlider(wert){
 
 function updateSliderRealeased(wert){
     console.log(wert);
+    //var d = new Date();
+    //console.log(d);
 }
 function scrollToTop() {
     //window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
