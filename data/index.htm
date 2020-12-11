@@ -12,46 +12,231 @@
                     margin: 0;
                     text-align: center;
                 }
-                html, body
-                {
+                html, body{
 				    height: 100%;
                     font-family: helvetica;
                     letter-spacing: 2px;
                     -ms-hyphens: auto;
                     -webkit-hyphens: auto;
                     hyphens: auto;
+                    scroll-behavior: smooth;
                 }
-                h1
-                {
+                h1{
                     font-size: 4.5vmin;
                 }
-                h2
-                {
+                h2{
                     font-size: 3vmin;
                 }
-                #wrapper_anzeige
-                {
+                .button{
+                    width: 90%;
+                    height: 90%;
+                    letter-spacing: 2px;
+                    border: none;
+                    color: white;
+                    font-size: 6vmin;
+                    cursor: pointer;
+                    transition: ease-in-out 0.2s;
+                    background-color: #aaa;
+                }
+                .button:hover{
+                    background-color: #ccc;
+                    letter-spacing: 3px;
+                    
+                }
+                .button:active{
+                    
+                    transition: ease-in-out 0.1s;
+                    background-color: #eee;
+                }
+
+                #wrapper_anzeige{
                     height: 100%;
                 }
-                #wrapper_einstellungen
-                {
+                #anzeige_icon{
+                    height: 40%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 30vh;
+                }
+                #anzeige_nachricht{
+                    height: 35%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 10vh;
+                }
+                #anzeige_hinweis{
+                    height: 20%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 9vh;
+                }
+                #anzeige_zu_einstellungen{
+                    height: 5%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 2vh;
+                    transition: ease-in-out 0.2s;
+                    cursor: pointer;
+                }
+                #anzeige_zu_einstellungen:hover{
+                    letter-spacing: 3px;
+                    
+                }
+
+                #wrapper_einstellungen{
                     height: 100%;
+                    
                 }
                 
+                #einstellungen_status{
+                    height: 15%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-top: 1px solid #3c3c3c;
+                    border-bottom: 1px solid #3c3c3c;
+                }
+                #einstellungen_status_anzeige{
+                    height: 15%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-bottom: 1px solid #3c3c3c;
+                }
+                #einstellungen_status_wlan{
+                    height: 100%;
+                    width: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-right: 1px solid #3c3c3c;
+                }
+                #einstellungen_status_batterie{
+                    width: 50%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                #einstellungen_einstellungen{
+                    height: 15%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-bottom: 1px solid #3c3c3c;
+                }
+                #einstellungen_personenzahl{
+                    height: 24%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    border-bottom: 1px solid #3c3c3c;
+                }
+                #wrapper_einstellungen_personenzahl_anzeige{
+                    display: flex;
+                    flex-direction: row;
+                }
+                #einstellungen_personenzahl_title{
+                    
+                    width: 60%;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                #einstellungen_personenzahl_label{
+                    
+                    width: 10%;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                /*
+                #einstellungen_personenzahl_slider{
+                    
+                    
+                }
+                */
+                #personenzahl{
+                    width: 90%;
+                }
+                #einstellungen_reset{
+                    height: 15%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-bottom: 1px solid #3c3c3c;
+                }
+
+                #einstellungen_zu_anzeige{
+                    height: 15%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
             </style>
                 <script src="script.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
            
         </head>
         <body>
             <div id="wrapper_anzeige">
-                <h1>Stop and Govid</h1>
-                ✋⛔️❌🚷
-                <br>
-                ✅👍
-                <br>
-                <p>8 / 20 Personen anwesend.</p>
-                <p id="p1">Bitte halten Sie den Sicherheitsabstand von mind. 1,5 m ein. Vielen Dank!</p>
+                <div id="anzeige_nachricht">
+                    Stopp! Bitte warten!
+                </div>
+                <div id="anzeige_icon">
+                    ✋
+                </div>
+                <div id="anzeige_hinweis">
+                    120 / 120 Personen 
+                </div>
+                <div id="anzeige_zu_einstellungen" onclick="scrollToEinstellungen()">
+                    Einstellungen
+                </div>
             </div>
+
+            <div id="wrapper_einstellungen">
+                <div id="einstellungen_status">
+                    <h1>Status</h1> 
+                </div>
+                <div id="einstellungen_status_anzeige">
+                    <div id="einstellungen_status_wlan">
+                        WIFI-Status: Verbunden
+                    </div>
+                    <div id="einstellungen_status_batterie">
+                        Akkustand: 70 %
+                    </div>
+                </div>
+                <div id="einstellungen_einstellungen">
+                    <h1>Einstellungen</h1>
+                </div>
+                <div id="einstellungen_personenzahl">
+                    <div id="wrapper_einstellungen_personenzahl_anzeige">
+                        <div id="einstellungen_personenzahl_title">
+                            Maximale Personenzahl:
+                        </div>
+                        <div id="einstellungen_personenzahl_label">   
+                                333
+                        </div>
+                    </div>
+                    <form >
+                        <div id="einstellungen_personenzahl_slider">
+                            <input oninput="updateSlider(personenzahl.value)" onchange="updateSliderRealeased(personenzahl.value)" type="range" id="personenzahl" name="personenzahl" min="0" max="1000" step="1">
+                            <!--label for="personenzahl">maximale Personenzahl</label-->
+                        </div>
+                    </form>
+                </div>
+                <div id="einstellungen_reset">
+                    <button id="button_reset" class="button" type="button" onclick="button_reset_func()">Zähler resetten</button>
+                </div>
+                <div id="einstellungen_zu_anzeige">
+                    <button id="button_to_anzeige" class="button" type="button" onclick="scrollToTop()">Zurück zur Anzeige</button>
+                </div>
+            </div>
+            <div style="height: 100%;">
+            
+            </div>
+            
             <div id="wrapper_einstellungen">
                 <h1>Einstellungen</h1>
                 <h2>Einstellungen</h2>
@@ -62,6 +247,16 @@
                         <output name="x" for="volume">80</output>
                     </div>
                 </form>
+            </div>
+
+            <div id="wrapper_anzeige">
+                <h1>Stop and Govid</h1>
+                ✋⛔️❌🚷
+                <br>
+                ✅👍🚶‍♀️🚶‍♂️🏃‍♀️🏃‍♂️
+                <br>
+                <p>8 / 20 Personen anwesend.</p>
+                <p id="p1">Bitte halten Sie den Sicherheitsabstand von mind. 1,5 m ein. Vielen Dank!</p>
             </div>
         </body>
     </html>
