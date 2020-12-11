@@ -12,8 +12,8 @@ Version: 0.1  Datum: 05.12.20
 
 CSchalfen ESP_schlaf; //Oder in Global?
 CSensor ToF_innen(24);
-//CSignalLicht L(5);
-//CSignalLicht R(6);
+CSignalLicht L(5);
+CSignalLicht R(18);
 
 void setup()
 {
@@ -37,11 +37,12 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   Serial.println("Hallo Team Cor-Count");
   Serial.println(menschenImRaum++);
   delay(800);
-  // L.LDR_pruefen();
-  // CSignalLicht R(6);
-  // R.LDR_pruefen();
-  Serial.println("T6");
-  //ESP_schlaf.resetSleepTime();
+  L.LDR_pruefen();
+  R.setLicht(true);
+  delay(100);
+  R.setLicht(false);
+  R.LDR_pruefen();
+  ESP_schlaf.resetSleepTime();
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep
 
   Serial.println("Hallo Corona Team");

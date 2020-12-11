@@ -62,12 +62,15 @@ class CSignalLicht{
     CSignalLicht(int LED_PIN, int I2C_Adresse){
         init(LED_PIN);
         //Lichtsensor suchen
+        //if Wire.beginn...
+        //if (Sensor da)
             LDR_verbunden=true;
+        //else break??
     };
     void setLicht(bool Zustand)     //Licht An oder Aus
     { 
         if(!Zustand){
-            ledcWrite(0, 0);
+            ledcWrite(channel, 0);
         }
         else{
             int duty=LDR_pruefen();
@@ -76,14 +79,14 @@ class CSignalLicht{
         }
 
     };
-    int LDR_pruefen(){
+    int LDR_pruefen(){              //Oder Set_LDR Methode
         Serial.println(channel); //Test
         Serial.println("T5");
         if(LDR_verbunden==false)
             return Grundhelligkeit;
         //Sensorabfrage
         //Mitteln?
-        return Grundhelligkeit-helligkeit*HelligkeitGain;
+        return Grundhelligkeit-umgebungsHelligkeit*HelligkeitGain;
     };
     private:
     void init(int LED_PIN){
@@ -92,13 +95,13 @@ class CSignalLicht{
         Serial.println(channel);
         ledcSetup(channel, 5000, aufloesung);     //Channel,Frequenz,Auflösung
         Serial.println("T2");
-        ledcAttachPin(LED_PIN,channel);           //Nur im Setup???
+        ledcAttachPin(LED_PIN,channel);           //Nur im Setup??? Nein Achtung nicht jeder Pin Möglich =>GuruPanik
         Serial.println("T3");
-        //ledcWrite(channel, 0); Rastet aus                   //Channel,Duty  Erstmal Aus
+        ledcWrite(channel, 0);                    //Channel,Duty  Erstmal Aus
         Serial.println("T4");
     };
     bool LDR_verbunden=false;
-    int helligkeit=1;
+    int umgebungsHelligkeit=1;
     const int aufloesung=13;
     int channel=0;  //0-15
     //int CSignalZaehler=5;
