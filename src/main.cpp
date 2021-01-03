@@ -6,9 +6,18 @@ Als Steuerung wird ein ESP32 der Firma Espressif eingesetzt.
 HIT Projekt WS20/21
 Version: 0.1  Datum: 05.12.20
 */
-#include "Global.h"   //Global wird überall includiert.
+#include "Global.h"   //Global wird überall inkludiert.
 #include "CorCount.h"
 #include "CSensor.h"
+#include "CServer.h"  // Webserver auf dem ESP32
+
+
+CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    // Webserver erstellen, mit SSID, Passwort und domain 
+DataSend mySendData;            // Strukt mit den zu sendenden Daten
+DataReceive myReceivedData;     // Strukt mit den zu empfangenen Daten
+bool messageFlag = false;       // Nachrichtenflag für Webseiten Daten
+
+
 
 
 CSchlafen ESP_schlaf(1); //Oder in Global?
@@ -20,6 +29,10 @@ CSignalLicht R(18);
 void setup()
 {
   Serial.begin(115200);
+  // Webserver starten
+  myServer.setup();             // Server wird gestartet
+  
+
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
   print_wakeup_reason();
