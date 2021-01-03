@@ -1,0 +1,14 @@
+#include <Arduino.h>
+#include <CServer.h>
+
+CServer myServer((char*)"Cor-Count",(char*)"GibsonLesPaul");
+
+void setup()
+{
+    Serial.begin(115200);
+    myServer.setup();
+}
+void loop()
+{
+
+}
