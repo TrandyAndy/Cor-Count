@@ -1,0 +1,339 @@
+:root{
+    --red: #790c0c;
+    --green: #045316;
+}
+*{
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+html, body{
+    height: 100%;
+    font-family: helvetica;
+    letter-spacing: 2px;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    scroll-behavior: smooth;
+}
+h1{
+    font-size: 4.5vmin;
+}
+h2{
+    font-size: 4vmin;
+}
+.normalText{
+    font-size: 3vmin;
+}
+.button{
+    width: 90%;
+    height: 90%;
+    letter-spacing: 2px;
+    border: none;
+    color: white;
+    font-size: 6vmin;
+    cursor: pointer;
+    transition: ease-in-out 0.2s;
+    background-color: #aaa;
+}
+.button:hover{
+    background-color: #ccc;
+    letter-spacing: 3px;
+    
+}
+.button:active{
+    
+    transition: ease-in-out 0.1s;
+    background-color: #eee;
+}
+
+#wrapper_anzeige{
+    height: 100%;
+    background-color: var(--red);
+    color: white;
+}
+#anzeige_icon{
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30vmin;
+}
+#anzeige_nachricht{
+    height: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10vmin;
+}
+#anzeige_hinweis{
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9vmin;
+}
+#anzeige_zu_einstellungen{
+    height: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2vh;
+    transition: ease-in-out 0.2s;
+    cursor: pointer;
+}
+#anzeige_zu_einstellungen:hover{
+    letter-spacing: 3px;
+    
+}
+
+#wrapper_einstellungen{
+    height: 100%; 
+}
+
+#einstellungen_status{
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*border-top: 1px solid #3c3c3c;*/
+    /*border-bottom: 1px solid #3c3c3c;*/
+}
+#einstellungen_status_anzeige{
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*border-bottom: 1px solid #3c3c3c;*/
+}
+#einstellungen_status_wlan{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-right: 1px solid #3c3c3c; */
+}
+#einstellungen_status_batterie{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.batteryContainer {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 5px;
+}
+.batteryOuter {
+    border-radius: 3px;
+    border: 1px solid #444;
+    padding: 1px;
+    width: 5vmin;
+    height: 2vmin;
+}
+.batteryBump {
+    border-radius: 2px;
+    background-color: #444;
+    margin: 2px;
+    width: 1px;
+    height: 3px;
+}
+#batteryLevel {
+    border-radius: 2px;
+    background-color: #328C46; /* voll: 328C46; leer: C75151 */
+    width: 100%;
+    height: 2vmin;
+    transition: ease-in-out 0.5s;
+}
+
+#einstellungen_einstellungen{
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-bottom: 1px solid #3c3c3c; */
+}
+
+#einstellungen_personenzahlMax{
+    height: 44%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* border-bottom: 1px solid #3c3c3c; */
+}
+#wrapper_einstellungen_personenzahlMax_anzeige{
+    display: flex;
+    flex-direction: row;
+    height: 3vh;
+    line-height: 5vh;
+}
+#einstellungen_personenzahlMax_form{
+    display: flex;
+    flex-direction: row;
+}
+
+#einstellungen_personenzahlMax_title{
+    
+    width: 60%;
+    display: flex;
+    justify-content: flex-end;
+    
+}
+#einstellungen_personenzahlMax_label{
+    
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+#einstellungen_personenzahlMax_min{
+    width: 10%;
+    height: 6vh;
+    line-height: 6vh;
+    font-size: 5vmin;
+    cursor: pointer;
+    transition: ease-in-out 0.1s;
+}
+#einstellungen_personenzahlMax_min:hover{
+    font-size: 6vmin;
+}
+#einstellungen_personenzahlMax_min:active{
+    font-size: 7vmin;
+}
+#einstellungen_personenzahlMax_max{
+    width: 10%;
+    height: 6vh;
+    line-height: 6vh;
+    font-size: 5vmin;
+    cursor: pointer;
+    transition: ease-in-out 0.1s;
+}
+#einstellungen_personenzahlMax_max:hover{
+    font-size: 6vmin;
+}
+#einstellungen_personenzahlMax_max:active{
+    font-size: 7vmin;
+}
+#einstellungen_personenzahlMax_slider{
+    width: 80%;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+#personenzahlMax{
+    width: 95%;
+    height: 6vh;
+    cursor: pointer;
+}
+
+
+
+
+#einstellungen_personenzahlAktuell{
+    height: 24%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* border-bottom: 1px solid #3c3c3c; */
+}
+#wrapper_einstellungen_personenzahlAktuell_anzeige{
+    display: flex;
+    flex-direction: row;
+    height: 3vh;
+    line-height: 5vh;
+}
+#einstellungen_personenzahlAktuell_form{
+    display: flex;
+    flex-direction: row;
+}
+
+#einstellungen_personenzahlAktuell_title{
+    
+    width: 60%;
+    display: flex;
+    justify-content: flex-end;
+}
+#einstellungen_personenzahlAktuell_label{
+    
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+#einstellungen_personenzahlAktuell_min{
+    width: 10%;
+    height: 6vh;
+    line-height: 6vh;
+    font-size: 5vmin;
+    cursor: pointer;
+    transition: ease-in-out 0.1s;
+}
+#einstellungen_personenzahlAktuell_min:hover{
+    font-size: 6vmin;
+}
+#einstellungen_personenzahlAktuell_min:active{
+    font-size: 7vmin;
+}
+#einstellungen_personenzahlAktuell_max{
+    width: 10%;
+    height: 6vh;
+    line-height: 6vh;
+    font-size: 5vmin;
+    cursor: pointer;
+    transition: ease-in-out 0.1s;
+}
+#einstellungen_personenzahlAktuell_max:hover{
+    font-size: 6vmin;
+}
+#einstellungen_personenzahlAktuell_max:active{
+    font-size: 7vmin;
+}
+#einstellungen_personenzahlAktuell_slider{
+    width: 80%;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+#personenzahlAktuell{
+    width: 95%;
+    height: 6vh;
+    cursor: pointer;
+}
+#energiesparmodus{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: ease-in-out 0.1s;
+}
+#energiesparmodus:hover{
+    letter-spacing: 3px;
+}
+#energiesparmodus_checkbox{
+    transform: scale(2);
+    margin-right: 3vmin;
+}
+
+#einstellungen_reset{
+    height: 13%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   /* border-bottom: 1px solid #3c3c3c; */
+}
+
+#einstellungen_zu_anzeige{
+    height: 13%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
