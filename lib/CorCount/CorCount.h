@@ -4,6 +4,7 @@ Autor: Andy
 */
 #pragma once
 #include <EEPROM.h>     //Speichern des Zaehlers
+#include <Preferences.h>
 
 void print_wakeup_reason(){
   esp_sleep_wakeup_cause_t wakeup_reason;
@@ -22,9 +23,19 @@ void print_wakeup_reason(){
 }
 
 
-class CSchalfen{
+class CSchlafen{
     public:
-    CSchalfen(void){};
+    CSchlafen(){
+        //int x=1+1;
+    };
+    CSchlafen(int x){
+        
+        //Serial.begin(115200);
+        //EEPROM.begin(1);
+        Serial.println("Ich war hier");
+        
+        P.begin("nvs",false);
+    };
     void resetSleepTime(){
         altleerlaufZeit=millis();
         leerlaufZeit=0;
@@ -37,7 +48,7 @@ class CSchalfen{
         Serial.println("ESP muede, ESP schlafen");
         esp_sleep_enable_ext0_wakeup(gpio_num_t (WakeupPin),1); //1 = High, 0 = Low
         esp_sleep_enable_timer_wakeup(6000000);
-        datensichern(&menschenImRaum);//Daten Sichern
+        datensichern(&menschenImRaum);//Daten sichern
         esp_deep_sleep_start(); 
         Serial.println("This will never be printed");
     };
@@ -47,9 +58,11 @@ class CSchalfen{
     private:
     long unsigned leerlaufZeit=0;
     long unsigned altleerlaufZeit=0;
+    Preferences P;
     void datensichern(int *Data1){  //private damit das niemand zu schnell macht.
         EEPROM.write(AdresseMesnchenZaehler,*Data1); //Läuft bei 255 Über
         EEPROM.commit();
+        P.putUChar("addr",65);
         //Serial.println("Daten gesichert");
     };
 };
