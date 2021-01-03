@@ -1,0 +1,77 @@
+#include <Arduino.h>
+#include <CServer.h>
+
+// Webseite unter (http://<domain>.local)
+CServer myServer((char*)"Cor-Count",(char*)"GibsonLesPaul", (char*)"cor-count");    // Webserver erstellen, mit SSID, Passwort und domain 
+DataSend mySendData;
+DataReceive myReceivedData;
+bool messageFlag = false;       // Nachrichtenflag für Webseiten Daten
+
+void setup()
+{
+    Serial.begin(115200);
+    myServer.setup();
+
+    sleep(5);
+    mySendData.akkustand = 4;
+    mySendData.personenzahlAktuell = 30 + 3;
+    mySendData.personenzahlMax = 50 - 3;
+    mySendData.energiesparmodus = 0;
+    mySendData.flagGetTime = false;
+    myServer.transmitData(mySendData);
+}
+
+void loop()
+{
+    for (int i = 0; i < 100; i++)
+    {
+        /*
+        mySendData.akkustand = i;
+        mySendData.personenzahlAktuell = 0 + i;
+        mySendData.personenzahlMax = 100 - i;
+        mySendData.energiesparmodus = (i % 2);
+        mySendData.flagGetTime = true;
+
+        myServer.transmitData(mySendData);
+        
+        delay(1000);
+        */
+        if(messageFlag)
+        {
+            messageFlag = false;
+            myServer.receiveData(myReceivedData);
+            Serial.print("Das Datum: ");
+            Serial.println(myReceivedData.dateTime);
+            Serial.print("Enegiesparmodus: ");
+            Serial.println(myReceivedData.energiesparmodus);
+            Serial.print("Personenzahl aktuell: ");
+            Serial.println(myReceivedData.personenzahlAktuell); 
+            Serial.print("Personenzahl maximal: ");
+            Serial.println(myReceivedData.personenzahlMax);
+            mySendData.akkustand = myReceivedData.personenzahlAktuell;
+            mySendData.personenzahlAktuell = myReceivedData.personenzahlAktuell;
+            mySendData.personenzahlMax = myReceivedData.personenzahlMax;
+            mySendData.energiesparmodus = myReceivedData.energiesparmodus;
+            mySendData.flagGetTime = false;
+            myServer.transmitData(mySendData);
+        }
+        if(i == 99)
+        {
+            mySendData.personenzahlAktuell = 42;
+            mySendData.flagGetTime = true;
+            myServer.transmitData(mySendData);
+        }
+        delay(100);
+    }
+    
+    //Serial.println("Hallo");
+    //delay(1000);
+    //sleep(100);
+}
+
+/*
+void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len)
+{
+    Serial.println("Hallo");
+}
+*/

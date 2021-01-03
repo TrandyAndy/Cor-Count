@@ -5,178 +5,8 @@
             
             <title>Corona-Ampel</title>
             <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-            <style>
-                
-                *{
-                    padding: 0;
-                    margin: 0;
-                    text-align: center;
-                }
-                html, body{
-				    height: 100%;
-                    font-family: helvetica;
-                    letter-spacing: 2px;
-                    -ms-hyphens: auto;
-                    -webkit-hyphens: auto;
-                    hyphens: auto;
-                    scroll-behavior: smooth;
-                }
-                h1{
-                    font-size: 4.5vmin;
-                }
-                h2{
-                    font-size: 3vmin;
-                }
-                .button{
-                    width: 90%;
-                    height: 90%;
-                    letter-spacing: 2px;
-                    border: none;
-                    color: white;
-                    font-size: 6vmin;
-                    cursor: pointer;
-                    transition: ease-in-out 0.2s;
-                    background-color: #aaa;
-                }
-                .button:hover{
-                    background-color: #ccc;
-                    letter-spacing: 3px;
-                    
-                }
-                .button:active{
-                    
-                    transition: ease-in-out 0.1s;
-                    background-color: #eee;
-                }
-
-                #wrapper_anzeige{
-                    height: 100%;
-                }
-                #anzeige_icon{
-                    height: 40%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 30vh;
-                }
-                #anzeige_nachricht{
-                    height: 35%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 10vh;
-                }
-                #anzeige_hinweis{
-                    height: 20%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 9vh;
-                }
-                #anzeige_zu_einstellungen{
-                    height: 5%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 2vh;
-                    transition: ease-in-out 0.2s;
-                    cursor: pointer;
-                }
-                #anzeige_zu_einstellungen:hover{
-                    letter-spacing: 3px;
-                    
-                }
-
-                #wrapper_einstellungen{
-                    height: 100%;
-                    
-                }
-                
-                #einstellungen_status{
-                    height: 15%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-top: 1px solid #3c3c3c;
-                    border-bottom: 1px solid #3c3c3c;
-                }
-                #einstellungen_status_anzeige{
-                    height: 15%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-bottom: 1px solid #3c3c3c;
-                }
-                #einstellungen_status_wlan{
-                    height: 100%;
-                    width: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-right: 1px solid #3c3c3c;
-                }
-                #einstellungen_status_batterie{
-                    width: 50%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                #einstellungen_einstellungen{
-                    height: 15%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-bottom: 1px solid #3c3c3c;
-                }
-                #einstellungen_personenzahl{
-                    height: 24%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-evenly;
-                    border-bottom: 1px solid #3c3c3c;
-                }
-                #wrapper_einstellungen_personenzahl_anzeige{
-                    display: flex;
-                    flex-direction: row;
-                }
-                #einstellungen_personenzahl_title{
-                    
-                    width: 60%;
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                #einstellungen_personenzahl_label{
-                    
-                    width: 10%;
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                /*
-                #einstellungen_personenzahl_slider{
-                    
-                    
-                }
-                */
-                #personenzahl{
-                    width: 90%;
-                }
-                #einstellungen_reset{
-                    height: 15%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-bottom: 1px solid #3c3c3c;
-                }
-
-                #einstellungen_zu_anzeige{
-                    height: 15%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-            </style>
-                <script src="script.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
+            <link rel="stylesheet" href="style.css">
+            <script src="script.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
            
         </head>
         <body>
@@ -199,35 +29,85 @@
                 <div id="einstellungen_status">
                     <h1>Status</h1> 
                 </div>
-                <div id="einstellungen_status_anzeige">
+                <div id="einstellungen_status_anzeige" class="normalText">
                     <div id="einstellungen_status_wlan">
                         WIFI-Status: Verbunden
                     </div>
                     <div id="einstellungen_status_batterie">
-                        Akkustand: 70 %
+                        <div id="einstellungen_status_batterie_text">
+                            Akkustand: 70 %
+                        </div>
+                        <div>
+                            <div class="batteryContainer">
+                                <div class="batteryOuter"><div id="batteryLevel"></div></div>
+                                <div class="batteryBump"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div id="einstellungen_einstellungen">
                     <h1>Einstellungen</h1>
                 </div>
-                <div id="einstellungen_personenzahl">
-                    <div id="wrapper_einstellungen_personenzahl_anzeige">
-                        <div id="einstellungen_personenzahl_title">
+                <div id="einstellungen_personenzahlMax">
+                    <div id="wrapper_einstellungen_personenzahlMax_anzeige" class="normalText">
+                        <div id="einstellungen_personenzahlMax_title">
                             Maximale Personenzahl:
                         </div>
-                        <div id="einstellungen_personenzahl_label">   
+                        <div id="einstellungen_personenzahlMax_label">   
                                 333
                         </div>
                     </div>
-                    <form >
-                        <div id="einstellungen_personenzahl_slider">
-                            <input oninput="updateSlider(personenzahl.value)" onchange="updateSliderRealeased(personenzahl.value)" type="range" id="personenzahl" name="personenzahl" min="0" max="1000" step="1">
-                            <!--label for="personenzahl">maximale Personenzahl</label-->
+                    <form id="einstellungen_personenzahlMax_form" >
+                        <div id="einstellungen_personenzahlMax_min" onclick="buttonPersonenzahlMax_min()">
+                            <div id="einstellungen_personenzahlMax_min_inner">
+                                ➖
+                            </div>
+                        </div>
+                        <div id="einstellungen_personenzahlMax_slider">
+                            <input oninput="updateSliderPersonenzahlMax(personenzahlMax.value)" onchange="updateSliderRealeasedPersoenzahlMax(personenzahlMax.value)" type="range" id="personenzahlMax" name="personenzahlMax" min="0" max="1000" step="1">
+                            <!--label for="personenzahlMax">maximale Personenzahl</label-->
+                        </div>
+                        <div id="einstellungen_personenzahlMax_max" onclick="buttonPersonenzahlMax_max()">
+                            <div id="einstellungen_personenzahlMax_max_inner">
+                                ➕
+                            </div>
                         </div>
                     </form>
+
+                    <div id="wrapper_einstellungen_personenzahlAktuell_anzeige" class="normalText">
+                        <div id="einstellungen_personenzahlAktuell_title">
+                            Aktuelle Personenzahl:
+                        </div>
+                        <div id="einstellungen_personenzahlAktuell_label">   
+                                333
+                        </div>
+                    </div>
+                    <form id="einstellungen_personenzahlAktuell_form" >
+                        <div id="einstellungen_personenzahlAktuell_min" onclick="buttonPersonenzahlAktuell_min()">
+                            <div id="einstellungen_personenzahlAktuell_min_inner">
+                                ➖
+                            </div>
+                        </div>
+                        <div id="einstellungen_personenzahlAktuell_slider">
+                            <input oninput="updateSliderPersonenzahlAktuell(personenzahlAktuell.value)" onchange="updateSliderRealeasedPersonenzahlAktuell(personenzahlAktuell.value)" type="range" id="personenzahlAktuell" name="personenzahlAktuell" min="0" max="100" step="1">
+                            <!--label for="personenzahl">maximale Personenzahl</label-->
+                        </div>
+                        <div id="einstellungen_personenzahlAktuell_max" onclick="buttonPersonenzahlAktuell_max()">
+                            <div id="einstellungen_personenzahlAktuell_max_inner">
+                                ➕
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="energiesparmodus" class="normalText" onclick="energiesparmodus_clicked()"  title="Energiesparmodus: rotes Dauerlicht, grünes Licht nur bei sich nähernden Person. Webseite nur aktiv, wenn der Bewegungssensor aktiv ist.">
+                        <input id="energiesparmodus_checkbox" type="checkbox" onclick="energiesparmodus_clicked()">
+                        Energiesparmodus 
+                        
+                    </div>
                 </div>
                 <div id="einstellungen_reset">
-                    <button id="button_reset" class="button" type="button" onclick="button_reset_func()">Zähler resetten</button>
+                    <button id="button_reset" class="button" type="button" onclick="button_reset_func()">Personenzahl resetten</button>
                 </div>
                 <div id="einstellungen_zu_anzeige">
                     <button id="button_to_anzeige" class="button" type="button" onclick="scrollToTop()">Zurück zur Anzeige</button>
