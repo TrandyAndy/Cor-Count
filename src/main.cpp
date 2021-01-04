@@ -10,12 +10,16 @@ Version: 0.1  Datum: 05.12.20
 #include "CorCount.h"
 #include "CSensor.h"
 #include "CServer.h"  // Webserver auf dem ESP32
+#include "CCamera.h"  // Klasse für die Anbindung der Kamera
 
-
-CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    // Webserver erstellen, mit SSID, Passwort und domain 
+// Webserver erstellen, mit SSID, Passwort und domain:
+CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    
 DataSend mySendData;            // Strukt mit den zu sendenden Daten
 DataReceive myReceivedData;     // Strukt mit den zu empfangenen Daten
 bool messageFlag = false;       // Nachrichtenflag für Webseiten Daten
+
+// Kamera Objekt erstellen:
+CCamera myCamera(pinCamereaEventEntry, pinCameraEventExit, pinCameraWakeUp);
 
 
 
@@ -29,9 +33,10 @@ CSignalLicht R(18);
 void setup()
 {
   Serial.begin(115200);
-  // Webserver starten
-  myServer.setup();             // Server wird gestartet
-  
+  // Webserver starten:
+  myServer.setup();     // Server wird gestartet
+  // Kamera Objekt erstellen:
+  myCamera.setup();     // Pins der Kamera werden aktiviert   
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
@@ -48,7 +53,9 @@ void setup()
 
 
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
-{  
+{ 
+  myCamera.run();
+
   Serial.println("Hallo Team Cor-Count");
   Serial.println(menschenImRaum++);
   delay(800);

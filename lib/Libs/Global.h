@@ -14,6 +14,9 @@ Autor: Andy
 #define WakeupPin 33    //RTC Fähiger Pin 
 #define LED_Rot 5       //GPIO
 #define LED_Gruen 6
+#define pinCamereaEventEntry 32 
+#define pinCameraEventExit 33
+#define pinCameraWakeUp 25
 
 //Global Veriablen:
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen

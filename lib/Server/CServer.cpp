@@ -1,3 +1,12 @@
+/*
+ * @Author: Julian Schweizerhof
+ * @Email: diegruppetg@gmail.com
+ * @Date: 2021-01-04 16:17:54
+ * @Last Modified by: JLS666
+ * @Last Modified time: 2021-01-04 16:24:27
+ * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
+ */
+
 #include "CServer.h"
 
 DataReceive globalReceivedData;
