@@ -17,6 +17,7 @@ Autor: Andy
 #define pinCamereaEventEntry 32 
 #define pinCameraEventExit 33
 #define pinCameraWakeUp 25
+#define pinBattery 26
 
 //Global Veriablen:         // Julian: geht das so überhaupt? 
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen

@@ -145,3 +145,5 @@ int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent)
     // return tofEvent;  // temp
   }
 }
+
+int8_
