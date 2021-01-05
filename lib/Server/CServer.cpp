@@ -11,14 +11,14 @@
 
 DataReceive globalReceivedData;
 AsyncWebSocketClient * CServer::globalClient = NULL;
-extern bool messageFlag;
+byte messageFlag = 0;
 
 CServer::CServer(char* pSSID, char* pPassword, char* pDomain): ssid(pSSID), password(pPassword), domain(pDomain), server(80), ws("/ws")
 {
     
 }
 
-void CServer::setup()
+void CServer::init()
 {
     if(!SPIFFS.begin())                       // Dateien vom Flashspeicher des ESP32 lesen, inkl. der Webseite
     {
@@ -95,12 +95,14 @@ void CServer::onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, 
             globalReceivedData.personenzahlMax = empfangenJSON["personenzahlMax"]; // Daten in den Strukt schreiben
             globalReceivedData.personenzahlAktuell = empfangenJSON["personenzahlAktuell"];
             globalReceivedData.energiesparmodus = empfangenJSON["energiesparmodus"];
+            messageFlag = 1; // Flag setzten, dass eine Änderung von der Webseite kommt.  
         }
         else    // wenn nur die Uhrzeit geschickt wurde, nachdem eine Person durchgelaufen ist
         {
             globalReceivedData.dateTime = empfangenJSON["dateTime"].as<String>();   // .as<String>(), ansonsten Fehler "This line is ambiguous because the compiler cannot tell which constructor of String to call. Is it the one taking a const char*, an int, or a float?"
+            messageFlag = 2; // Flag setzten, dass ein Datum geschickt wird
         }
-        messageFlag = true; // Flag setzten, Nachricht ist angekommen.  
+        
     }
     // Ende Websocket Funktion
 
@@ -128,10 +130,29 @@ void CServer::transmitData(DataSend mySendData)
     }
 }
 
-void CServer::receiveData(DataReceive & myReceivedData)
+byte CServer::receiveData(DataReceive & myReceivedData)
 {
-    myReceivedData.dateTime = globalReceivedData.dateTime;
-    myReceivedData.personenzahlAktuell = globalReceivedData.personenzahlAktuell;
-    myReceivedData.personenzahlMax = globalReceivedData.personenzahlMax;
-    myReceivedData.energiesparmodus = globalReceivedData.energiesparmodus;
+    byte tempMessageFlag = messageFlag;
+    messageFlag = 0;    // Mesage Flag resetten
+    if (tempMessageFlag == 0)
+    {
+        return tempMessageFlag;
+    }
+    else if (tempMessageFlag == 1)
+    {
+        myReceivedData.personenzahlAktuell = globalReceivedData.personenzahlAktuell;
+        myReceivedData.personenzahlMax = globalReceivedData.personenzahlMax;
+        myReceivedData.energiesparmodus = globalReceivedData.energiesparmodus;
+        return tempMessageFlag;
+    }
+    else if (tempMessageFlag == 2)
+    {
+        myReceivedData.dateTime = globalReceivedData.dateTime;
+        return tempMessageFlag;
+    }
+    else
+    {
+        return 3;
+    }
+    
 }

@@ -21,7 +21,7 @@ CCamera::CCamera(byte pPinEventEntry, byte pPinEventExit, byte pPinWakeUp): pinE
     Serial.println("Kamera Objekt erzeugt");
 }
 
-void CCamera::setup()
+void CCamera::init()
 {
     pinMode(pinEventEntry, INPUT_PULLDOWN);
     pinMode(pinEventExit, INPUT_PULLDOWN);
@@ -29,19 +29,22 @@ void CCamera::setup()
     attachInterrupt(digitalPinToInterrupt(pinEventEntry), isrEventEntry, RISING);
     attachInterrupt(digitalPinToInterrupt(pinEventExit), isrEventExit, RISING);
 }
-void CCamera::run()
+int8_t CCamera::run()
 {
+    int8_t returnValue = 0;
     if(flagEventEntry)
     {
-        Serial.println("Person hineingelaufen");
         flagEventEntry = false;
+        Serial.println("Person hineingelaufen");
+        returnValue++;
     }
     if(flagEventyExit)
     {
-        Serial.println("Person hinausgelaufen");
         flagEventyExit = false;
+        Serial.println("Person hinausgelaufen");
+        returnValue--;
     }
-
+    return returnValue;
 }
 void CCamera::isrEventEntry()
 {

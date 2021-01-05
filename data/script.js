@@ -5,7 +5,7 @@
 var ws = null;                  // Variable für den Websocket
 var flagAutoConnect = false;    // Varialbe für die AutoConnect Funktion false = deaktiviert, true = aktiviert
 var flagFirstCall = true;       // Variable für den ersten Aufruf true = erster Aufruf, false = nicht erster Aufruf
-var personenzahlMax = 10;       // globale Variable für die maximale Personenzahl
+var personenzahlMax = 12;       // globale Variable für die maximale Personenzahl
 var personenzahlAktuell = 0;    // globale Variable für die aktuelle Personenzahl
 var akkustand = 0;            // globale Variable für den Akkustand
 var energiesparmodus = true;    // globale Variable für den Energiesparmodus
@@ -41,18 +41,19 @@ function openWebsocket(){
 
     ws.onopen = function() {        // Was soll passieren, wenn eine Verbindung hergestellt wird?
         console.log("ws.onopen");
-        clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
-        flagAutoConnect = false;    // Autoconnect Flag reseten   
+        //clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
+        //flagAutoConnect = false;    // Autoconnect Flag reseten   
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Verbunden";
         document.getElementById("einstellungen_status_wlan").style.color = "#2ECC40";
     }
 
     ws.onclose = function() {       // Was soll passieren, wenn die Verbindung geschlossen wird?
-        if(flagAutoConnect == false)    // wenn die Autoconnect-Funktion noch nicht aktiviert ist
-        {
-            flagAutoConnect = setInterval(openWebsocket, 5000); // aktiviere die Autoconnect-Funktion, diese wird alle 5 Sekunden aufgerufen
-            console.log(flagAutoConnect);                       
-        }
+        //if(flagAutoConnect == false)    // wenn die Autoconnect-Funktion noch nicht aktiviert ist
+        //{
+            //flagAutoConnect = setInterval(openWebsocket, 5000); // aktiviere die Autoconnect-Funktion, diese wird alle 5 Sekunden aufgerufen
+        openWebsocket();    // autoConnect nicht mehr notwendig, reicht so aus.
+        //    console.log(flagAutoConnect);                       
+        //}
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Nicht verbunden";
         document.getElementById("einstellungen_status_wlan").style.color = "#FFDC00";
     }

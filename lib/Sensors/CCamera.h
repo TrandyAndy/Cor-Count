@@ -15,8 +15,8 @@ class CCamera
 {
     public:
         CCamera(byte pPinEventEntry, byte pPinEventExit, byte pPinWakeUp); // Kunstruktor
-        void setup();           // muss in der setup aufgerufen werden!!!
-        void run();             // muss in der loop aufgerufen werden
+        void init();            // muss in der setup aufgerufen werden!!!
+        int8_t run();           // muss in der loop aufgerufen werden, Rückgabe: 0 = nichts, -1 = rauslaufen, 1 = reinlaufen
         void wakeUpCamera();    // Die Kamera soll aufgewacht werden
         void setCameraToSleep();// Die Kamera soll schlafen gehen
     private:

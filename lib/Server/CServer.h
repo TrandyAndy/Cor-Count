@@ -26,9 +26,9 @@ class CServer
     public:
         CServer(char* pSSID, char* pPassword, char* pDomain);
         void transmitData(DataSend mySendData);
-        void receiveData(DataReceive & myReceivedData);
+        byte receiveData(DataReceive & myReceivedData); // Rückgabe: 0 = keine Nachricht, 1 = Änderungen an der Webseite, 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist, 3 = Fehler
         //void run();
-        void setup();
+        void init();
     private:
         IPAddress IP;        // Variable zum Speichern der IP-Adresse
         char* ssid;

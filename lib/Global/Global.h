@@ -21,8 +21,11 @@ Autor: Andy
 //Global Veriablen:         // Julian: geht das so überhaupt? 
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
 long unsigned int leerlaufZeit = 0;      //Zeit in der nichts passiert
-int menschenImRaum = 0;
-
+int menschenImRaum = 0; // aktuelle Personenzahl im Raum
+int menschenImRaumMax = 0;  // maximale Personenzahl im Raum
+bool energiesparmodus = false;
+bool flagGetTime = false;
+byte akkustand = 0;
 //Global Objekte:
 
 
