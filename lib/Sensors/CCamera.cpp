@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-04 16:23:01
+ * @Last Modified time: 2021-01-05 21:31:05
  * @Description: Anbindung der Camera an die Hauptsteuerung über 3 GPIO Pins
  */
 
@@ -57,4 +57,12 @@ void CCamera::isrEventExit()
     portENTER_CRITICAL_ISR(&mux);
     flagEventyExit = true;
     portEXIT_CRITICAL_ISR(&mux);
+}
+void CCamera::wakeUpCamera()
+{
+    digitalWrite(pinWakeUp, HIGH);
+}
+void CCamera::setCameraToSleep()
+{
+    digitalWrite(pinWakeUp, LOW);
 }

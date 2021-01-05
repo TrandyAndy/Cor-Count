@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-04 16:22:09
+ * @Last Modified time: 2021-01-05 21:30:27
  * @Description: Anbindung der Camera an die Hauptsteuerung über 3 GPIO Pins
  */
 

@@ -140,6 +140,8 @@ int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent)
   }
   else // Sensor Fusion
   {
+    // Bei verunden: speichert Millis vom ersten Sensor ab, zweite Sensor warten. 
     return cameraEvent; // temp
+    // return tofEvent;  // temp
   }
 }
