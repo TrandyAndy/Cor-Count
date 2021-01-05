@@ -18,10 +18,10 @@ Autor: Andy
 #define pinCameraEventExit 33
 #define pinCameraWakeUp 25
 
-//Global Veriablen:
+//Global Veriablen:         // Julian: geht das so überhaupt? 
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
-long unsigned int leerlaufZeit =0;      //Zeit in der nichts passiert
-int menschenImRaum =0;
+long unsigned int leerlaufZeit = 0;      //Zeit in der nichts passiert
+int menschenImRaum = 0;
 
 //Global Objekte:
 
