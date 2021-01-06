@@ -13,6 +13,7 @@ Version: 0.1  Datum: 05.12.20
 #include "CServer.h"  // Webserver auf dem ESP32
 #include "CCamera.h"  // Klasse für die Anbindung der Kamera
 #include "Global.h"
+#include "CTof.h"
 
 // Webserver erstellen, mit SSID, Passwort und domain:
 CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    
@@ -23,6 +24,9 @@ DataReceive myReceivedData;     // Strukt mit den zu empfangenen Daten
 // Kamera Objekt erstellen:
 CCamera myCamera(pinCamereaEventEntry, pinCameraEventExit, pinCameraWakeUp);
 bool once = true;
+
+//Tof Obj erstellen:
+CTof Lichtschranke;
 
 CSchlafen ESP_schlaf(1); //Oder in Global?
 //CSchlafen ESP();
@@ -44,7 +48,8 @@ void setup()
   //myServer.transmitData(mySendData);
   // Kamera starten:
   myCamera.init();     // Pins der Kamera werden aktiviert
-
+  // Lichtschranke starten
+  Lichtschranke.init();
   // Init Batterie
   pinMode(pinBattery, INPUT_PULLDOWN);
 

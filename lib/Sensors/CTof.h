@@ -4,8 +4,10 @@
 class CTof
 {
 private:
-    void IRAM_ATTR ISR_ToF1();
-    void IRAM_ATTR ISR_ToF2();
+    static void IRAM_ATTR ISR1();
+    static void IRAM_ATTR ISR2();
+    void ISR_ToF1();
+    void ISR_ToF2();
     void setID();
     void read_dual_sensors();
     void setNumbers();

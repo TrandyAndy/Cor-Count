@@ -17,7 +17,7 @@ Autor: Andy
 #define SHT_LOX1 2      //shutdown Pin Tof1
 #define SHT_LOX2 4      //shutdown Pin Tof2
 #define TOF1_PIN 16     //Tof 1 Interrupt
-#define FOF2_PIN 17     //Tof 2 Interrupt
+#define TOF2_PIN 17     //Tof 2 Interrupt
 #define pinBattery 32
 #define pinCamereaEventEntry 33 
 #define pinCameraEventExit 25

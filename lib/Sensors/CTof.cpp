@@ -1,5 +1,8 @@
 #include "CTof.h"
 
+bool ISR_Flag1=0;
+bool ISR_Flag2=0;
+
 void CTof::ISR_ToF1()
 {
     if (currRange1 < prevRange1 - Hysteresis)                                                 // Person/Objekt wurde erkannt
@@ -65,6 +68,15 @@ void CTof::ISR_ToF2()
 
 }
 
+void CTof::ISR1()
+{
+  ISR_Flag1=true;
+}
+void CTof::ISR2()
+{
+  ISR_Flag2=true;
+}
+
 void CTof::init()
 {
     pinMode(SHT_LOX1, OUTPUT);
@@ -81,14 +93,26 @@ void CTof::init()
     Serial.println("Starting...");
     setID();
     
-    //attachInterrupt(GPIO1, ISR_ToF1, RISING);
-    //attachInterrupt(GPIO2, ISR_ToF2, RISING);
+    attachInterrupt(TOF1_PIN, ISR1, RISING);
+    attachInterrupt(TOF2_PIN, ISR2, RISING);
 }
 
 void CTof::run()
 {
     read_dual_sensors();
     Richtung=get_Direction();
+
+    //ISR Flag abfragen
+    if(ISR_Flag1)
+    {
+      ISR_ToF1();
+      ISR_Flag1=false;
+    }
+    if(ISR_Flag2)
+    {
+      ISR_ToF2();
+      ISR_Flag2=false;
+    }
 }
 
 int CTof::get_Direction()         //prevNumbers
