@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-06 20:40:21
+ * @Last Modified time: 2021-01-06 21:38:00
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -11,10 +11,10 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
-#include <ESPAsyncWebServer.h>
+#include "ESPAsyncWebServer.h"
 #include <SPIFFS.h>
 #include <ESPmDNS.h>
-#include <ArduinoJson.h>
+#include "ArduinoJson.h"
 #include "SData.h"
 
 //static DataReceive globalReceivedData;
