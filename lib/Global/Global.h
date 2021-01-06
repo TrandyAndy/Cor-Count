@@ -14,10 +14,11 @@ Autor: Andy
 #define WakeupPin 33    //RTC Fähiger Pin 
 #define LED_Rot 5       //GPIO
 #define LED_Gruen 6
+#define pinBattery 32
 #define pinCamereaEventEntry 33 
 #define pinCameraEventExit 25
 #define pinCameraWakeUp 26
-#define pinBattery 32
+
 
 //Global Veriablen:         // Julian: geht das so überhaupt? 
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
@@ -32,7 +33,7 @@ byte akkustand = 0;
 
 
 //Defines:
-#define Schalfenszeit 4000              //Wartezeit für DeepSleep in ms
+#define Schalfenszeit 15000              //Wartezeit für DeepSleep in ms //ehemals 4000
 #define AdresseMesnchenZaehler  0       //Speicherort ! Nur 0 geht???
 #define PersonErkannt 1
 #define NiemandDa 0

@@ -2,6 +2,8 @@
 Allgemeine Funktionen 
 Autor: Andy
 */
+// Julian: Warum ist die Datei nicht in h und cpp aufgeteilt??????
+
 #pragma once
 #include <EEPROM.h>     //Speichern des Zaehlers
 #include <Preferences.h>
@@ -22,7 +24,7 @@ void print_wakeup_reason(){
   }
 }
 
-
+// Fragen von Julian: Wo ist das Wecken vom PIR? Ich müsste zusätzlich noch menschenImRaumMax und energiesparmodus speichern
 class CSchlafen{
     public:
     CSchlafen(){
@@ -47,8 +49,8 @@ class CSchlafen{
         return; //Noch nicht so weit
         Serial.println("ESP muede, ESP schlafen");
         esp_sleep_enable_ext0_wakeup(gpio_num_t (WakeupPin),1); //1 = High, 0 = Low
-        esp_sleep_enable_timer_wakeup(6000000);
-        datensichern(&menschenImRaum);//Daten sichern
+        esp_sleep_enable_timer_wakeup(15000000);
+        datensichern(&menschenImRaum);//Daten sichern  
         esp_deep_sleep_start(); 
         Serial.println("This will never be printed");
     };
