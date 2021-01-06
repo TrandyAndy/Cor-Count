@@ -9,10 +9,9 @@ Version: 0.1  Datum: 05.12.20
 
 #include "Global.h"   //Global wird überall inkludiert.
 #include "CorCount.h"
-//#include "CSensor.h"
+#include "CSensor.h"
 #include "CServer.h"  // Webserver auf dem ESP32
 #include "CCamera.h"  // Klasse für die Anbindung der Kamera
-#include "Adafruit_VL53L0X.h"
 
 // Webserver erstellen, mit SSID, Passwort und domain:
 CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    

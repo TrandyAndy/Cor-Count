@@ -1,4 +1,4 @@
-
+#include "Global.h"
 
 class CTof
 {
@@ -11,4 +11,4 @@ public:
     void run();
     int getErgebnis();
     int get_Direction();
-}
+};
