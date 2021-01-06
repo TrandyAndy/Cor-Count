@@ -1,6 +1,6 @@
 #include "CTof.h"
 
-void CTof::IRAM_ATTR ISR_ToF1()
+void CTof::ISR_ToF1()
 {
     if (currRange1 < prevRange1 - Hysteresis)                                                 // Person/Objekt wurde erkannt
   {
@@ -33,7 +33,7 @@ void CTof::IRAM_ATTR ISR_ToF1()
   
 }
 
-void CTof::IRAM_ATTR ISR_ToF2() 
+void CTof::ISR_ToF2() 
 {
   
   if (currRange2 < prevRange2 - Hysteresis)                                                 // Person/Objekt wurde erkannt
@@ -81,8 +81,8 @@ void CTof::init()
     Serial.println("Starting...");
     setID();
     
-    attachInterrupt(GPIO1, ISR_ToF1, RISING);
-    attachInterrupt(GPIO2, ISR_ToF2, RISING);
+    //attachInterrupt(GPIO1, ISR_ToF1, RISING);
+    //attachInterrupt(GPIO2, ISR_ToF2, RISING);
 }
 
 void CTof::run()
@@ -163,3 +163,88 @@ int CTof::get_Direction()         //prevNumbers
 
   return direction_number;
 }
+
+void CTof::setID() 
+{
+  // all reset
+  digitalWrite(SHT_LOX1, LOW);    
+  digitalWrite(SHT_LOX2, LOW);
+  delay(10);
+  // all unreset
+  digitalWrite(SHT_LOX1, HIGH);
+  digitalWrite(SHT_LOX2, HIGH);
+  delay(10);
+
+  // activating LOX1 and reseting LOX2
+  digitalWrite(SHT_LOX1, HIGH);
+  digitalWrite(SHT_LOX2, LOW);
+
+  // initing LOX1
+  if(!lox1.begin(LOX1_ADDRESS)) {
+    Serial.println("Failed to boot first VL53L0X");
+    while(1);
+  }
+  delay(10);
+
+  // activating LOX2
+  digitalWrite(SHT_LOX2, HIGH);
+  delay(10);
+
+  //initing LOX2
+  if(!lox2.begin(LOX2_ADDRESS)) {
+    Serial.println("Failed to boot second VL53L0X");
+    while(1);
+  }
+}
+
+void CTof::read_dual_sensors() 
+{
+  
+  lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
+  lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
+
+  // print sensor one reading
+  //Serial.print(F("1: "));
+  if(measure1.RangeStatus != 4) {               // if not out of range
+    currRange1 = measure1.RangeMilliMeter;
+    //Serial.print(currRange1);
+  } else {
+    //Serial.println(F("1: Out of range"));
+    currRange1 = 1800;
+  }
+  
+  //Serial.print(F(" "));
+
+  // print sensor two reading
+  //Serial.print(F("2: "));
+  if(measure2.RangeStatus != 4) {
+    //Serial.print(measure2.RangeMilliMeter);
+    currRange2 = measure2.RangeMilliMeter;
+  } else {
+    //Serial.println(F("2: Out of range"));
+    currRange2 = 1800;
+  }
+
+  if (firstMeasurement)
+  {
+    prevRange1 = currRange1;
+    prevRange2 = currRange2;
+    firstMeasurement = false;
+  }
+  
+  //Serial.println();
+}
+
+void CTof::setNumbers()
+{
+  for(int i = 0; i < sizeof(numbers)/sizeof(numbers[0]); i++)
+  {
+    numbers[i] = 0;
+  }
+  /*
+  Serial.print("  size of numbers "); 
+  Serial.print(sizeof(numbers)); 
+  Serial.print("sizeof(numbers)/sizeof(numbers[0])  "); 
+  Serial.println(sizeof(numbers)/sizeof(numbers[0])); */
+}
+
