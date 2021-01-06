@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-04 16:24:27
+ * @Last Modified time: 2021-01-06 18:01:57
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -90,7 +90,11 @@ void CServer::onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, 
         DeserializationError fehlerJSON = deserializeJson(empfangenJSON, nachricht); // Nachricht aus dem Chararray "nachricht" ist das JSON Dokument "empfangenJSON" übertragen
         Serial.println(fehlerJSON.c_str());     // Fehler bei Lesen der JSON Nachricht 
         
-        if(empfangenJSON["dateTime"].as<String>() == " ")       // wenn, etwas in den Einstellungen auf der Webseite geändert wurde
+        if (empfangenJSON["energiesparmodus"].as<String>() == " ")  // wenn initiale Message von der Webseite kommt
+        {
+            messageFlag = 3;
+        }
+        else if(empfangenJSON["dateTime"].as<String>() == " ")       // wenn, etwas in den Einstellungen auf der Webseite geändert wurde
         {
             globalReceivedData.personenzahlMax = empfangenJSON["personenzahlMax"]; // Daten in den Strukt schreiben
             globalReceivedData.personenzahlAktuell = empfangenJSON["personenzahlAktuell"];
@@ -150,9 +154,13 @@ byte CServer::receiveData(DataReceive & myReceivedData)
         myReceivedData.dateTime = globalReceivedData.dateTime;
         return tempMessageFlag;
     }
+    else if (tempMessageFlag == 3)
+    {
+        return tempMessageFlag;
+    }
     else
     {
-        return 3;
+        return 4;
     }
     
 }

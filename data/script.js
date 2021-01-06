@@ -41,19 +41,25 @@ function openWebsocket(){
 
     ws.onopen = function() {        // Was soll passieren, wenn eine Verbindung hergestellt wird?
         console.log("ws.onopen");
-        //clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
-        //flagAutoConnect = false;    // Autoconnect Flag reseten   
+        clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
+        flagAutoConnect = false;    // Autoconnect Flag reseten   
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Verbunden";
         document.getElementById("einstellungen_status_wlan").style.color = "#2ECC40";
+        // Leere Nachricht schicken:
+        jsonData.energiesparmodus = " ";
+        var nachricht = JSON.stringify(jsonData);
+        console.log(nachricht); 
+        ws.send(nachricht);
     }
 
     ws.onclose = function() {       // Was soll passieren, wenn die Verbindung geschlossen wird?
-        //if(flagAutoConnect == false)    // wenn die Autoconnect-Funktion noch nicht aktiviert ist
-        //{
-            //flagAutoConnect = setInterval(openWebsocket, 5000); // aktiviere die Autoconnect-Funktion, diese wird alle 5 Sekunden aufgerufen
-        openWebsocket();    // autoConnect nicht mehr notwendig, reicht so aus.
-        //    console.log(flagAutoConnect);                       
-        //}
+        if(flagAutoConnect == false)    // wenn die Autoconnect-Funktion noch nicht aktiviert ist
+        {
+            openWebsocket();    // autoConnect nicht mehr notwendig, reicht so aus. Mmh macht manchmal Endlosschleifen
+            flagAutoConnect = setInterval(openWebsocket, 10000); // aktiviere die Autoconnect-Funktion, diese wird alle 60 Sekunden aufgerufen
+            
+            console.log(flagAutoConnect);                       
+        }
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Nicht verbunden";
         document.getElementById("einstellungen_status_wlan").style.color = "#FFDC00";
     }
@@ -193,6 +199,7 @@ function buttonPersonenzahlAktuell_max(){   // - beim PersonenzahlAktuell geklic
 
 function energiesparmodus_clicked() // div mit der Checkbox geklickt
 {
+    //console.log("Energieeeeee");
     if(document.getElementById("energiesparmodus_checkbox").checked){
         document.getElementById("energiesparmodus_checkbox").checked = false;
     }
