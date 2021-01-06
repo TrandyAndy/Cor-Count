@@ -14,10 +14,10 @@ Autor: Andy
 #define WakeupPin 33    //RTC Fähiger Pin 
 #define LED_Rot 5       //GPIO
 #define LED_Gruen 6
-#define pinCamereaEventEntry 32 
-#define pinCameraEventExit 33
-#define pinCameraWakeUp 25
-#define pinBattery 26
+#define pinCamereaEventEntry 33 
+#define pinCameraEventExit 25
+#define pinCameraWakeUp 26
+#define pinBattery 32
 
 //Global Veriablen:         // Julian: geht das so überhaupt? 
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
@@ -40,3 +40,5 @@ byte akkustand = 0;
 #define LichtAn true
 #define Grundhelligkeit 50               //Grundwert für die LEDs in %
 #define HelligkeitGain 10
+//Batterie
+#define faktorSpannungsteiler 0.5       // Faktor des Spannungsteiler [ R2 / (R1+R2) ], z.B. R1 = 1k und R2 = 1k--> 0.5 oder R1 = 3k und R2 = 1k  --> 0.25
