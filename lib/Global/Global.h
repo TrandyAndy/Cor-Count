@@ -14,9 +14,14 @@ Autor: Andy
 #define WakeupPin 33    //RTC Fähiger Pin 
 #define LED_Rot 5       //GPIO
 #define LED_Gruen 6
+#define SHT_LOX1 2      //shutdown Pin Tof1
+#define SHT_LOX2 4      //shutdown Pin Tof2
+#define TOF1_PIN 16     //Tof 1 Interrupt
+#define FOF2_PIN 17     //Tof 2 Interrupt
 #define pinCamereaEventEntry 32 
 #define pinCameraEventExit 33
 #define pinCameraWakeUp 25
+
 
 //Global Veriablen:         // Julian: geht das so überhaupt? 
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
@@ -39,3 +44,5 @@ byte akkustand = 0;
 #define LichtAn true
 #define Grundhelligkeit 50               //Grundwert für die LEDs in %
 #define HelligkeitGain 10
+#define LOX1_ADDRESS 0x30
+#define LOX2_ADDRESS 0x31
