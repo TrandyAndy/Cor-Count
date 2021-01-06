@@ -12,6 +12,7 @@ Version: 0.1  Datum: 05.12.20
 #include "CSensor.h"
 #include "CServer.h"  // Webserver auf dem ESP32
 #include "CCamera.h"  // Klasse für die Anbindung der Kamera
+#include "Global.h"
 
 // Webserver erstellen, mit SSID, Passwort und domain:
 CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    

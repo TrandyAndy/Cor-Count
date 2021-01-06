@@ -8,6 +8,7 @@ Ein System zum Zählen von Personenfluss durch Türen. Insbensondere um die Coro
 * **Arduino core for the ESP32** - [Link](https://github.com/espressif/arduino-esp32) (unter Platformio: bereits vorinstalliert)
 * **ESPAsyncWebServer.h** - [Link](https://github.com/me-no-dev/ESPAsyncWebServer?utm_source=platformio&utm_medium=piohome) (unter Platformio: ESP Async WebServer by Hristo Gochkov Version: 1.2.3)
 * **ArduinoJson.h** - [Link](https://github.com/bblanchon/ArduinoJson) (unter Platformio: ArduinoJson by Benoit Blanchon Version: 6.17.2)
+* **Adafruit VL53L0X Library** - [Link](https://github.com/adafruit/Adafruit_VL53L0X) (unter Platformio: Adafruit_VL53L0X by Adafruit Version: 1.1.0)
 
 ## Versionen
 
