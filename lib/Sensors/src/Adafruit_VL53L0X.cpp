@@ -211,6 +211,7 @@ boolean Adafruit_VL53L0X::setAddress(uint8_t newAddr) {
         VL53L0X_SENSE_LONG_RANGE
         VL53L0X_SENSE_HIGH_SPEED,
         VL53L0X_SENSE_HIGH_ACCURACY
+
     @returns True if address was set successfully, False otherwise
 */
 /**************************************************************************/
@@ -573,6 +574,7 @@ uint32_t Adafruit_VL53L0X::getMeasurementTimingBudgetMicroSeconds() {
 /**************************************************************************/
 /*!
     @brief Sets the VCSEL pulse period.
+
     @param   VcselPeriodType       VCSEL period identifier (pre-range|final).
     @param   VCSELPulsePeriod          VCSEL period value
     @returns True if success
@@ -589,6 +591,7 @@ Adafruit_VL53L0X::setVcselPulsePeriod(VL53L0X_VcselPeriod VcselPeriodType,
 /**************************************************************************/
 /*!
     @brief Gets the VCSEL pulse period.
+
     @param   VcselPeriodType       VCSEL period identifier (pre-range|final).
     @returns the current pulse peried for the given type.
 */
@@ -603,6 +606,7 @@ Adafruit_VL53L0X::getVcselPulsePeriod(VL53L0X_VcselPeriod VcselPeriodType) {
 /**************************************************************************/
 /*!
     @brief  Enable/Disable a specific limit check
+
     @param   LimitCheckId                  Limit Check ID
      (0<= LimitCheckId < VL53L0X_GetNumberOfLimitCheck() ).
     @param   LimitCheckEnable              if 1 the check limit
