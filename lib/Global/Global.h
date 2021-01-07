@@ -25,7 +25,7 @@ Autor: Andy
 
 
 
-//Global Veriablen:         // Julian: geht das so überhaupt? 
+//Global Veriablen:         // Julian: kein schöner Stil, wurde gezwungen dass so zu machen.
 extern RTC_DATA_ATTR int aufwachZaehler;   //Im RTC nciht von DeepSleep betroffen
 extern long unsigned int leerlaufZeit;      //Zeit in der nichts passiert
 extern int menschenImRaum; // aktuelle Personenzahl im Raum
@@ -33,6 +33,8 @@ extern int menschenImRaumMax;  // maximale Personenzahl im Raum
 extern bool energiesparmodus;
 extern bool flagGetTime;
 extern byte akkustand;
+
+
 //Global Objekte:
 
 
