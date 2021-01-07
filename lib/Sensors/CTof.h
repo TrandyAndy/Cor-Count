@@ -32,6 +32,6 @@ const long interval = 50;
 public:
     void init();
     void run();
-    int getErgebnis();
-    int get_Direction();
+    //int getErgebnis();
+    int get_Direction(); //0=nix 1=rein -1=raus
 };

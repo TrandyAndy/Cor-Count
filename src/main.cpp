@@ -71,7 +71,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
 { 
   checkIfNewMessageFromServer();
   //myCamera.run();
-  int8_t zaehlerAenderung = updateZaehler(myCamera.run(), 0);  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
+  int8_t zaehlerAenderung = updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
@@ -82,9 +82,10 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   }
   akkustand = getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
-  delay(100);
+  delay(500);
   Lichtschranke.run();
-  Serial.printf("Sensor sagt: ");
+  Serial.print("Sensor sagt: "); //Debug
+  Serial.println(Lichtschranke.get_Direction());
   /*
   delay(800);
   L.LDR_pruefen();
@@ -174,8 +175,8 @@ int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent)
   else // Sensor Fusion
   {
     // Bei verunden: speichert Millis vom ersten Sensor ab, zweite Sensor warten. 
-    return cameraEvent; // temp
-    // return tofEvent;  // temp
+    //return cameraEvent; // temp
+     return tofEvent;  // temp
   }
 }
 

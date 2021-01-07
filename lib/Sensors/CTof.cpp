@@ -101,7 +101,7 @@ void CTof::init()
 void CTof::run()
 {
     read_dual_sensors();
-    Richtung=get_Direction();
+    //Richtung=get_Direction(); //Wir arbeine direkt mir get Dir.
 
     //ISR Flag abfragen
     if(ISR_Flag1)
@@ -118,7 +118,7 @@ void CTof::run()
 
 int CTof::get_Direction()         //prevNumbers
 {
-  direction_number = -1;
+  direction_number = 0;
   sum = Signal1 + Signal2;
 
   if(sum != prevSum || (prevSum == 0 && sum == 0)) 
@@ -145,7 +145,7 @@ int CTof::get_Direction()         //prevNumbers
   (numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 2 && numbers[3] == 0 && numbers[4] == 0))
   {
     //Serial.println("------------------------------------------ Raus");
-    direction_number = 1;
+    direction_number = -1;
     setNumbers();
   }
   else if((numbers[0] == 0 && numbers[1] == 2 && numbers[2] == 3 && numbers[3] == 1 && numbers[4] == 0) || 
@@ -155,7 +155,7 @@ int CTof::get_Direction()         //prevNumbers
   (numbers[0] == 2 && numbers[1] == 3 && numbers[2] == 1 && numbers[3] == 0 && numbers[4] == 0))
   {
     //Serial.println("------------------------------------------ Rein");
-    direction_number = 2;
+    direction_number = 1;
     setNumbers();
   }
   else if((numbers[0] == 0 && numbers[1] == 1 && numbers[2] == 3 && numbers[3] == 1 && numbers[4] == 0) || 
@@ -165,7 +165,7 @@ int CTof::get_Direction()         //prevNumbers
   (numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 1 && numbers[3] == 0 && numbers[4] == 0))
   {
     //Serial.println("Raus und doch wieder rein");
-    direction_number = 3;
+    direction_number = 0;
     setNumbers();
   }
   else if((numbers[0] == 0 && numbers[1] == 1 && numbers[2] == 3 && numbers[3] == 2 && numbers[4] == 3) || 
@@ -180,7 +180,7 @@ int CTof::get_Direction()         //prevNumbers
   (numbers[0] == 3 && numbers[1] == 1 && numbers[2] == 0 && numbers[3] == 0 && numbers[4] == 0))
   {
     //Serial.println("Rein und doch wieder raus");
-    direction_number = 4;
+    direction_number = 0;
     setNumbers();
   }
 
