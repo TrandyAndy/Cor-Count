@@ -75,11 +75,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
 { 
   checkIfNewMessageFromServer();
   //myCamera.run();
-<<<<<<< HEAD
   int8_t zaehlerAenderung = updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
-=======
-  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), 0);  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
->>>>>>> parent of 900be8b... ! Ich weiß nicht wo die änderunge her kommen?
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
@@ -90,18 +86,10 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   }
   akkustand = myBattery.getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
-<<<<<<< HEAD
   delay(500);
   Lichtschranke.run();
   Serial.print("Sensor sagt: "); //Debug
   Serial.println(Lichtschranke.get_Direction());
-=======
-  delay(100);
-
-  // Auskommentiert, weil der ESP schon schlafen geht, bevor man sich mit dem Wlan verbinden kann. 
-  // Serial.println("Hallo Team Cor-Count");
-  //Serial.println(menschenImRaum++);
->>>>>>> parent of 900be8b... ! Ich weiß nicht wo die änderunge her kommen?
   /*
   delay(800);
   L.LDR_pruefen();
@@ -180,7 +168,6 @@ void checkIfNewMessageFromServer()
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");
     break;
   }
-<<<<<<< HEAD
 }
 
 int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent)
@@ -233,6 +220,4 @@ uint8_t getBatteryLevel()
     soc = 0;
   }
   return (uint8_t) soc;
-=======
->>>>>>> parent of 900be8b... ! Ich weiß nicht wo die änderunge her kommen?
 }
