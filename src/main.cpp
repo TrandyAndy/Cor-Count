@@ -75,7 +75,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
 { 
   checkIfNewMessageFromServer();
   //myCamera.run();
-  int8_t zaehlerAenderung = updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
+  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
@@ -168,56 +168,4 @@ void checkIfNewMessageFromServer()
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");
     break;
   }
-}
-
-int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent)
-{
-  if (cameraEvent == 0 && tofEvent == 0)  // keine Änderung
-  {
-    return 0;
-  }
-  else // Sensor Fusion
-  {
-    // Bei verunden: speichert Millis vom ersten Sensor ab, zweite Sensor warten. 
-    //return cameraEvent; // temp
-     return tofEvent;  // temp
-  }
-}
-
-uint8_t getBatteryLevel()
-{
-  uint16_t analogValue = analogRead(pinBattery);  // analogValue Rohwert des ADC
-  // Serial.print("Analogwert ist: "); // debug
-  // Serial.println(analogValue);  // debug
-  /*
-  Umrechnung vom Analogwert in Spannung: 
-  y = x  * (3,3 V) / (2^12 - 1) / Faktor_Spannungsteiler
-    x: Rohwert ADC 
-    y: Spannung in V
-  */
-  float batteryVoltage = analogValue * 3.3 / 4095 / faktorSpannungsteiler;  // batteryVoltage in Volt 
-  // Serial.print("Gemessene Spannung ist: "); // debug
-  // Serial.println(batteryVoltage);  // debug
-  /* 
-  Umrechnung von Spannung in SOC
-  Verwendetes Polynom:
-  0 mAh / 3350 mAh:      0 % --> 4,2 V
-  2000 mAh / 3350 mAh:  60 % --> 3,5 V
-  3350 mAh / 3350 mAh: 100 % --> 2,5 V
-  Matlab:   polyfit([4.2, 3.5, 2.5], [0, 60, 100], 1);
-            y = - 57.5 * x + 249 
-            x: Spannung in V
-            y: State of Charge in %
-  */
- 
-  int8_t soc = (int8_t) roundf(-57.5 * batteryVoltage + 249);  // erg in %
-  if (soc > 100)
-  {
-    soc = 100;
-  }
-  else if (soc < 0)
-  {
-    soc = 0;
-  }
-  return (uint8_t) soc;
 }
