@@ -14,12 +14,13 @@ Version: 0.1  Datum: 05.12.20
 #include "CCamera.h"  // Klasse für die Anbindung der Kamera
 #include "Global.h"
 #include "CTof.h"
+#include "CBattery.h"
+#include "CZaehler.h"
 
 // Webserver erstellen, mit SSID, Passwort und domain:
 CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    
 DataSend mySendData;            // Strukt mit den zu sendenden Daten
 DataReceive myReceivedData;     // Strukt mit den zu empfangenen Daten
-
 
 // Kamera Objekt erstellen:
 CCamera myCamera(pinCamereaEventEntry, pinCameraEventExit, pinCameraWakeUp);
@@ -28,6 +29,12 @@ bool once = true;
 //Tof Obj erstellen:
 CTof Lichtschranke;
 
+// Batterie Objekt erstellen:
+CBattery myBattery(pinBattery);
+
+// Zaehler Objekt erstellen:
+CZaehler myZaehler;
+
 CSchlafen ESP_schlaf(1); //Oder in Global?
 //CSchlafen ESP();
 CSensor ToF_innen(24);
@@ -35,9 +42,6 @@ CSignalLicht L(5);
 CSignalLicht R(18);
 
 void checkIfNewMessageFromServer(); // Überprüft ob eine neue Nachricht von der Webseite vorliegt, falls ja wird diese gelesen und gespeichert
-int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent);   // Rückgabe: Änderung des Zählers, Parameter 1: Event der Kamera, Parameter 2: Event des TOF-Sensors
-uint8_t getBatteryLevel(); // Gibt den Ladezustand der Batterie in % zurück.
-
 
 void setup()
 {
@@ -45,13 +49,13 @@ void setup()
   // Webserver starten:
   myServer.init();     // Server wird gestartet
   // hier müssen noch die gespeicherten Daten geschickt werden
-  //myServer.transmitData(mySendData);
+  // myServer.transmitData(mySendData);
   // Kamera starten:
   myCamera.init();     // Pins der Kamera werden aktiviert
   // Lichtschranke starten
   Lichtschranke.init();
   // Init Batterie
-  pinMode(pinBattery, INPUT_PULLDOWN);
+  myBattery.init();
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
@@ -71,7 +75,11 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
 { 
   checkIfNewMessageFromServer();
   //myCamera.run();
+<<<<<<< HEAD
   int8_t zaehlerAenderung = updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
+=======
+  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), 0);  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
+>>>>>>> parent of 900be8b... ! Ich weiß nicht wo die änderunge her kommen?
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
@@ -80,12 +88,20 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
   }
-  akkustand = getBatteryLevel();
+  akkustand = myBattery.getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
+<<<<<<< HEAD
   delay(500);
   Lichtschranke.run();
   Serial.print("Sensor sagt: "); //Debug
   Serial.println(Lichtschranke.get_Direction());
+=======
+  delay(100);
+
+  // Auskommentiert, weil der ESP schon schlafen geht, bevor man sich mit dem Wlan verbinden kann. 
+  // Serial.println("Hallo Team Cor-Count");
+  //Serial.println(menschenImRaum++);
+>>>>>>> parent of 900be8b... ! Ich weiß nicht wo die änderunge her kommen?
   /*
   delay(800);
   L.LDR_pruefen();
@@ -164,6 +180,7 @@ void checkIfNewMessageFromServer()
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");
     break;
   }
+<<<<<<< HEAD
 }
 
 int8_t updateZaehler(int8_t cameraEvent, int8_t tofEvent)
@@ -216,4 +233,6 @@ uint8_t getBatteryLevel()
     soc = 0;
   }
   return (uint8_t) soc;
+=======
+>>>>>>> parent of 900be8b... ! Ich weiß nicht wo die änderunge her kommen?
 }
