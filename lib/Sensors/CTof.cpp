@@ -83,15 +83,15 @@ void CTof::init()
     pinMode(SHT_LOX1, OUTPUT);
     pinMode(SHT_LOX2, OUTPUT);
 
-    Serial.println("Shutdown pins inited...");
+    //Serial.println("Shutdown pins inited...");
 
     digitalWrite(SHT_LOX1, LOW);
     digitalWrite(SHT_LOX2, LOW);
 
-    Serial.println("Both in reset mode...(pins are low)");
+    //Serial.println("Both in reset mode...(pins are low)");
     
     
-    Serial.println("Starting...");
+    //Serial.println("Starting...");
     setID();
     
     attachInterrupt(TOF1_PIN, ISR1, RISING);
