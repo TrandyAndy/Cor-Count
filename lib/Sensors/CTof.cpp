@@ -5,6 +5,7 @@ bool ISR_Flag2=0;
 
 void CTof::ISR_ToF1()
 {
+  Serial.println("ISR1 erkannt");
     if (currRange1 < prevRange1 - Hysteresis)                                                 // Person/Objekt wurde erkannt
   {
     //Serial.println("currRange1 < prevRange1 - Hysteresis");
@@ -38,7 +39,7 @@ void CTof::ISR_ToF1()
 
 void CTof::ISR_ToF2() 
 {
-  
+  Serial.println("ISR2 erkannt");
   if (currRange2 < prevRange2 - Hysteresis)                                                 // Person/Objekt wurde erkannt
   {
     //Serial.println("currRange2 < prevRange2 - Hysteresis");
@@ -206,7 +207,7 @@ void CTof::setID()
   // initing LOX1
   if(!lox1.begin(LOX1_ADDRESS)) {
     Serial.println("Failed to boot first VL53L0X");
-    while(1);
+    Error1=true;
   }
   delay(10);
 
@@ -217,13 +218,14 @@ void CTof::setID()
   //initing LOX2
   if(!lox2.begin(LOX2_ADDRESS)) {
     Serial.println("Failed to boot second VL53L0X");
-    while(1);
+    Error2=true;
   }
 }
 
 void CTof::read_dual_sensors() 
 {
-  
+  if(Error1||Error2)
+    return;
   lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
   lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
 
