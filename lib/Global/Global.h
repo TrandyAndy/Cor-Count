@@ -41,8 +41,8 @@ extern byte akkustand;
 
 
 //Defines:
-#define Schalfenszeit 60000             //Wartezeit für DeepSleep in ms //ehemals 4000
-#define SolangesollderESPschalfen 15    //sec
+#define Schalfenszeit 30000             //Wartezeit für DeepSleep in ms //ehemals 4000
+#define SolangesollderESPschalfen 1    //sec
 #define AdresseMesnchenZaehler  0       //Speicherort ! Nur 0 geht???
 #define AdresseMesnchenMax 2
 #define Adresseenergiesparmodus 4

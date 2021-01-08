@@ -78,6 +78,8 @@ void setup()
   energiesparmodus=ESP_schlaf.getData(Adresseenergiesparmodus);
   Serial.print("Energiespaeren war : "); //Debug
   Serial.println(energiesparmodus);
+  Serial.println(menschenImRaumMax);
+  Serial.println(menschenImRaum);
 }
 
 
