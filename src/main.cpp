@@ -46,16 +46,19 @@ void checkIfNewMessageFromServer(); // Überprüft ob eine neue Nachricht von de
 void setup()
 {
   Serial.begin(115200);
+  // Kamera starten:
+  myCamera.init();     // Pins der Kamera werden aktiviert
+  myCamera.wakeUpCamera();  // Kamera ESP32 aufwecken
   // Webserver starten:
   myServer.init();     // Server wird gestartet
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
-  // Kamera starten:
-  myCamera.init();     // Pins der Kamera werden aktiviert
   // Lichtschranke starten
   Lichtschranke.init();
   // Init Batterie
   myBattery.init();
+  // PIR PIN zum Aufwachen
+  pinMode(WakeupPin, INPUT_PULLDOWN);
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
@@ -82,7 +85,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   if(zaehlerAenderung != 0)
   {
     mySendData.akkustand = menschenImRaum; // temp: // hier wird der aktuelle Akkustand geschickt
-    mySendData.personenzahlAktuell = menschenImRaum; // temp: // hier wird die aktuelle Personenzahl geschickt
+    mySendData.personenzahlAktuell = menschenImRaum; // hier wird die aktuelle Personenzahl geschickt
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
   }
