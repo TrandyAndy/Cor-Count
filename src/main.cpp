@@ -46,12 +46,13 @@ void checkIfNewMessageFromServer(); // Überprüft ob eine neue Nachricht von de
 void setup()
 {
   Serial.begin(115200);
+  // Kamera starten:
+  myCamera.init();     // Pins der Kamera werden aktiviert
+  myCamera.wakeUpCamera();  // Kamera ESP32 aufwecken
   // Webserver starten:
   myServer.init();     // Server wird gestartet
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
-  // Kamera starten:
-  myCamera.init();     // Pins der Kamera werden aktiviert
   // Lichtschranke starten
   Lichtschranke.init();
   // Init Batterie
