@@ -64,6 +64,7 @@ class CSchlafen{
     long unsigned leerlaufZeit=0;
     long unsigned altleerlaufZeit=0;
     //Preferences P;
+    public:
     void datensichern(int Data1, int Adr){  //private damit das niemand zu schnell macht.
         int Daten=Data1; //MAX 16Bit int
         EEPROM.write(Adr,Daten>>8); //High Byte 

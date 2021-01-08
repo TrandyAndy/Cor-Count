@@ -133,6 +133,11 @@ void checkIfNewMessageFromServer()
     Serial.println(myReceivedData.personenzahlMax); //debug
     // debug Ausgabe Ende
 
+    if (energiesparmodus != myReceivedData.energiesparmodus)
+    {
+      ESP_schlaf.datensichern( (int) myReceivedData.energiesparmodus, Adresseenergiesparmodus); 
+      Serial.printf("Energiesparmodus wird gespeichert: %d",(int) myReceivedData.energiesparmodus);
+    }
     // Empfangene Daten speichern
     menschenImRaum = myReceivedData.personenzahlAktuell;
     menschenImRaumMax = myReceivedData.personenzahlMax;
