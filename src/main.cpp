@@ -71,7 +71,7 @@ void setup()
   }
   aufwachZaehler++;
   //Daten Rücklesen
-  EEPROM.begin(46); //46 Byte Reservieren
+  //EEPROM.begin(46); //46 Byte Reservieren
   menschenImRaumMax=ESP_schlaf.getData(AdresseMesnchenMax);
   menschenImRaum=ESP_schlaf.getData(AdresseMesnchenZaehler);
   energiesparmodus=ESP_schlaf.getData(Adresseenergiesparmodus);
