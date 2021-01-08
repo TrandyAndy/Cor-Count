@@ -65,7 +65,7 @@ void setup()
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
-  print_wakeup_reason();
+  //print_wakeup_reason();
   }
   else{
   Serial.println("Setup Abgeschlossen. Neustart");
@@ -84,7 +84,6 @@ void setup()
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
 { 
   checkIfNewMessageFromServer();
-  //myCamera.run();
   int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
@@ -97,7 +96,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   akkustand = myBattery.getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
   Lichtschranke.run();
-  if (menschenImRaum>10)
+  if (menschenImRaum>=menschenImRaumMax) //Wichtigste if im ganzen System
   {
     Go.setLicht(true);
     Stop.setLicht(true);
@@ -107,13 +106,10 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
     Go.setLicht(false);
     Stop.setLicht(false);
   }
-  
-
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep wenn es zeit ist.
   if (!energiesparmodus)
     ESP_schlaf.resetSleepTime(); //Verzögert Energiesparen
-  
-  // Serial.println("Hallo Corona Team");
+
   
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
 

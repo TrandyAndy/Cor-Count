@@ -25,7 +25,6 @@ void print_wakeup_reason(){
   }
 }
 
-// Fragen von Julian: Wo ist das Wecken vom PIR? Ich müsste zusätzlich noch menschenImRaumMax und energiesparmodus speichern
 class CSchlafen{
     public:
     CSchlafen(){
