@@ -11,7 +11,7 @@ Autor: Andy
 
 
 //Pin Map:
-#define WakeupPin 33    //RTC Fähiger Pin 
+#define WakeupPin 15    //RTC Fähiger Pin 
 #define LED_Rot 5       //GPIO
 #define LED_Gruen 6
 #define SHT_LOX1 2      //shutdown Pin Tof1

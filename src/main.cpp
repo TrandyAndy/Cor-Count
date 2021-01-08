@@ -57,6 +57,8 @@ void setup()
   Lichtschranke.init();
   // Init Batterie
   myBattery.init();
+  // PIR PIN zum Aufwachen
+  pinMode(WakeupPin, INPUT_PULLDOWN);
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
@@ -81,7 +83,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   if(zaehlerAenderung != 0)
   {
     mySendData.akkustand = menschenImRaum; // temp: // hier wird der aktuelle Akkustand geschickt
-    mySendData.personenzahlAktuell = menschenImRaum; // temp: // hier wird die aktuelle Personenzahl geschickt
+    mySendData.personenzahlAktuell = menschenImRaum; // hier wird die aktuelle Personenzahl geschickt
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
   }
