@@ -7,6 +7,7 @@ Autor: Andy
 #pragma once
 #include <EEPROM.h>     //Speichern des Zaehlers
 #include <Preferences.h>
+#include <Adafruit_NeoPixel.h>
 
 void print_wakeup_reason(){
   esp_sleep_wakeup_cause_t wakeup_reason;
@@ -36,7 +37,7 @@ class CSchlafen{
         //EEPROM.begin(1);
         Serial.println("Ich war hier");
         
-        P.begin("nvs",false);
+        //P.begin("nvs",false);
     };
     void resetSleepTime(){
         altleerlaufZeit=millis();
@@ -49,7 +50,7 @@ class CSchlafen{
         return; //Noch nicht so weit
         Serial.println("ESP muede, ESP schlafen");
         esp_sleep_enable_ext0_wakeup(gpio_num_t (WakeupPin),1); //1 = High, 0 = Low
-        esp_sleep_enable_timer_wakeup(15000000);
+        esp_sleep_enable_timer_wakeup(SolangesollderESPschalfen*1000000);
         datensichern(menschenImRaum, AdresseMesnchenZaehler);//Daten sichern
         datensichern(menschenImRaumMax, AdresseMesnchenMax);
         datensichern(int(energiesparmodus), Adresseenergiesparmodus);  
@@ -63,67 +64,41 @@ class CSchlafen{
     private:
     long unsigned leerlaufZeit=0;
     long unsigned altleerlaufZeit=0;
-    Preferences P;
+    //Preferences P;
     void datensichern(int Data1, int Adr){  //private damit das niemand zu schnell macht.
         int Daten=Data1; //MAX 16Bit int
         EEPROM.write(Adr,Daten>>8); //High Byte 
         EEPROM.write(Adr+1,Daten&0xFF); //Low Byte
         EEPROM.commit();
-        P.putUChar("addr",65);
+        //P.putUChar("addr",65);
         //Serial.println("Daten gesichert");
     };
 };
 
 class CSignalLicht{
     public:
-    CSignalLicht(int LED_PIN){
-        init(LED_PIN);
-    };
-    CSignalLicht(int LED_PIN, int I2C_Adresse){
-        init(LED_PIN);
-        //Lichtsensor suchen
-        //if Wire.beginn...
-        //if (Sensor da)
-            LDR_verbunden=true;
-        //else break??
+    CSignalLicht(int pFarbe, int pPin): ring(PIXEL_COUNT, pPin, NEO_GRB + NEO_KHZ800)
+    {
+        mFarbe=pFarbe;
     };
     void setLicht(bool Zustand)     //Licht An oder Aus
     { 
-        if(!Zustand){
-            ledcWrite(channel, 0);
-        }
-        else{
-            int duty=LDR_pruefen();
-            duty=255*duty/100;
-            ledcWrite(channel, duty);
-        }
-
+        int Arr[]={0,0,0};
+        Arr[mFarbe]=Grundhelligkeit;
+        for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
+            ring.setPixelColor(i,Arr[0],Arr[1],Arr[2]);         //  Set pixel's color (in RAM)
+            ring.show();                          //  Update strip to match
+            delay(1);                           //  Pause for a moment
+            }
+        //Serial.println(ring.getPixelColor(1)); //Debug
     };
-    int LDR_pruefen(){              //Oder Set_LDR Methode
-        Serial.println(channel); //Test
-        Serial.println("T5");
-        if(LDR_verbunden==false)
-            return Grundhelligkeit;
-        //Sensorabfrage
-        //Mitteln?
-        return Grundhelligkeit-umgebungsHelligkeit*HelligkeitGain;
+    void init(){
+        ring.begin(); // Initialize NeoPixel strip object (REQUIRED)
+        ring.show();  // Initialize all pixels to 'off'
     };
     private:
-    void init(int LED_PIN){
-        channel=CSignalZaehler++;                 //Channel zuweisen + Instanz hochzählen
-        Serial.println("T1");
-        Serial.println(channel);
-        ledcSetup(channel, 5000, aufloesung);     //Channel,Frequenz,Auflösung
-        Serial.println("T2");
-        ledcAttachPin(LED_PIN,channel);           //Nur im Setup??? Nein Achtung nicht jeder Pin Möglich =>GuruPanik
-        Serial.println("T3");
-        ledcWrite(channel, 0);                    //Channel,Duty  Erstmal Aus
-        Serial.println("T4");
-    };
-    bool LDR_verbunden=false;
-    int umgebungsHelligkeit=1;
-    const int aufloesung=13;
-    int channel=0;  //0-15
+    Adafruit_NeoPixel ring; //Wir in der Liste gemacht
+    int mFarbe=2;
     //int CSignalZaehler=5;
     static int CSignalZaehler;    //public?                  //Instanzen Zählen Nur Deklatration möglich!
 };

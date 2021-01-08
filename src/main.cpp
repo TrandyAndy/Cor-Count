@@ -38,8 +38,9 @@ CZaehler myZaehler;
 CSchlafen ESP_schlaf(1); //Oder in Global?
 //CSchlafen ESP();
 CSensor ToF_innen(24);
-CSignalLicht L(5);
-CSignalLicht R(18);
+//CSignalLicht L(5);
+CSignalLicht Stop(Rot,LED_Rot);
+CSignalLicht Go(Gruen,LED_Gruen);
 
 void checkIfNewMessageFromServer(); // Überprüft ob eine neue Nachricht von der Webseite vorliegt, falls ja wird diese gelesen und gespeichert
 void wakeupISR();
@@ -71,7 +72,7 @@ void setup()
   }
   aufwachZaehler++;
   //Daten Rücklesen
-  //EEPROM.begin(46); //46 Byte Reservieren
+  EEPROM.begin(46); //46 Byte Reservieren
   menschenImRaumMax=ESP_schlaf.getData(AdresseMesnchenMax);
   menschenImRaum=ESP_schlaf.getData(AdresseMesnchenZaehler);
   energiesparmodus=ESP_schlaf.getData(Adresseenergiesparmodus);
@@ -96,29 +97,24 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   akkustand = myBattery.getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
   Lichtschranke.run();
-  if (Lichtschranke.get_Direction())
+  if (menschenImRaum>10)
   {
-    Serial.print("Sensor sagt: "); //Debug
-    Serial.println(Lichtschranke.get_Direction());
+    Go.setLicht(true);
+    Stop.setLicht(true);
   }
+  else
+  {
+    Go.setLicht(false);
+    Stop.setLicht(false);
+  }
+  
 
-  /*
-  delay(800);
-  L.LDR_pruefen();
-  R.setLicht(true);
-  delay(100);
-  R.setLicht(false);
-  R.LDR_pruefen();
-  */
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep wenn es zeit ist.
   if (!energiesparmodus)
     ESP_schlaf.resetSleepTime(); //Verzögert Energiesparen
   
-  
-
   // Serial.println("Hallo Corona Team");
   
-
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
 
 

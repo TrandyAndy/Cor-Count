@@ -13,8 +13,8 @@ Autor: Andy
 //Pin Map:
 //#define WakeupPin 33    //RTC fähiger Pin 
 #define WakeupPin 15    //by Julian
-#define LED_Rot 5       //GPIO
-#define LED_Gruen 6
+#define LED_Rot 12       //GPIO
+#define LED_Gruen 14
 #define SHT_LOX1 2      //shutdown Pin Tof1
 #define SHT_LOX2 4      //shutdown Pin Tof2
 #define TOF1_PIN 16     //Tof 1 Interrupt
@@ -41,7 +41,8 @@ extern byte akkustand;
 
 
 //Defines:
-#define Schalfenszeit 120000            //Wartezeit für DeepSleep in ms //ehemals 4000
+#define Schalfenszeit 60000             //Wartezeit für DeepSleep in ms //ehemals 4000
+#define SolangesollderESPschalfen 15    //sec
 #define AdresseMesnchenZaehler  0       //Speicherort ! Nur 0 geht???
 #define AdresseMesnchenMax 2
 #define Adresseenergiesparmodus 4
@@ -50,8 +51,12 @@ extern byte akkustand;
 #define ImProzess 2
 #define LichtAn true
 #define Grundhelligkeit 50               //Grundwert für die LEDs in %
+#define Rot 0                            //RGB 0,1,2
+#define Gruen 1
 #define HelligkeitGain 10
+#define PIXEL_COUNT 24                   // Number of NeoPixels
 #define LOX1_ADDRESS 0x30
 #define LOX2_ADDRESS 0x31
+
 //Batterie
 #define faktorSpannungsteiler 0.5       // Faktor des Spannungsteiler [ R2 / (R1+R2) ], z.B. R1 = 1k und R2 = 1k--> 0.5 oder R1 = 3k und R2 = 1k  --> 0.25
