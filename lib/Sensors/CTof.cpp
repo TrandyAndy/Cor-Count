@@ -5,7 +5,7 @@ bool ISR_Flag2=0;
 
 void CTof::ISR_ToF1()
 {
-  Serial.println("ISR1 erkannt");
+  //Serial.println("ISR1 erkannt");
     if (currRange1 < prevRange1 - Hysteresis)                                                 // Person/Objekt wurde erkannt
   {
     //Serial.println("currRange1 < prevRange1 - Hysteresis");
@@ -39,7 +39,7 @@ void CTof::ISR_ToF1()
 
 void CTof::ISR_ToF2() 
 {
-  Serial.println("ISR2 erkannt");
+  //Serial.println("ISR2 erkannt");
   if (currRange2 < prevRange2 - Hysteresis)                                                 // Person/Objekt wurde erkannt
   {
     //Serial.println("currRange2 < prevRange2 - Hysteresis");
@@ -273,4 +273,3 @@ void CTof::setNumbers()
   Serial.print("sizeof(numbers)/sizeof(numbers[0])  "); 
   Serial.println(sizeof(numbers)/sizeof(numbers[0])); */
 }
-
