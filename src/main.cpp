@@ -71,7 +71,7 @@ void setup()
   }
   aufwachZaehler++;
   //Daten Rücklesen
-  EEPROM.begin(46); //46 Byte Reservieren
+  //EEPROM.begin(46); //46 Byte Reservieren
   menschenImRaumMax=ESP_schlaf.getData(AdresseMesnchenMax);
   menschenImRaum=ESP_schlaf.getData(AdresseMesnchenZaehler);
   energiesparmodus=ESP_schlaf.getData(Adresseenergiesparmodus);
@@ -171,6 +171,7 @@ void checkIfNewMessageFromServer()
     mySendData.energiesparmodus = energiesparmodus; // energiesparmodus schicken;
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
+    ESP_schlaf.resetSleepTime();
     break;
   default:  // Fehler
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");
