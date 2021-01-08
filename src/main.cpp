@@ -171,6 +171,7 @@ void checkIfNewMessageFromServer()
     mySendData.energiesparmodus = energiesparmodus; // energiesparmodus schicken;
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
+    ESP_schlaf.resetSleepTime();
     break;
   default:  // Fehler
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");
