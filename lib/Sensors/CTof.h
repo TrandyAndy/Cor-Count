@@ -21,7 +21,7 @@ private:
     VL53L0X_RangingMeasurementData_t measure2;
     int Richtung=0;
     int numbers[5] = {};
-    int direction_number = 0, Signal1 = 0, Signal2 = 0, sum = 0, prevSum = 0, prevNumbers = 100, numbersCounter = 0, Hysteresis = 150;         // Signal1 counts in one step --> 0, 1; Signal2 counts in two step --> 0, 2 
+    int direction_number = 0, Signal1 = 0, Signal2 = 0, sum = 0, prevSum = 0, prevNumbers = 100, numbersCounter = 0, Hysteresis = 200;         // Signal1 counts in one step --> 0, 1; Signal2 counts in two step --> 0, 2 
     int prevRange1, currRange1, prevRange2, currRange2;
     int people = 0, counterTriggered = 0;
     bool firstMeasurement = true;

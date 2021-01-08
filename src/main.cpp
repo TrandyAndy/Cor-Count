@@ -95,10 +95,13 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   }
   akkustand = myBattery.getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
-  delay(500);
   Lichtschranke.run();
-  Serial.print("Sensor sagt: "); //Debug
-  Serial.println(Lichtschranke.get_Direction());
+  if (Lichtschranke.get_Direction())
+  {
+    Serial.print("Sensor sagt: "); //Debug
+    Serial.println(Lichtschranke.get_Direction());
+  }
+
   /*
   delay(800);
   L.LDR_pruefen();
