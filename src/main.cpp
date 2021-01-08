@@ -100,15 +100,10 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   R.setLicht(false);
   R.LDR_pruefen();
   */
-  if (energiesparmodus)
-  {
-    if (once)
-    {
-      ESP_schlaf.resetSleepTime();
-      once = false;
-    }
-    ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep  
-  }
+  ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep wenn es zeit ist.
+  if (!energiesparmodus)
+    ESP_schlaf.resetSleepTime(); //Verzögert Energiesparen
+  
   
 
   // Serial.println("Hallo Corona Team");
