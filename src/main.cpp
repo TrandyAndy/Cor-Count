@@ -42,6 +42,7 @@ CSignalLicht L(5);
 CSignalLicht R(18);
 
 void checkIfNewMessageFromServer(); // Überprüft ob eine neue Nachricht von der Webseite vorliegt, falls ja wird diese gelesen und gespeichert
+void wakeupISR();
 
 void setup()
 {
@@ -59,6 +60,7 @@ void setup()
   myBattery.init();
   // PIR PIN zum Aufwachen
   pinMode(WakeupPin, INPUT_PULLDOWN);
+  attachInterrupt(WakeupPin, wakeupISR, RISING);
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
@@ -73,6 +75,8 @@ void setup()
   menschenImRaumMax=ESP_schlaf.getData(AdresseMesnchenMax);
   menschenImRaum=ESP_schlaf.getData(AdresseMesnchenZaehler);
   energiesparmodus=ESP_schlaf.getData(Adresseenergiesparmodus);
+  Serial.print("Energiespaeren war : "); //Debug
+  Serial.println(energiesparmodus);
 }
 
 
@@ -139,6 +143,7 @@ void checkIfNewMessageFromServer()
     menschenImRaumMax = myReceivedData.personenzahlMax;
     energiesparmodus = myReceivedData.energiesparmodus;
 
+    ESP_schlaf.resetSleepTime(); //Verzögert energiesparen Besser die client.connekt abfragen!
 
     mySendData.akkustand = 95; // temp: // hier wird der aktuelle Akkustand geschickt
     mySendData.personenzahlAktuell = myReceivedData.personenzahlAktuell; // temp: // hier wird die aktuelle Personenzahl geschickt
@@ -168,4 +173,8 @@ void checkIfNewMessageFromServer()
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");
     break;
   }
+}
+void wakeupISR()
+{
+  ESP_schlaf.resetSleepTime(); //Verzögert Energiesparen
 }

@@ -9,7 +9,8 @@ int8_t CZaehler::updateZaehler(int8_t cameraEvent, int8_t tofEvent)
   else // Sensor Fusion
   {
     // Bei verunden: speichert Millis vom ersten Sensor ab, zweite Sensor warten. 
-    return cameraEvent; // temp
+    //return cameraEvent; // temp
     // return tofEvent;  // temp
+    return cameraEvent||tofEvent;
   }
 }
