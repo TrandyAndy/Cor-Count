@@ -50,21 +50,24 @@ class CSchlafen{
         Serial.println("ESP muede, ESP schlafen");
         esp_sleep_enable_ext0_wakeup(gpio_num_t (WakeupPin),1); //1 = High, 0 = Low
         esp_sleep_enable_timer_wakeup(15000000);
-        datensichern(&menschenImRaum);//Daten sichern
-        //Menschen im RaumMAx
-        //Energiesparen  
+        datensichern(menschenImRaum, AdresseMesnchenZaehler);//Daten sichern
+        datensichern(menschenImRaumMax, AdresseMesnchenMax);
+        datensichern(int(energiesparmodus), Adresseenergiesparmodus);  
         esp_deep_sleep_start(); 
         Serial.println("This will never be printed");
     };
-    int getData(){
-        return EEPROM.read(AdresseMesnchenZaehler);
+    int getData(int Adr) 
+    {
+        return (EEPROM.read(Adr)<<8)+(EEPROM.read(Adr+1));
     };
     private:
     long unsigned leerlaufZeit=0;
     long unsigned altleerlaufZeit=0;
     Preferences P;
-    void datensichern(int *Data1){  //private damit das niemand zu schnell macht.
-        EEPROM.write(AdresseMesnchenZaehler,*Data1); //Läuft bei 255 Über
+    void datensichern(int Data1, int Adr){  //private damit das niemand zu schnell macht.
+        int Daten=Data1; //MAX 16Bit int
+        EEPROM.write(Adr,Daten>>8); //High Byte 
+        EEPROM.write(Adr+1,Daten&0xFF); //Low Byte
         EEPROM.commit();
         P.putUChar("addr",65);
         //Serial.println("Daten gesichert");

@@ -11,7 +11,7 @@ Autor: Andy
 
 
 //Pin Map:
-#define WakeupPin 33    //RTC Fähiger Pin 
+#define WakeupPin 33    //RTC fähiger Pin 
 #define LED_Rot 5       //GPIO
 #define LED_Gruen 6
 #define SHT_LOX1 2      //shutdown Pin Tof1
@@ -40,8 +40,10 @@ extern byte akkustand;
 
 
 //Defines:
-#define Schalfenszeit 15000              //Wartezeit für DeepSleep in ms //ehemals 4000
+#define Schalfenszeit 20000              //Wartezeit für DeepSleep in ms //ehemals 4000
 #define AdresseMesnchenZaehler  0       //Speicherort ! Nur 0 geht???
+#define AdresseMesnchenMax 2
+#define Adresseenergiesparmodus 4
 #define PersonErkannt 1
 #define NiemandDa 0
 #define ImProzess 2
