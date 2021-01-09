@@ -153,16 +153,6 @@ void checkIfNewMessageFromServer()
     mySendData.energiesparmodus = energiesparmodus; // temp: // energiesparmodus schicken;
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
-
-
-    ////// temp
-    if (menschenImRaum == 99 && menschenImRaumMax == 99)
-    {
-      Serial.println("Close aufgerufen");
-      myServer.close();
-    }
-
-
     break;
 
   case 2:   // 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist
