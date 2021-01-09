@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-09 07:58:15
+ * @Last Modified time: 2021-01-09 08:23:18
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -166,6 +166,7 @@ byte CServer::receiveData(DataReceive & myReceivedData)
 }
 void CServer::close()
 {
+    Serial.println("Verbindung wird geschlossen");
     ws.cleanupClients();
     ws.closeAll();
 }
