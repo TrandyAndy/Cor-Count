@@ -41,8 +41,8 @@ function openWebsocket(){
 
     ws.onopen = function() {        // Was soll passieren, wenn eine Verbindung hergestellt wird?
         console.log("ws.onopen");
-        clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
-        flagAutoConnect = false;    // Autoconnect Flag reseten   
+        //clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
+        //flagAutoConnect = false;    // Autoconnect Flag reseten   
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Verbunden";
         document.getElementById("einstellungen_status_wlan").style.color = "#2ECC40";
         // Leere Nachricht schicken:
@@ -52,7 +52,12 @@ function openWebsocket(){
         ws.send(nachricht);
     }
 
-    ws.onclose = function() {       // Was soll passieren, wenn die Verbindung geschlossen wird?
+    ws.onclose = function(error) {       // Was soll passieren, wenn die Verbindung geschlossen wird?
+        console.log('Socket is closed. Reconnect will be attempted in 5 second.', error.reason);
+        setTimeout(function() {
+        openWebsocket();
+        }, 5000);
+        /*
         if(flagAutoConnect == false)    // wenn die Autoconnect-Funktion noch nicht aktiviert ist
         {
             openWebsocket();    // autoConnect nicht mehr notwendig, reicht so aus. Mmh macht manchmal Endlosschleifen
@@ -60,6 +65,7 @@ function openWebsocket(){
             
             console.log(flagAutoConnect);                       
         }
+        */
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Nicht verbunden";
         document.getElementById("einstellungen_status_wlan").style.color = "#FFDC00";
     }
@@ -88,7 +94,8 @@ function openWebsocket(){
     }         
 
     ws.onerror = function(error) {  // was soll passieren, wenn ein Fehler auftritt?
-        console.log("Fehler: " + error);
+        console.log("Fehler: ", error, " ", error.message, " Websocket wird geschlossen");
+        ws.close();
     }
 } 
 

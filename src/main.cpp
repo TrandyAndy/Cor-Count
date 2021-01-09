@@ -18,7 +18,7 @@ Version: 0.1  Datum: 05.12.20
 #include "CZaehler.h"
 
 // Webserver erstellen, mit SSID, Passwort und domain:
-CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    
+// CServer ist global // CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    
 DataSend mySendData;            // Strukt mit den zu sendenden Daten
 DataReceive myReceivedData;     // Strukt mit den zu empfangenen Daten
 
@@ -148,11 +148,21 @@ void checkIfNewMessageFromServer()
     ESP_schlaf.resetSleepTime(); //Verzögert energiesparen Besser die client.connekt abfragen!
 
     mySendData.akkustand = 95; // temp: // hier wird der aktuelle Akkustand geschickt
-    mySendData.personenzahlAktuell = myReceivedData.personenzahlAktuell; // temp: // hier wird die aktuelle Personenzahl geschickt
-    mySendData.personenzahlMax = myReceivedData.personenzahlMax; // temp: // maximale Personenzahl im Raum schicken
-    mySendData.energiesparmodus = myReceivedData.energiesparmodus; // temp: // energiesparmodus schicken;
+    mySendData.personenzahlAktuell = menschenImRaum;  // hier wird die aktuelle Personenzahl geschickt
+    mySendData.personenzahlMax = menschenImRaumMax; // maximale Personenzahl im Raum schicken
+    mySendData.energiesparmodus = energiesparmodus; // temp: // energiesparmodus schicken;
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
+
+
+    ////// temp
+    if (menschenImRaum == 99 && menschenImRaumMax == 99)
+    {
+      Serial.println("Close aufgerufen");
+      myServer.close();
+    }
+
+
     break;
 
   case 2:   // 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist

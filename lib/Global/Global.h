@@ -8,6 +8,7 @@ Autor: Andy
 //Inlcudes:
 #include <Arduino.h>    //Grundlegende Funktionen   Nutzung: Andy
 #include <Wire.h>       //I²C Funktion              Nutzung: Sensor.h
+#include "CServer.h"
 
 
 //Pin Map:
@@ -38,7 +39,7 @@ extern byte akkustand;
 
 //Global Objekte:
 
-
+extern CServer myServer;    
 
 //Defines:
 #define Schalfenszeit 30000             //Wartezeit für DeepSleep in ms //ehemals 4000

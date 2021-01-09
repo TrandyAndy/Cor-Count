@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-06 18:01:57
+ * @Last Modified time: 2021-01-09 07:58:15
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -66,7 +66,7 @@ void CServer::onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, 
         
         Serial.println("Websocket Verbindung hergestellt.");  // Zum Debuggen
         globalClient = client;                  // client speichern
-        Serial.printf("Die ID des Client ist: %d",globalClient->id()); // Zum Debuggen
+        Serial.printf("Die ID des Client ist: %d \n",globalClient->id()); // Zum Debuggen
         //ausgabe();                              // Webseite aktualisieren
         
     } 
@@ -163,4 +163,9 @@ byte CServer::receiveData(DataReceive & myReceivedData)
         return 4;
     }
     
+}
+void CServer::close()
+{
+    ws.cleanupClients();
+    ws.closeAll();
 }

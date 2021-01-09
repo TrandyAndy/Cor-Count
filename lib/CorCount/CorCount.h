@@ -9,6 +9,7 @@ Autor: Andy
 #include <Preferences.h>
 #include <Adafruit_NeoPixel.h>
 
+
 void print_wakeup_reason(){
   esp_sleep_wakeup_cause_t wakeup_reason;
 
@@ -53,6 +54,7 @@ class CSchlafen{
         datensichern(menschenImRaum, AdresseMesnchenZaehler);//Daten sichern
         datensichern(menschenImRaumMax, AdresseMesnchenMax);
         datensichern(int(energiesparmodus), Adresseenergiesparmodus);  
+        myServer.close();       // Websocket Verbindung wird geschlossen.
         esp_deep_sleep_start(); 
         Serial.println("This will never be printed");
     };

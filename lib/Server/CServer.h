@@ -29,6 +29,7 @@ class CServer
         byte receiveData(DataReceive & myReceivedData); // Rückgabe: 0 = keine Nachricht, 1 = Änderungen an der Webseite, 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist, 3 = initiale Nachricht, 4 = Fehler
         //void run();
         void init();
+        void close();
     private:
         IPAddress IP;        // Variable zum Speichern der IP-Adresse
         char* ssid;
