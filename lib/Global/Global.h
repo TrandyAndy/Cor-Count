@@ -55,7 +55,7 @@ extern CServer myServer;
 #define Rot 0                            //RGB 0,1,2
 #define Gruen 1
 #define HelligkeitGain 10
-#define PIXEL_COUNT 24                   // Number of NeoPixels
+#define PIXEL_COUNT 64                  // Number of NeoPixels
 #define LOX1_ADDRESS 0x30
 #define LOX2_ADDRESS 0x31
 
