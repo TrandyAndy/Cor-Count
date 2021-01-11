@@ -85,13 +85,16 @@ class CSignalLicht{
     };
     void setLicht(bool Zustand)     //Licht An oder Aus
     { 
+        if (Zustand==altZustand)
+            return;
         int Arr[]={0,0,0};
         Arr[mFarbe]=Grundhelligkeit;
         for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
             ring.setPixelColor(i,Arr[0],Arr[1],Arr[2]);         //  Set pixel's color (in RAM)
             ring.show();                          //  Update strip to match
-            delay(1);                           //  Pause for a moment
+            delay(10 );                           //  Pause for a moment
             }
+        altZustand=Zustand;
         //Serial.println(ring.getPixelColor(1)); //Debug
     };
     void init(){
@@ -101,6 +104,7 @@ class CSignalLicht{
     private:
     Adafruit_NeoPixel ring; //Wir in der Liste gemacht
     int mFarbe=2;
+    int altZustand=-1; //Damit es inital immer schaltet.
     //int CSignalZaehler=5;
     static int CSignalZaehler;    //public?                  //Instanzen Zählen Nur Deklatration möglich!
 };

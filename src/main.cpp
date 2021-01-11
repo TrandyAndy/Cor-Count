@@ -100,12 +100,12 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   Lichtschranke.run();
   if (menschenImRaum>=menschenImRaumMax) //Wichtigste if im ganzen System
   {
-    Go.setLicht(true);
+    Go.setLicht(false);
     Stop.setLicht(true);
   }
   else
   {
-    Go.setLicht(false);
+    Go.setLicht(true);
     Stop.setLicht(false);
   }
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep wenn es zeit ist.
