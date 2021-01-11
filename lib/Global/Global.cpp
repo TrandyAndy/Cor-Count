@@ -11,4 +11,4 @@ bool flagGetTime = false;
 byte akkustand = 0;
 
 // globale Objekte
-CServer myServer((char*)"Stop&Go-vid",(char*)"COVID-19", (char*)"cor-count");    // Cor-Count
+CServer myServer((char*)"Stop&Go-vid",(char*)"COVID-19", (char*)"stopgovid");    // Cor-Count
