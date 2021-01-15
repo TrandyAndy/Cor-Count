@@ -65,7 +65,7 @@ void setup()
 
   if(aufwachZaehler>0){
   Serial.println("Zum "+ String(aufwachZaehler)+" mal Aufgewacht");
-  //print_wakeup_reason();
+   print_wakeup_reason();
   }
   else{
   Serial.println("Setup Abgeschlossen. Neustart");

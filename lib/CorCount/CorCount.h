@@ -18,9 +18,9 @@ void print_wakeup_reason(){
   switch(wakeup_reason)
   {
     case 1  : Serial.println("Wakeup caused by external signal using RTC_IO"); break;
-    case 2  : Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
+    case 2  : Serial.println("PIR hat mich aufgeweckt"); break; //Wakeup caused by external signal using RTC_CNTL
     case 3  : Serial.println("Wakeup caused by timer"); break;
-    case 4  : Serial.println("Wakeup caused by touchpad"); break;
+    case 4  : Serial.println("Aufgewacht weil ich ausgeschlafen habe."); break; //Wakeup caused by touchpad
     case 5  : Serial.println("Wakeup caused by ULP program"); break;
     default : Serial.println("Wakeup was not caused by deep sleep"); break;
   }
