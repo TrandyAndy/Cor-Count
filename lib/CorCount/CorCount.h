@@ -88,11 +88,11 @@ class CSignalLicht{
         if (Zustand==altZustand)
             return;
         int Arr[]={0,0,0};
-        Arr[mFarbe]=Grundhelligkeit;
+        Arr[mFarbe]=Grundhelligkeit*Zustand;
         for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
             ring.setPixelColor(i,Arr[0],Arr[1],Arr[2]);         //  Set pixel's color (in RAM)
             ring.show();                          //  Update strip to match
-            delay(10 );                           //  Pause for a moment
+            delay(5);                           //  Pause for a moment
             }
         altZustand=Zustand;
         //Serial.println(ring.getPixelColor(1)); //Debug

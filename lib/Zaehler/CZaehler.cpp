@@ -11,6 +11,8 @@ int8_t CZaehler::updateZaehler(int8_t cameraEvent, int8_t tofEvent)
     // Bei verunden: speichert Millis vom ersten Sensor ab, zweite Sensor warten. 
     //return cameraEvent; // temp
     // return tofEvent;  // temp
+    Serial.print("Erkannt:");
+    Serial.println(cameraEvent); //Debug
     return cameraEvent+tofEvent; //temp
   }
 }
