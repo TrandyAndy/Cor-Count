@@ -25,7 +25,7 @@ uint8_t CBattery::getBatteryLevel()
     /* 
     Umrechnung von Spannung in SOC
     Verwendetes Polynom:
-    0 mAh / 3350 mAh:      0 % --> 4,2 V
+    0 mAh / 3350 mAh:      0 % --> 4,2 V        // 4,2
     2000 mAh / 3350 mAh:  60 % --> 3,5 V
     3350 mAh / 3350 mAh: 100 % --> 2,5 V
     Matlab:   polyfit([4.2, 3.5, 2.5], [0, 60, 100], 1);

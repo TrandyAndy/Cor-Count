@@ -6,7 +6,8 @@ Als Steuerung wird ein ESP32 der Firma Espressif eingesetzt.
 HIT Projekt WS20/21
 Version: 0.1  Datum: 05.12.20
 */
-
+#include <Arduino.h>
+#include <Wire.h>
 #include "Global.h"   //Global wird überall inkludiert.
 #include "CorCount.h"
 #include "CSensor.h"
@@ -56,7 +57,7 @@ void setup()
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
   // Lichtschranke starten
-  wire.beginn(SDA,SCL); //!!!!! Macht vill Probleme
+  Wire.begin(SDA, SCL); //!!!!! Macht vill Probleme
   Lichtschranke.init();
   // Init Batterie
   myBattery.init();
@@ -91,7 +92,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
-    mySendData.akkustand = menschenImRaum; // temp: // hier wird der aktuelle Akkustand geschickt
+    mySendData.akkustand = akkustand; // temp: // hier wird der aktuelle Akkustand geschickt
     mySendData.personenzahlAktuell = menschenImRaum; // hier wird die aktuelle Personenzahl geschickt
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
@@ -148,7 +149,7 @@ void checkIfNewMessageFromServer()
 
     ESP_schlaf.resetSleepTime(); //Verzögert energiesparen Besser die client.connekt abfragen!
 
-    mySendData.akkustand = 95; // temp: // hier wird der aktuelle Akkustand geschickt
+    mySendData.akkustand = akkustand; // temp: // hier wird der aktuelle Akkustand geschickt
     mySendData.personenzahlAktuell = menschenImRaum;  // hier wird die aktuelle Personenzahl geschickt
     mySendData.personenzahlMax = menschenImRaumMax; // maximale Personenzahl im Raum schicken
     mySendData.energiesparmodus = energiesparmodus; // temp: // energiesparmodus schicken;
