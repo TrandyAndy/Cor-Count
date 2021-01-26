@@ -47,6 +47,8 @@ void wakeupISR();
 
 void setup()
 {
+  //pinMode(SDA,INPUT_PULLUP);
+  //pinMode(SCL,INPUT_PULLUP);
   Serial.begin(115200);
   // Kamera starten:
   myCamera.init();     // Pins der Kamera werden aktiviert
@@ -56,7 +58,7 @@ void setup()
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
   // Lichtschranke starten
-  wire.beginn(SDA,SCL); //!!!!! Macht vill Probleme
+  Wire.begin(SDA,SCL); //!!!!! Macht vill Probleme
   Lichtschranke.init();
   // Init Batterie
   myBattery.init();
