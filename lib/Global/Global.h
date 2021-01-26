@@ -25,6 +25,7 @@ Autor: Andy
 #define pinCameraEventExit 25
 #define pinCameraWakeUp 26
 
+//SDA pin 23 and SCL pin 19 work fine also using lolin 32 lite.
 
 
 //Global Veriablen:         // Julian: kein schöner Stil, wurde gezwungen dass so zu machen.
