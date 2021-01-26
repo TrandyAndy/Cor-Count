@@ -48,6 +48,8 @@ void wakeupISR();
 
 void setup()
 {
+  //pinMode(SDA,INPUT_PULLUP);
+  //pinMode(SCL,INPUT_PULLUP);
   Serial.begin(115200);
   // Kamera starten:
   myCamera.init();     // Pins der Kamera werden aktiviert
