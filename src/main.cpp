@@ -56,6 +56,7 @@ void setup()
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
   // Lichtschranke starten
+  wire.beginn(SDA,SCL); //!!!!! Macht vill Probleme
   Lichtschranke.init();
   // Init Batterie
   myBattery.init();

@@ -24,8 +24,10 @@ Autor: Andy
 #define pinCamereaEventEntry 33 
 #define pinCameraEventExit 25
 #define pinCameraWakeUp 26
+#define SDA 18 
+#define SCL 19          //SDA pin 23 and SCL pin 19 work fine also using lolin 32 lite.
 
-//SDA pin 23 and SCL pin 19 work fine also using lolin 32 lite.
+
 
 
 //Global Veriablen:         // Julian: kein schöner Stil, wurde gezwungen dass so zu machen.
