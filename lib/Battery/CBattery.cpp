@@ -6,11 +6,13 @@ CBattery::CBattery(byte pPinBattery): mPinBattery(pPinBattery)
 }
 void CBattery::init()
 {
-    pinMode(mPinBattery, INPUT_PULLDOWN);
+    pinMode(mPinBattery, INPUT);
 }
 uint8_t CBattery::getBatteryLevel()
 {
     uint16_t analogValue = analogRead(mPinBattery);  // analogValue Rohwert des ADC
+    //Serial.printf("Unser Analoger Akkuwert ist: %d\n", analogValue);
+    //delay(100);
     // Serial.print("Analogwert ist: "); // debug
     // Serial.println(analogValue);  // debug
     /*
@@ -19,7 +21,8 @@ uint8_t CBattery::getBatteryLevel()
         x: Rohwert ADC 
         y: Spannung in V
     */
-    float batteryVoltage = analogValue * 3.3 / 4095 / faktorSpannungsteiler;  // batteryVoltage in Volt 
+    float batteryVoltage = ( analogValue * 3.6 / (float)4095 ) / (float)faktorSpannungsteiler;  // batteryVoltage in Volt // 3.6 ist bei komischen Lolin schöner
+    //Serial.printf("Unser Batteriespannung ist: %f\n", batteryVoltage);
     // Serial.print("Gemessene Spannung ist: "); // debug
     // Serial.println(batteryVoltage);  // debug
     /* 
