@@ -13,7 +13,7 @@ DataReceive globalReceivedData;
 AsyncWebSocketClient * CServer::globalClient = NULL;
 byte messageFlag = 0;
 
-CServer::CServer(char* pSSID, char* pPassword, char* pDomain): ssid(pSSID), password(pPassword), domain(pDomain), server(80), ws("/ws")
+CServer::CServer(char* pSSID, char* pPassword, char* pDomain): ssid(pSSID), password(pPassword), domain(pDomain), server(80), ws("/ws"), flagAP(true)
 {
     
 }
