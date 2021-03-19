@@ -55,6 +55,8 @@ void setup()
   myCamera.init();     // Pins der Kamera werden aktiviert
   myCamera.wakeUpCamera();  // Kamera ESP32 aufwecken
   // Webserver starten:
+  //myServer.setNewConnection((char*)"PartyHart",(char*)"9876543210",true);
+  
   myServer.init();     // Server wird gestartet
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);

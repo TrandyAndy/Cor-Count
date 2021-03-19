@@ -37,14 +37,15 @@ h2{
     background-color: #aaa;
 }
 .button:hover{
-    background-color: #ccc;
+    background-color: #888;
     letter-spacing: 3px;
     
 }
 .button:active{
     
     transition: ease-in-out 0.1s;
-    background-color: #eee;
+    background-color: #666;
+    color: #eee;
 }
 
 #wrapper_anzeige{

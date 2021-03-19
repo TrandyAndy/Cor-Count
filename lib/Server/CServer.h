@@ -25,6 +25,7 @@ class CServer
 {
     public:
         CServer(char* pSSID, char* pPassword, char* pDomain);
+        void setNewConnection(char* pSSID, char* pPassword, bool pFlagMode);
         void transmitData(DataSend mySendData);
         byte receiveData(DataReceive & myReceivedData); // Rückgabe: 0 = keine Nachricht, 1 = Änderungen an der Webseite, 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist, 3 = initiale Nachricht, 4 = Fehler
         //void run();
@@ -43,4 +44,5 @@ class CServer
         static void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len);
         DataReceive dataReceived;
         DataSend dataSend;
+        bool flagAP;
 };

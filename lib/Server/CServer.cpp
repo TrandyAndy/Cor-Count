@@ -12,11 +12,17 @@
 DataReceive globalReceivedData;
 AsyncWebSocketClient * CServer::globalClient = NULL;
 byte messageFlag = 0;
-bool flagAP = true;
 
 CServer::CServer(char* pSSID, char* pPassword, char* pDomain): ssid(pSSID), password(pPassword), domain(pDomain), server(80), ws("/ws")
 {
     
+}
+
+void CServer::setNewConnection(char* pSSID, char* pPassword, bool pFlagMode)
+{
+    ssid = pSSID;
+    password = pPassword;
+    flagAP = pFlagMode;
 }
 
 void CServer::init()
@@ -41,7 +47,7 @@ void CServer::init()
     else
     {
         Serial.println("Verbinden mit WLAN Router...");
-        WiFi.begin("eure SSID", "euer Passwort");
+        WiFi.begin(ssid, password);
         bool flagError = false;
         unsigned long startZeit = millis();
         while (WiFi.status() != WL_CONNECTED) 
