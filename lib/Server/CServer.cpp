@@ -12,6 +12,7 @@
 DataReceive globalReceivedData;
 AsyncWebSocketClient * CServer::globalClient = NULL;
 byte messageFlag = 0;
+bool flagAP = true;
 
 CServer::CServer(char* pSSID, char* pPassword, char* pDomain): ssid(pSSID), password(pPassword), domain(pDomain), server(80), ws("/ws")
 {
@@ -29,15 +30,45 @@ void CServer::init()
     // Ende Dateien vom Speicher laden
 
     // WiFi
-    Serial.print("Starten AP (Access Point)…");
-    WiFi.softAP(ssid, password,1,0,4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
-    IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+    
+    
+    if (flagAP)
+    {
+        Serial.print("Starten AP (Access Point)…");
+        WiFi.softAP(ssid, password,1,0,4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+        IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+    }
+    else
+    {
+        Serial.println("Verbinden mit WLAN Router...");
+        WiFi.begin("eure SSID", "euer Passwort");
+        bool flagError = false;
+        unsigned long startZeit = millis();
+        while (WiFi.status() != WL_CONNECTED) 
+        {
+            if ( (millis() - startZeit) > 2000)
+            {
+                Serial.println("STA WLAN Verbindung fehlgeschlagen, stattdessen AP starten ...");
+                WiFi.disconnect();
+                WiFi.softAP(ssid, password,1,0,4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+                IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+                flagError = true;
+                break;
+            }
+        }
+        if (flagError == false)
+        {
+            Serial.println("");
+            Serial.println("Mit Router verbunden");
+            IP = WiFi.localIP();
+        }
+    }
     if(MDNS.begin(domain))
     {
       Serial.println("DNS gestartet, erreichbar unter: ");
       Serial.println("http://" + String(domain)+ ".local/");
     }
-    Serial.print("AP IP-Adresse: ");
+    Serial.print("IP-Adresse: ");
     Serial.println(IP);                       // IP-Adresse ausgeben
     ws.onEvent(onWsEvent);                    // Funktion bekannt machen, die aufgerufen werden soll bei einem WS Events
     server.addHandler(&ws);                   // Handler hinzufügen
@@ -49,6 +80,12 @@ void CServer::init()
     });
     server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/style.css" zugreift
     request->send(SPIFFS, "/style.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+    });
+    server.on("/config", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/config" zugreift
+    request->send(SPIFFS, "/config.htm", "text/html"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+    });
+    server.on("/style_config.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/config" zugreift
+    request->send(SPIFFS, "/style_config.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
     });
     /*
     server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){   // wenn der Client auf die Adresse: "192.168.4.1/favicon.ico" zugreift

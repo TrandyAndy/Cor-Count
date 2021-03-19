@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+    <html lang="de">
+            <meta charset="utf-8">
+        <head>
+            
+            <title>Corona-Ampel</title>
+            <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+            <link rel="stylesheet" href="style_config.css">
+            <!--script src="script.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
+           
+        </head>
+        <body>
+            <div id="wrapper">
+                <div id="wrapper_AP">
+                    <div id="AP_title"  class="center">
+                        <h1>Einstellungen für das WLAN des Personenzählers</h1>
+                    </div>
+                    <div id="AP_settings_ssid" class="center">
+                        <div id="AP_ssid_label" class="normalText label">
+                            SSID (Name):
+                        </div>
+                        <div id="AP_ssid_textbox" class="inputElement">
+                            <input type="text" class="textBox normalText" placeholder="Cor-Count">
+                        </div>
+                    </div>
+                    <div id="AP_settings_password" class="center">
+                        <div id="AP_password_label" class="normalText label">
+                            Passwort:
+                        </div>
+                        <div id="AP_password_textbox" class="inputElement">
+                            <input type="text" class="textBox normalText" placeholder="Gewünschtes Passwort">
+                        </div>
+                    </div>
+                    <div id="AP_speichern" class="center">
+                        <button id="button_reset" class="button" type="button" onclick="button_reset_func()">Speichern</button>
+                    </div>
+                    
+                </div>
+                <div id="wrapper_STA">
+                    <div id="STA_title"  class="center">
+                        <h1>Einstellungen für die Verbindung zu Ihren Router</h1>
+                    </div>
+                    <div id="STA_settings_ssid" class="center">
+                        <div id="STA_ssid_label" class="normalText label">
+                            SSID (Name):
+                        </div>
+                        <div id="STA_ssid_textbox" class="inputElement">
+                            <input type="text" class="textBox normalText" placeholder="SSID ihres Netzwerks">
+                        </div>
+                    </div>
+                    <div id="STA_settings_password" class="center">
+                        <div id="STA_password_label" class="normalText label">
+                            Passwort:
+                        </div>
+                        <div id="STA_password_textbox" class="inputElement">
+                            <input type="text" class="textBox normalText" placeholder="Passwort ihres Netzwerks">
+                        </div>
+                    </div>
+                    <div id="STA_speichern" class="center">
+                        <button id="button_reset" class="button" type="button" onclick="button_reset_func()">Speichern</button>
+                    </div>
+                    
+                </div>
+            </div>
+            <!--form action="#">
+                <label>SSID (WLAN Name):
+                    <select name="top5">
+                        <option>WLAN 1</option>
+                        <option>WLAN 2</option>
+                        <option>WLAN 3</option>
+                        <option>WLAN 383479234940394</option>
+                        <option>Andere</option>
+                    </select>
+                    <input type="text"></input>
+                </label>
+            </form>
+            <input type="text">
+                <label>Passwort</label>
+            </input-->
+            
+        </body>
+    </html>
