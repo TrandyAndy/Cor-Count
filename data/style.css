@@ -17,21 +17,27 @@ html, body{
     scroll-behavior: smooth;
 }
 h1{
-    font-size: 4.5vmin;
+    font-size: 4vmin;
+    width: 90%;
 }
 h2{
-    font-size: 4vmin;
+    font-size: 3.5vmin;
+    width: 90%;
+}
+hr{
+    margin: auto;
+    width: 98%;
 }
 .normalText{
-    font-size: 3vmin;
+    font-size: 2.5vmin;
 }
 .button{
-    width: 90%;
+    width: 75%;
     height: 90%;
     letter-spacing: 2px;
     border: none;
     color: white;
-    font-size: 6vmin;
+    font-size: 4vmin;
     cursor: pointer;
     transition: ease-in-out 0.2s;
     background-color: #aaa;
@@ -337,4 +343,88 @@ h2{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+
+
+
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.label{
+    width: 30%;
+    text-align: right;
+    margin-right: 20px;
+}
+.inputElement{
+    width: 40%;
+}
+.textBox{
+    width: 90%;
+    text-align: left;
+    padding-left: 10px;
+    height: 3vmin;
+}
+.buttonConfig{
+    width: 40%;
+    height: 70%;
+    letter-spacing: 2px;
+    border: none;
+    color: white;
+    font-size:4vmin;
+    cursor: pointer;
+    transition: ease-in-out 0.2s;
+    background-color: #aaa;
+}
+.buttonConfig:hover{
+    background-color: #888;
+    letter-spacing: 3px;
+    
+}
+.buttonConfig:active{
+    
+    transition: ease-in-out 0.1s;
+    background-color: #666;
+    color: #eee;
+}
+
+
+#wrapper{
+    height: 100%;
+}
+#headlineConfig{
+    height: 13%;
+}
+#wrapper_AP{
+    height: 37%;
+}
+#AP_title{
+    height: 26%;
+}
+#AP_settings_ssid{
+    height: 22%;
+}
+#AP_settings_password{
+    height: 22%;
+}
+#AP_speichern{
+    height: 30%;
+}
+#wrapper_STA{
+    height: 37%;
+}
+#STA_title{
+    height: 26%;
+}
+#STA_settings_ssid{
+    height: 22%;
+}
+#STA_settings_password{
+    height: 22%;
+}
+#STA_speichern{
+    height: 30%;
 }

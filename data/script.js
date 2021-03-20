@@ -132,6 +132,10 @@ function scrollToEinstellungen(){   // Zur 2. Seite "den Einstellungen" scrollen
     document.getElementById('wrapper_einstellungen').scrollIntoView();
 }
 
+function scrollToWlanEinstellungen(){   // Zur 3. Seite "den WLAN Einstellungen" scrollen
+    document.getElementById('wrapper').scrollIntoView();
+}
+
 function button_reset_func(){       // Button Personenzahl resetten gedrückt
     alert("Zähler wurde erfolgreich resettet.");
     document.getElementById("personenzahlAktuell").value = 0;
