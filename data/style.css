@@ -1,6 +1,7 @@
 :root{
     --red: #790c0c;
     --green: #045316;
+    --link: #0366d6;
 }
 *{
     padding: 0;
@@ -27,6 +28,13 @@ h2{
 hr{
     margin: auto;
     width: 98%;
+}
+a {
+    color: var(--link);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 .normalText{
     font-size: 2.5vmin;
@@ -355,7 +363,7 @@ hr{
     justify-content: center;
 }
 .label{
-    width: 30%;
+    width: 25%;
     text-align: right;
     margin-right: 20px;
 }
@@ -365,12 +373,12 @@ hr{
 .textBox{
     width: 90%;
     text-align: left;
-    padding-left: 10px;
+    padding-left: 2%;
     height: 3vmin;
 }
 .buttonConfig{
     width: 40%;
-    height: 70%;
+    height: 7vmin   ;
     letter-spacing: 2px;
     border: none;
     color: white;
@@ -390,41 +398,59 @@ hr{
     background-color: #666;
     color: #eee;
 }
+.pText{
+    width: 90%;
+    text-align: left;
+}
 
-
+.settingsElement{
+    height: 15%; /* Ansonten komischer Bug bei den Textboxen, wenn diese animiert werden. */
+}
 #wrapper{
     height: 100%;
 }
 #headlineConfig{
-    height: 13%;
+    height: 10%;
 }
 #wrapper_AP{
-    height: 37%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
+    /*
 #AP_title{
-    height: 26%;
+    height: 18%;
+}*/
+#AP_hinweise{
+    transition: ease-in-out 0.5s;
+    height: 13%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto; 
 }
-#AP_settings_ssid{
-    height: 22%;
-}
-#AP_settings_password{
-    height: 22%;
-}
+
+/*
 #AP_speichern{
-    height: 30%;
-}
+    height: 25%;
+}*/
 #wrapper_STA{
-    height: 37%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
-#STA_title{
-    height: 26%;
+#STA_hinweise{
+    transition: ease-in-out 0.5s;
+    height: 13%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto; 
 }
-#STA_settings_ssid{
-    height: 22%;
-}
-#STA_settings_password{
-    height: 22%;
-}
-#STA_speichern{
-    height: 30%;
+
+#wlan_zu_anzeige{
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

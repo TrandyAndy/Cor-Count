@@ -236,3 +236,39 @@ function sendDataToServer(changedEvent) {
     console.log(nachricht); 
     ws.send(nachricht);
 }
+function buttonSaveAP() {
+    document.getElementById("AP_IP").href = "http://www.google.de"
+    document.getElementById("AP_IP").innerHTML = "http://www.google.de"
+    console.log("tada!");
+    //var url = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.jso'
+    var url = "data";
+    console.log("Die Url ist: ", url);
+    fetch(url)
+    .then(function (response) {
+        //console.log(response);
+        //console.log(response.json);
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+        console.log(data.flagSTA);
+        if (data.flagSTA) 
+        {
+            document.getElementById("AP_ssid_textbox").value = "Verbunden über STA"
+        } 
+        else 
+        {
+            document.getElementById("AP_ssid_textbox").value = "Verbunden über AP"
+        }
+        
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+function buttonSaveSTA(){
+    document.getElementById("AP_hinweise").innerHTML = "";
+    document.getElementById("AP_hinweise").style.height = "0%";
+    document.getElementById("STA_hinweise").innerHTML = "";
+    document.getElementById("STA_hinweise").style.height = "0%";
+}

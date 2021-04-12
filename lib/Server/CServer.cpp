@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-09 08:23:18
+ * @Last Modified time: 2021-03-29 23:15:02
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -37,7 +37,39 @@ void CServer::init()
 
     // WiFi
     
-    
+    WiFi.mode(WIFI_MODE_APSTA);
+
+
+
+    Serial.print("Starten AP (Access Point)…");
+    //WiFi.softAP(ssid, password,1,0,4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+    WiFi.softAP((char*)"PartyHart",(char*)"9876543210");        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+    IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+    Serial.print("AP IP ist: ");
+    Serial.println(IP);
+
+    WiFi.begin(ssid, password);
+    bool flagError = false;
+    unsigned long startZeit = millis();
+    while (WiFi.status() != WL_CONNECTED) 
+    {
+        if ( (millis() - startZeit) > 2000)
+        {
+            Serial.println("STA WLAN Verbindung fehlgeschlagen");
+            flagError = true;
+            break;
+        }
+    }
+    if (flagError == false)
+    {
+        Serial.println("");
+        Serial.println("Mit Router verbunden");
+        IP = WiFi.localIP();
+        Serial.print("STA IP ist: ");
+        Serial.println(IP);
+    }
+
+    /*
     if (flagAP)
     {
         Serial.print("Starten AP (Access Point)…");
@@ -69,13 +101,15 @@ void CServer::init()
             IP = WiFi.localIP();
         }
     }
+    */
     if(MDNS.begin(domain))
     {
       Serial.println("DNS gestartet, erreichbar unter: ");
       Serial.println("http://" + String(domain)+ ".local/");
     }
-    Serial.print("IP-Adresse: ");
-    Serial.println(IP);                       // IP-Adresse ausgeben
+    //Serial.print("IP-Adresse: ");
+    //Serial.println(IP);                       // IP-Adresse ausgeben
+    
     ws.onEvent(onWsEvent);                    // Funktion bekannt machen, die aufgerufen werden soll bei einem WS Events
     server.addHandler(&ws);                   // Handler hinzufügen
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/" zugreift
@@ -87,8 +121,49 @@ void CServer::init()
     server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/style.css" zugreift
     request->send(SPIFFS, "/style.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
     });
+    server.on("/data", HTTP_GET, [](AsyncWebServerRequest * request){
+        DynamicJsonDocument sendenJSON(1024);
+        String JSONmessage;
+        if (ON_STA_FILTER(request))
+        {
+            sendenJSON["flagSTA"] = true;
+            serializeJson(sendenJSON, JSONmessage);
+            request->send(200, "application/json", JSONmessage);
+            Serial.println("Aufruf von STA Client.");   // debug
+        }
+        else if (ON_AP_FILTER(request)) 
+        {
+            sendenJSON["flagSTA"] = false;
+            serializeJson(sendenJSON, JSONmessage);
+            request->send(200, "application/json", JSONmessage);
+            Serial.println("Aufruf von AP Client.");    // debug
+        }
+        else
+        {
+            //request->send(200,"application/json","{\"message\":\"Welcome from Unknwon\"}");
+            sendenJSON["flagSTA"] = false;
+            serializeJson(sendenJSON, JSONmessage);
+            request->send(200, "application/json", JSONmessage);
+            Serial.println("Aufruf von unbekannten Client.");    // debug
+        }
+    });
     server.on("/config", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/config" zugreift
-    request->send(SPIFFS, "/config.htm", "text/html"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+        request->send(SPIFFS, "/config.htm", "text/html"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+        if (ON_STA_FILTER(request))
+        {
+            request->send(200,"application/json","{\"message\":\"Welcome from STA\"}");
+            Serial.println("Aufruf von STA Client.");   // debug
+        }
+        else if (ON_AP_FILTER(request)) 
+        {
+            request->send(200,"application/json","{\"message\":\"Welcome from AP\"}");
+            Serial.println("Aufruf von AP Client.");    // debug
+        }
+        else
+        {
+            request->send(200,"application/json","{\"message\":\"Welcome from Unknwon\"}");
+            Serial.println("Aufruf von unbekannten Client.");    // debug
+        }
     });
     server.on("/style_config.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/config" zugreift
     request->send(SPIFFS, "/style_config.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
@@ -166,8 +241,8 @@ void CServer::transmitData(DataSend mySendData)
         sendenJSON["flagGetTime"] = mySendData.flagGetTime;
         String JSONmessage;
         serializeJson(sendenJSON, JSONmessage);
-        globalClient->text(JSONmessage);    // nur ein Client wird behandelt
-        //ws.textAll(JSONmessage);  // alternative mehrere Clients bekommen selbe anzeige
+        //globalClient->text(JSONmessage);    // nur ein Client wird behandelt
+        ws.textAll(JSONmessage);  // alternative mehrere Clients bekommen selbe anzeige
         // Serial.print("Gesendete Daten sind: "); // Zum Debuggen
         // Serial.println(JSONmessage);  // Zum Debuggen
     }
