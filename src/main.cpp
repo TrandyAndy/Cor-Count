@@ -59,7 +59,7 @@ void setup()
   // Mit Router verbinden:
   //myServer.setNewConnection((char*)"PartyHart",(char*)"9876543210", false);
 
-
+  
   myServer.init();     // Server wird gestartet
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
@@ -89,8 +89,10 @@ void setup()
   Serial.println(energiesparmodus);
   Serial.println(menschenImRaumMax);
   Serial.println(menschenImRaum);
+  myServer.sendDebugMessage("Setup abgeschlossen");
 }
 
+//int i = 0;
 
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
 { 
@@ -120,7 +122,10 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep wenn es zeit ist.
   if (!energiesparmodus)
     ESP_schlaf.resetSleepTime(); //Verzögert Energiesparen
-
+  //myServer.sendDebugMessage("Hallo hier ist der ESP32");
+  // myServer.sendTOFData((float)i/2.0,(float)i/10.0);
+  //delay(500);
+  //i++;
   
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
 

@@ -74,23 +74,25 @@ function openWebsocket(){
         var message = JSON.parse(evt.data); // ["personenzahlMax"], ["personenzahlAktuell"], ["akkustand"], ["energiesparmodus"], ["flagGetTime"]
         console.log(message);   // debug
         // geschickte Werte laden
-        personenzahlMax = message.personenzahlMax;
-        personenzahlAktuell = message.personenzahlAktuell;
-        akkustand = message.akkustand;
-        if (akkustand > 100) { // wenn Akkustand größer 100 wird das begrenzt
-            akkustand = 100;
+        if (message.hasOwnProperty("personenzahlMax")) {
+            personenzahlMax = message.personenzahlMax;
+            personenzahlAktuell = message.personenzahlAktuell;
+            akkustand = message.akkustand;
+            if (akkustand > 100) { // wenn Akkustand größer 100 wird das begrenzt
+                akkustand = 100;
+            }
+            energiesparmodus = message.energiesparmodus;
+            flagGetTime = message.flagGetTime;
+            if(flagFirstCall)   // nur beim ersten Aufruf aufrufen:
+            {
+                flagFirstCall = false;
+            }
+            else if(flagGetTime) {
+                sendDataToServer(false);
+                flagGetTime = false;
+            }
+            aktualisiereAnzeige();
         }
-        energiesparmodus = message.energiesparmodus;
-        flagGetTime = message.flagGetTime;
-        if(flagFirstCall)   // nur beim ersten Aufruf aufrufen:
-        {
-            flagFirstCall = false;
-        }
-        else if(flagGetTime) {
-            sendDataToServer(false);
-            flagGetTime = false;
-        }
-        aktualisiereAnzeige();
     }         
 
     ws.onerror = function(error) {  // was soll passieren, wenn ein Fehler auftritt?

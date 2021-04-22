@@ -1,7 +1,10 @@
 #include "CTof.h"
+#include "Global.h"
 
 bool ISR_Flag1=0;
 bool ISR_Flag2=0;
+
+unsigned long startTime = 0;
 
 void CTof::ISR_ToF1()
 {
@@ -228,6 +231,15 @@ void CTof::read_dual_sensors()
     return;
   lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
   lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
+
+  if (millis() - startTime > 1000)
+  {
+    myServer.sendTOFData(measure1.RangeDMaxMilliMeter,measure2.RangeMilliMeter);
+    myServer.sendDebugMessage("Range Status Sensor 1: " + (String) measure1.RangeStatus);
+    myServer.sendDebugMessage("Range Status Sensor 2: " + (String) measure2.RangeStatus);
+    startTime = millis();
+  }
+
 
   // print sensor one reading
   //Serial.print(F("1: "));

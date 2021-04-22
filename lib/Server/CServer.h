@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-06 21:38:00
+ * @Last Modified time: 2021-04-22 09:45:15
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -28,6 +28,8 @@ class CServer
         void setNewConnection(char* pSSID, char* pPassword, bool pFlagMode);
         void transmitData(DataSend mySendData);
         byte receiveData(DataReceive & myReceivedData); // Rückgabe: 0 = keine Nachricht, 1 = Änderungen an der Webseite, 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist, 3 = initiale Nachricht, 4 = Fehler
+        void sendDebugMessage(String msg);  // Debug Message schicken an Webclient
+        void sendTOFData(float dataTOF1, float dataTOF2);
         //void run();
         void init();
         void close();
@@ -45,4 +47,5 @@ class CServer
         DataReceive dataReceived;
         DataSend dataSend;
         bool flagAP;
+        bool isThereAnyClient();
 };

@@ -1,4 +1,5 @@
 #include "CZaehler.h"
+#include "Global.h"
 
 int8_t CZaehler::updateZaehler(int8_t cameraEvent, int8_t tofEvent)
 {
@@ -13,6 +14,7 @@ int8_t CZaehler::updateZaehler(int8_t cameraEvent, int8_t tofEvent)
     // return tofEvent;  // temp
     Serial.print("Erkannt:");
     Serial.println(cameraEvent); //Debug
+    myServer.sendDebugMessage("Sensor hat was erkannt: " + (String)tofEvent);
     return cameraEvent+tofEvent; //temp
   }
 }

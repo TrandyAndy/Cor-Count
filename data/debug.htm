@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+    <html lang="de">
+            <meta charset="utf-8">
+        <head>
+            
+            <title>Corona-Ampel</title>
+            <!--link rel="shortcut icon" type="image/x-icon" href="favicon.png"-->
+            <link rel="stylesheet" href="style_debug.css">
+            <!--script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.min.js"></script-->
+            <script src="chart.min.js"></script>
+
+            <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script-->
+            <script src="script_debug.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
+        </head>
+        <body>
+            <div id="wrapper">
+                <div id="title_debug" class="center">
+                    <h1>Debug-Informationen</h1>
+                </div>  
+                <div id="title_debug_messages" class="center">
+                    <h2>Debug-Messages</h2>
+                </div>  
+                <textarea id="debug_messages_text" name="debug_messages_text" ></textarea>
+                <button onclick="button()">hallo</button>
+                <div >
+                    <h2>Daten</h2>
+                </div>
+                <div>
+                    <canvas id="line-chart" width="800" height="450"></canvas>
+                </div>
+                <div>
+                    <canvas id="line-chart2" width="800" height="450"></canvas>
+                </div>
+            </div>
+        </body>
+    </html>

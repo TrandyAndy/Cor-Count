@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-03-29 23:15:02
+ * @Last Modified time: 2021-04-22 09:53:36
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
 
@@ -53,7 +53,7 @@ void CServer::init()
     unsigned long startZeit = millis();
     while (WiFi.status() != WL_CONNECTED) 
     {
-        if ( (millis() - startZeit) > 2000)
+        if ( (millis() - startZeit) > 3000) // 3 Sekunden Zeit für Verbindung mit dem Router
         {
             Serial.println("STA WLAN Verbindung fehlgeschlagen");
             flagError = true;
@@ -120,6 +120,18 @@ void CServer::init()
     });
     server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/style.css" zugreift
     request->send(SPIFFS, "/style.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+    });
+    server.on("/debug", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/" zugreift
+    request->send(SPIFFS, "/debug.htm", "text/html"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+    });
+    server.on("/script_debug.js", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/script.js" zugreift
+    request->send(SPIFFS, "/script_debug.js", "text/script"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+    });
+    server.on("/style_debug.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/style.css" zugreift
+    request->send(SPIFFS, "/style_debug.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
+    });
+    server.on("/chart.min.js", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/script.js" zugreift
+    request->send(SPIFFS, "/chart.min.js", "text/script"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
     });
     server.on("/data", HTTP_GET, [](AsyncWebServerRequest * request){
         DynamicJsonDocument sendenJSON(1024);
@@ -231,7 +243,7 @@ void CServer::onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, 
 }
 void CServer::transmitData(DataSend mySendData)
 {
-    if(globalClient != NULL && globalClient->status() == WS_CONNECTED)    // wenn die Verbindung zur Webseite besteht
+    if(isThereAnyClient())      // wenn die Verbindung zur Webseite besteht
     {
         DynamicJsonDocument sendenJSON(1024);
         sendenJSON["personenzahlMax"] = mySendData.personenzahlMax;
@@ -282,9 +294,44 @@ byte CServer::receiveData(DataReceive & myReceivedData)
     }
     
 }
+void CServer::sendDebugMessage(String msg)
+{
+    if(isThereAnyClient()) // wenn eine Verbindung zur Webseite besteht
+    {
+        DynamicJsonDocument sendenJSON(1024);
+        sendenJSON["debug_msg"] = msg;
+        String JSONmessage;
+        serializeJson(sendenJSON, JSONmessage);
+        ws.textAll(JSONmessage);  // alternative mehrere Clients bekommen selbe anzeige
+        // Serial.print("Gesendete Daten sind: "); // Zum Debuggen
+        // Serial.println(JSONmessage);  // Zum Debuggen
+    }
+}
+void CServer::sendTOFData(float dataTOF1, float dataTOF2)
+{
+    if(isThereAnyClient()) // wenn eine Verbindung zur Webseite besteht
+    {
+        DynamicJsonDocument sendenJSON(1024);
+        sendenJSON["tof1"] = dataTOF1;
+        sendenJSON["tof2"] = dataTOF2;
+        String JSONmessage;
+        serializeJson(sendenJSON, JSONmessage);
+        ws.textAll(JSONmessage);  // alternative mehrere Clients bekommen selbe anzeige
+        // Serial.print("Gesendete Daten sind: "); // Zum Debuggen
+        // Serial.println(JSONmessage);  // Zum Debuggen
+    }
+}
 void CServer::close()
 {
     Serial.println("Verbindung wird geschlossen");
     ws.cleanupClients();
     ws.closeAll();
+}
+
+bool CServer::isThereAnyClient()
+{
+    AsyncWebSocket::AsyncWebSocketClientLinkedList myClients =  ws.getClients();    // Liste aller Clients laden
+    bool clientAvailable = ! myClients.isEmpty();
+    Serial.println(clientAvailable);     // Zum Debuggen
+    return clientAvailable;        // gibt es kein Client --> false, gibt es Clients --> true
 }
