@@ -8,6 +8,7 @@ var flagFirstCall = true;       // Variable für den ersten Aufruf true = erster
 var maxDataPoints = 200;        // maximal angezeigte Daten im Graph
 var csvFile = "Messwert; Datum; Uhrzeit; TOF1; TOF2\n";
 var indexMesswert = 1;
+var pause = false;
 
 var dataPlotTOF = new Chart(document.getElementById('myChartTOF').getContext('2d'), {
     type: 'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
@@ -137,7 +138,9 @@ function openWebsocket() {
             printMessage(message.debug_msg);
         }
         if (message.hasOwnProperty("tof1")) {
-            addData(dataPlot, getTime(), [message.tof1, message.tof2]);
+            if (!pause) {
+                addData(dataPlot, getTime(), [message.tof1, message.tof2]);
+            }
             saveToFile(message.tof1, message.tof2);
         }
     }
@@ -272,6 +275,23 @@ document.querySelector('#downloadCSV').addEventListener('click', () => {
     downloadToFile(csvFile,  getDateTimeWithline() + '_sensor_measurement.csv', 'text/comma-separated-values');
 });
 
+function buttonLoeschen() {
+    deleteData(dataPlotTOF);
+    deleteData(dataPlot1);
+    deleteData(dataPlot2);
+}
+
+function buttonPause() {
+    pause = !pause;
+}
+
+function deleteData(chart) {
+    chart.data.labels = [];
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data = [];
+    });
+    chart.update();
+}
 /*
 
 var newDataset = {

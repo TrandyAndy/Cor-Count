@@ -90,3 +90,19 @@ h2{
 	font-family: Tahoma, sans-serif;
     text-align: left;
 }
+
+#wrapperButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 10%;
+}
+.divSmallButtons {
+    width: 100%;
+}
+#pause {
+    width: 80%;
+}
+#loeschen {
+    width: 80%;
+}
