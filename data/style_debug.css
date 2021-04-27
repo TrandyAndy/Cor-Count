@@ -52,7 +52,7 @@ h2{
     letter-spacing: 2px;
     border: none;
     color: white;
-    font-size:4vmin;
+    font-size: 3vmin;
     cursor: pointer;
     transition: ease-in-out 0.2s;
     background-color: #aaa;
@@ -68,14 +68,22 @@ h2{
     background-color: #666;
     color: #eee;
 }
+.divButton {
+    height: 10%;
+}
 
 
 #wrapper{
     height: 100%;
 }
-
+#title_debug {
+    height: 10%;
+}
+.title_h2 {
+    height: 7%;
+}
 #debug_messages_text {
-    height: 50%;
+    height: 70%;
     width: 90%;
     border: 1px solid #cccccc;
 	padding: 0.5em;

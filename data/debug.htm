@@ -7,7 +7,14 @@
             <!--link rel="shortcut icon" type="image/x-icon" href="favicon.png"-->
             <link rel="stylesheet" href="style_debug.css">
             <!--script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.min.js"></script-->
-            <script src="chart.min.js"></script>
+           <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.js"></script-->
+            
+           <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>  <!--verursacht viel Speicher -->
+           <!--script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@next"></script-->
+           <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0/build/global/luxon.min.js"></script>
+           <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+           
+            <!--script src="chart.min.js"></script--> <!-- local Char.js -->
 
             <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script-->
             <script src="script_debug.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
@@ -17,19 +24,28 @@
                 <div id="title_debug" class="center">
                     <h1>Debug-Informationen</h1>
                 </div>  
-                <div id="title_debug_messages" class="center">
-                    <h2>Debug-Messages</h2>
+                <div id="title_debug_messages" class="center title_h2">
+                    <h2>Messages</h2>
                 </div>  
                 <textarea id="debug_messages_text" name="debug_messages_text" ></textarea>
-                <button onclick="button()">hallo</button>
-                <div >
-                    <h2>Daten</h2>
+                <div class="center divButton">
+                    <button class="button" onclick="button()">Messwerte Test</button>
+                </div>
+                <div class="center divButton">
+                    <button id="downloadCSV" class="button">Messwerte als CSV herunterladen</button>
+                </div>
+              
+                <div class="center title_h2">
+                    <h2>Diagramme</h2>
                 </div>
                 <div>
-                    <canvas id="line-chart" width="800" height="450"></canvas>
+                    <canvas id="myChartTOF"></canvas>
                 </div>
                 <div>
-                    <canvas id="line-chart2" width="800" height="450"></canvas>
+                    <canvas id="myChart1"></canvas>
+                </div>
+                <div>
+                    <canvas id="myChart2"></canvas>
                 </div>
             </div>
         </body>
