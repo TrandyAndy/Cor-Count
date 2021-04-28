@@ -139,7 +139,8 @@ function openWebsocket() {
         }
         if (message.hasOwnProperty("tof1")) {
             if (!pause) {
-                addData(dataPlot, getTime(), [message.tof1, message.tof2]);
+                //addData(dataPlotTOF, getTime(), [message.tof1, message.tof2]);
+                addData(dataPlotTOF, new Date(), [message.tof1, message.tof2]);
             }
             saveToFile(message.tof1, message.tof2);
         }
@@ -209,7 +210,7 @@ function addData(chart, label, data) {
     if (chart.data.labels.length > maxDataPoints) removeData(chart);
     chart.data.labels.push(label);
     chart.data.datasets.forEach((dataset, i) => {
-        // console.log(dataset, i); // debug
+        //console.log(dataset, i); // debug
         if (Array.isArray(data)) {
             dataset.data.push(data[i]);
         } else {
@@ -243,13 +244,13 @@ function button() {
 
 
     var now = new Date();
-   console.log("toISOString\t" + now.toISOString());
+    /*console.log("toISOString\t" + now.toISOString());
     console.log("toLocaleTimeString\t" + now.toLocaleTimeString());
     console.log("toLocaleDateString\t" + now.toLocaleDateString());
     console.log("toLocaleString\t" + now.toLocaleString());
     console.log("valueOf\t" + now.valueOf())
     console.log("toString\t" + now.toString());
-    console.log("get Millis" + now.getMilliseconds());
+    console.log("get Millis" + now.getMilliseconds());*/
     saveToFile(Math.floor(Math.random() * 20), Math.floor(Math.random() * 20))
 
     //csvFile += String(now.toISOString()) + ";" + String(Math.floor(Math.random() * 20)) + ";" + String(Math.floor(Math.random() * 20)) + "\n";
@@ -283,6 +284,11 @@ function buttonLoeschen() {
 
 function buttonPause() {
     pause = !pause;
+    if(pause) {
+        document.getElementById("pause").innerText = "Diagramm pausiert";
+    } else {
+        document.getElementById("pause").innerText = "Diagramm pausieren";
+    }
 }
 
 function deleteData(chart) {
