@@ -58,6 +58,7 @@ void setup()
 
   // Mit Router verbinden:
   //myServer.setNewConnection((char*)"PartyHart",(char*)"9876543210", false);
+  myServer.setNewConnection((char*)"FRITZ!Box 7590 UP",(char*)"45525509900873963179", false);
 
   
   myServer.init();     // Server wird gestartet

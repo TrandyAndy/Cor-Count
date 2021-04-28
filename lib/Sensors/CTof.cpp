@@ -234,9 +234,9 @@ void CTof::read_dual_sensors()
 
   if (millis() - startTime > 1000)
   {
-    myServer.sendTOFData(measure1.RangeDMaxMilliMeter,measure2.RangeMilliMeter);
-    myServer.sendDebugMessage("Range Status Sensor 1: " + (String) measure1.RangeStatus);
-    myServer.sendDebugMessage("Range Status Sensor 2: " + (String) measure2.RangeStatus);
+    myServer.sendTOFData(measure1.RangeMilliMeter,measure2.RangeMilliMeter);
+    //myServer.sendDebugMessage("Range Status Sensor 1: " + (String) measure1.RangeStatus);
+    //myServer.sendDebugMessage("Range Status Sensor 2: " + (String) measure2.RangeStatus);
     startTime = millis();
   }
 

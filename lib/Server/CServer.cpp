@@ -332,6 +332,6 @@ bool CServer::isThereAnyClient()
 {
     AsyncWebSocket::AsyncWebSocketClientLinkedList myClients =  ws.getClients();    // Liste aller Clients laden
     bool clientAvailable = ! myClients.isEmpty();
-    Serial.println(clientAvailable);     // Zum Debuggen
+    //Serial.println(clientAvailable);     // Zum Debuggen
     return clientAvailable;        // gibt es kein Client --> false, gibt es Clients --> true
 }

@@ -13,7 +13,7 @@ int8_t CZaehler::updateZaehler(int8_t cameraEvent, int8_t tofEvent)
     //return cameraEvent; // temp
     // return tofEvent;  // temp
     Serial.print("Erkannt:");
-    Serial.println(cameraEvent); //Debug
+    Serial.println(tofEvent); //Debug
     myServer.sendDebugMessage("Sensor hat was erkannt: " + (String)tofEvent);
     return cameraEvent+tofEvent; //temp
   }
