@@ -3,11 +3,12 @@
             <meta charset="utf-8">
         <head>
             
-            <title>Corona-Ampel</title>
+            <title>Counting-Cube</title>
             <!--link rel="shortcut icon" type="image/x-icon" href="favicon.ico"-->
             <link rel="stylesheet" href="style.css">
             <script src="script.js" defer></script> <!-- defer: erst ausfüren, wenn die Seite geladen wurde-->
-           
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+            <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         </head>
         <body>
             <div id="wrapper_anzeige">
@@ -127,8 +128,8 @@
                         <div class="normalText label">
                             Status:
                         </div>
-                        <div class="inputElement center">
-                            <p class="pText normalText">
+                        <div class="inputElement">
+                            <p id="AP_status" class="pText normalText">
                                 aktiv und Sie sind damit verbunden
                             </p>
                         </div>
@@ -138,7 +139,9 @@
                             SSID (Name):
                         </div>
                         <div class="inputElement">
-                            <input id="AP_ssid_textbox"  type="text" class="textBox normalText" placeholder="Cor-Count">
+                            <input id="AP_ssid_textbox"  type="text" class="textBox normalText" placeholder="Counting-Cube">
+                            <div class="center eyeIcon normalText">
+                            </div>
                         </div>
                     </div>
                     <div class="center settingsElement">
@@ -146,11 +149,14 @@
                             Passwort:
                         </div>
                         <div class="inputElement">
-                            <input id="AP_password_textbox" type="text" class="textBox normalText" placeholder="Gewünschtes Passwort">
+                            <input id="AP_password_textbox" type="password" class="textBox normalText" placeholder="Gewünschtes Passwort">
+                            <div onclick="onclickPasswordAP()" class="center eyeIcon normalText">
+                                <i id="eyeIconAP" class="fas fa-eye"></i>
+                            </div>
                         </div>
                     </div>
                     <div id="AP_hinweise" class="normalText">
-                        Personenzähler erreichbar unter <a href="http://stopgovid.local">stopgovid.local</a> (Windows, macOS und iOS) und unter <a id="AP_IP" href="#">192.168.4.1</a> (Android).
+                        Personenzähler erreichbar unter <a href="http://counting-cube.local">counting-cube.local</a> (Windows, macOS und iOS) und unter <a id="AP_IP" href="#">192.168.4.1</a> (Android).
                     </div>
                     <div id="AP_speichern" class="center">
                         <button id="button_reset" class="buttonConfig" type="button" onclick="buttonSaveAP()">Speichern</button>
@@ -165,8 +171,8 @@
                         <div class="normalText label">
                             Status:
                         </div>
-                        <div class="inputElement center">
-                            <p class="pText normalText">
+                        <div class="inputElement">
+                            <p id="STA_status" class="pText normalText">
                                 aktiv
                             </p>
                         </div>
@@ -176,7 +182,29 @@
                             SSID (Name):
                         </div>
                         <div class="inputElement">
+                            <select onchange="onchangeComboBoxSSID()" name="comboBoxSSID" id="comboBoxSSID" class="textBox normalText">
+                                <optgroup id="groupSavedNetworks" label="Davor verwendetes Netzwerk">
+                                    <!--option>Volvo</option>
+                                    <option>Saab</option-->
+                                </optgroup>
+                                <optgroup id="groupFoundNetworks" label="Gefundene Netzwerke">
+                                    <!--option>Mercedes</option>
+                                    <option>Audi</option-->
+                                </optgroup>
+                                <option>Anderes Netzwerk verwenden</option>
+                              </select>
+                            <div class="center eyeIcon normalText">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="STA_ssid_own" class="center settingsElement hide">
+                        <div id="STA_ssid_label" class="normalText label">
+                            SSID (Name):
+                        </div>
+                        <div class="inputElement">
                             <input id="STA_ssid_textbox" type="text" class="textBox normalText" placeholder="SSID ihres Netzwerks">
+                            <div class="center eyeIcon normalText">
+                            </div>
                         </div>
                     </div>
                     <div class="center settingsElement">
@@ -184,11 +212,15 @@
                             Passwort:
                         </div>
                         <div class="inputElement">
-                            <input id="STA_password_textbox" type="text" class="textBox normalText" placeholder="Passwort ihres Netzwerks">
+                            <input id="STA_password_textbox" type="password" class="textBox normalText" placeholder="Passwort ihres Netzwerks">
+                            <div onclick="onclickPasswordSTA()" class="center eyeIcon normalText">
+                                <i id="eyeIconSTA" class="fas fa-eye"></i>
+                            </div>
                         </div>
+                        
                     </div>
                     <div id="STA_hinweise" class="normalText">
-                        Personenzähler erreichbar unter <a href="http://stopgovid.local">stopgovid.local</a> (Windows, macOS und iOS) und unter <a id="STA_IP" href="#">192.168.4.1</a> (Android).
+                        Personenzähler erreichbar unter <a href="http://counting-cube.local">counting-cube.local</a> (Windows, macOS und iOS) und unter <a id="STA_IP" href="#">192.168.4.1</a> (Android).
                     </div>
                     <div id="STA_speichern" class="center">
                         <button id="button_reset" class="buttonConfig" type="button" onclick="buttonSaveSTA()">Speichern</button>

@@ -7,8 +7,9 @@ HIT Projekt WS20/21
 Version: 0.1  Datum: 05.12.20
 */
 #include <Arduino.h>
-#include <Wire.h>
 #include "Global.h"   //Global wird überall inkludiert.
+#include <Wire.h>
+#include "CSaveLoad.h"
 #include "CorCount.h"
 #include "CSensor.h"
 #include "CServer.h"  // Webserver auf dem ESP32
@@ -17,6 +18,8 @@ Version: 0.1  Datum: 05.12.20
 #include "CTof.h"
 #include "CBattery.h"
 #include "CZaehler.h"
+
+
 
 // Webserver erstellen, mit SSID, Passwort und domain:
 // CServer ist global // CServer myServer((char*)"Cor-Count",(char*)"COVID-19", (char*)"cor-count");    
@@ -54,14 +57,22 @@ void setup()
   // Kamera starten:
   myCamera.init();     // Pins der Kamera werden aktiviert
   myCamera.wakeUpCamera();  // Kamera ESP32 aufwecken
+
+  // Flash starten
+  myFlash.init();
+
   // Webserver starten:
 
   // Mit Router verbinden:
   //myServer.setNewConnection((char*)"PartyHart",(char*)"9876543210", false);
-  myServer.setNewConnection((char*)"FRITZ!Box 7590 UP",(char*)"45525509900873963179", false);
+  //myServer.setNewConnection((char*)"FRITZ!Box 7590 UP",(char*)"45525509900873963179", false);
+  
 
   
   myServer.init();     // Server wird gestartet
+  //myServer.setNewConnectionAP((char *) "hallowasgehtHALLO", (char *) "123456789");
+  
+  // delay(10000);
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
   // Lichtschranke starten
@@ -81,11 +92,16 @@ void setup()
   Serial.println("Setup Abgeschlossen. Neustart");
   }
   aufwachZaehler++;
+  /* Wurden durch neue Funktionen von Julian ersetzt
   //Daten Rücklesen
   EEPROM.begin(46); //46 Byte Reservieren
   menschenImRaumMax=ESP_schlaf.getData(AdresseMesnchenMax);
   menschenImRaum=ESP_schlaf.getData(AdresseMesnchenZaehler);
   energiesparmodus=ESP_schlaf.getData(Adresseenergiesparmodus);
+  */
+  myFlash.loadMenschenImRaum(menschenImRaum);
+  myFlash.loadMenschenImRaumMax(menschenImRaumMax);
+  myFlash.loadEnergiesparmodus(energiesparmodus);
   Serial.print("Energiespaeren war : "); //Debug
   Serial.println(energiesparmodus);
   Serial.println(menschenImRaumMax);
@@ -120,14 +136,28 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
     Go.setLicht(true);
     Stop.setLicht(false);
   }
+  myServer.checkIsWorkingSTA();   // überprüft ob eine Verbindung zum Router besteht
+
   ESP_schlaf.energiesparen(); //Sende ESP in den Deepsleep wenn es zeit ist.
   if (!energiesparmodus)
     ESP_schlaf.resetSleepTime(); //Verzögert Energiesparen
   //myServer.sendDebugMessage("Hallo hier ist der ESP32");
   // myServer.sendTOFData((float)i/2.0,(float)i/10.0);
-  //delay(500);
+  //myServer.sendTOFData(millis() % 10, millis() % 10 + 10);
+  //delay(100);
   //i++;
-  
+
+  /*
+  myFlash.saveWlanAccessDataSta("test12345","test54321");
+  delay(10000);
+  String ssidAP, pswAP;
+  myFlash.loadWlanAccessDataSta(ssidAP, pswAP);
+  Serial.print("Daten sind: ");
+  Serial.println(ssidAP);
+  Serial.println(pswAP);
+  delay(10000);
+  */
+
 } // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
 
 
@@ -136,10 +166,10 @@ void checkIfNewMessageFromServer()
 {
   switch (myServer.receiveData(myReceivedData))
   {
-  case 0:   // 0 = keine Nachricht,
+  case noMessage:   // 0 = keine Nachricht,
     //Serial.println("Keine Nachrichten");  // debug
     break;
-  case 1:   // 1 = Änderungen an der Webseite,
+  case changeOnWebsite:   // 1 = Änderungen an der Webseite,
     // debug Ausgabe
     Serial.println("Empfangene Daten: "); //debug
     Serial.print("Enegiesparmodus: ");  //debug
@@ -152,7 +182,8 @@ void checkIfNewMessageFromServer()
 
     if (energiesparmodus != myReceivedData.energiesparmodus)
     {
-      ESP_schlaf.datensichern( (int) myReceivedData.energiesparmodus, Adresseenergiesparmodus); 
+      myFlash.saveEnergiesparmodus(myReceivedData.energiesparmodus);
+      //ESP_schlaf.datensichern( (int) myReceivedData.energiesparmodus, Adresseenergiesparmodus); 
       Serial.printf("Energiesparmodus wird gespeichert: %d",(int) myReceivedData.energiesparmodus);
     }
     // Empfangene Daten speichern
@@ -170,14 +201,15 @@ void checkIfNewMessageFromServer()
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
     break;
 
-  case 2:   // 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist
+  case getTimeFromWebsite:   // 2 = Datum und Zeit wird geschickt nachdem eine Person durchgelaufen ist
     // debug Ausgabe
     Serial.println("Empfangene Daten: "); //debug
     Serial.print("Das Datum: ");  //debug
     Serial.println(myReceivedData.dateTime);  //debug
     // debug Ausgabe Ende
     break;
-  case 3:   // 3 = initiale Nachricht
+  case initialMessage:   // 3 = initiale Nachricht
+    myServer.checkIsWorkingSTA(true);
     Serial.println("Website verbunden:"); //debug
     mySendData.akkustand = akkustand; // hier wird der aktuelle Akkustand geschickt
     mySendData.personenzahlAktuell = menschenImRaum; // hier wird die aktuelle Personenzahl geschickt
@@ -185,7 +217,16 @@ void checkIfNewMessageFromServer()
     mySendData.energiesparmodus = energiesparmodus; // energiesparmodus schicken;
     mySendData.flagGetTime = false; // keine Zeit anforderun,
     myServer.transmitData(mySendData);  // Daten an Webseite schicken
+    myServer.transmitDataWIFI();  // Die gespeicherten WiFi Daten schicken
     ESP_schlaf.resetSleepTime();
+    break;
+  case wlanConfigAP: // 4 = WLAN AP config
+    Serial.println("WLAN Config AP"); //debug
+    myServer.setNewConnectionAP(myReceivedData.ssidAP, myReceivedData.passwordAP);
+    break;
+  case wlanConfigSTA: // 5 = WLAN STA config
+    Serial.println("WLAN Config STA"); //debug
+    myServer.setNewConnectionSTA(myReceivedData.ssidSTA, myReceivedData.passwordSTA);
     break;
   default:  // Fehler
     Serial.println("Fehler des Servers beim Empfangen der Nachrichten.");

@@ -5,6 +5,7 @@ Autor: Andy
 // Julian: Warum ist die Datei nicht in h und cpp aufgeteilt??????
 
 #pragma once
+//#include "Global.h"
 #include <EEPROM.h>     //Speichern des Zaehlers
 #include <Preferences.h>
 #include <Adafruit_NeoPixel.h>
@@ -51,9 +52,12 @@ class CSchlafen{
         Serial.println("ESP muede, ESP schlafen");
         esp_sleep_enable_ext0_wakeup(gpio_num_t (WakeupPin),1); //1 = High, 0 = Low
         esp_sleep_enable_timer_wakeup(SolangesollderESPschalfen*1000000);
-        datensichern(menschenImRaum, AdresseMesnchenZaehler);//Daten sichern
-        datensichern(menschenImRaumMax, AdresseMesnchenMax);
-        datensichern(int(energiesparmodus), Adresseenergiesparmodus);  
+        myFlash.saveMenschenImRaum(menschenImRaum);
+        myFlash.saveMenschenImRaumMax(menschenImRaumMax);
+        myFlash.saveEnergiesparmodus(energiesparmodus);
+        //datensichern(menschenImRaum, AdresseMesnchenZaehler);//Daten sichern
+        //datensichern(menschenImRaumMax, AdresseMesnchenMax);
+        //datensichern(int(energiesparmodus), Adresseenergiesparmodus);  
         myServer.close();       // Websocket Verbindung wird geschlossen.
         esp_deep_sleep_start(); 
         Serial.println("This will never be printed");

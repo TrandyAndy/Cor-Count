@@ -4,11 +4,12 @@ Hier werden alle Globalen Bibliotheken, Defines, und Enums erzeugt.
 Autor: Andy
 
 */
-
+#pragma once
 //Inlcudes:
 #include <Arduino.h>    //Grundlegende Funktionen   Nutzung: Andy
-#include <Wire.h>       //I²C Funktion              Nutzung: Sensor.h
+//#include <Wire.h>       //I²C Funktion              Nutzung: Sensor.h
 #include "CServer.h"
+#include "CSaveLoad.h"
 
 
 //Pin Map:
@@ -42,10 +43,12 @@ extern byte akkustand;
 
 //Global Objekte:
 
+extern CSaveLoad myFlash;
 extern CServer myServer;    
 
+
 //Defines:
-#define Schalfenszeit 80000             //Wartezeit für DeepSleep in ms //ehemals 4000
+#define Schalfenszeit 80000             //Wartezeit für DeepSleep in ms //ehemals 4000 akutell 80000
 #define SolangesollderESPschalfen 60    //sec
 #define AdresseMesnchenZaehler  0       //Speicherort ! Nur 0 geht???
 #define AdresseMesnchenMax 2
@@ -61,6 +64,14 @@ extern CServer myServer;
 #define PIXEL_COUNT 64                  // Number of NeoPixels
 #define LOX1_ADDRESS 0x30
 #define LOX2_ADDRESS 0x31
+// Defines für WiFi
+#define noMessage 0
+#define changeOnWebsite 1
+#define getTimeFromWebsite 2
+#define initialMessage 3
+#define wlanConfigAP 4
+#define wlanConfigSTA 5
+
 
 //Batterie
 #define faktorSpannungsteiler 0.5       // Faktor des Spannungsteiler [ R2 / (R1+R2) ], z.B. R1 = 1k und R2 = 1k--> 0.5 oder R1 = 3k und R2 = 1k  --> 0.25

@@ -3,57 +3,43 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-04-22 09:53:36
+ * @Last Modified time: 2021-06-04 22:05:36
  * @Description: Voraussetzungen: Webseite im data Ordner auf dem ESP32 hochladen via Platformio "Upload Filesystem Image"
  */
-
+//#include "Global.h"
 #include "CServer.h"
+#define waitForConnection 10000
 
 DataReceive globalReceivedData;
 AsyncWebSocketClient * CServer::globalClient = NULL;
 byte messageFlag = 0;
 
-CServer::CServer(char* pSSID, char* pPassword, char* pDomain): ssid(pSSID), password(pPassword), domain(pDomain), server(80), ws("/ws"), flagAP(true)
+CServer::CServer(String pSSID, String pPassword, String pDomain): 
+    ssidSTA(""), 
+    passwordSTA(""),
+    ssidAP(pSSID), 
+    passwordAP(pPassword),
+    domain(pDomain), 
+    server(80), 
+    ws("/ws"), 
+    flagAP(true),
+    numberOfScannedNetworks(0)
 {
     
 }
 
-void CServer::setNewConnection(char* pSSID, char* pPassword, bool pFlagMode)
+void CServer::setNewConnectionSTA(String pSSID, String pPassword)
 {
-    ssid = pSSID;
-    password = pPassword;
-    flagAP = pFlagMode;
-}
-
-void CServer::init()
-{
-    if(!SPIFFS.begin())                       // Dateien vom Flashspeicher des ESP32 lesen, inkl. der Webseite
-    {
-        Serial.println("An Error has occurred while mounting SPIFFS");  // Zum Debuggen
-        Serial.println("Sie muessen eine Webseite hochladen!"); // Zum Debuggen
-        //return;                               // Wenn keine Webseite hochgeladen wurde, wird kein WiFi eröffnet
-    }
-    // Ende Dateien vom Speicher laden
-
-    // WiFi
-    
+    ssidSTA = pSSID;
+    passwordSTA = pPassword;
+    WiFi.disconnect();
     WiFi.mode(WIFI_MODE_APSTA);
-
-
-
-    Serial.print("Starten AP (Access Point)…");
-    //WiFi.softAP(ssid, password,1,0,4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
-    WiFi.softAP((char*)"PartyHart",(char*)"9876543210");        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
-    IP = WiFi.softAPIP();                     // IP-Adresse auslesen
-    Serial.print("AP IP ist: ");
-    Serial.println(IP);
-
-    WiFi.begin(ssid, password);
     bool flagError = false;
     unsigned long startZeit = millis();
+    WiFi.begin(ssidSTA.c_str(), passwordSTA.c_str());
     while (WiFi.status() != WL_CONNECTED) 
     {
-        if ( (millis() - startZeit) > 3000) // 3 Sekunden Zeit für Verbindung mit dem Router
+        if ( (millis() - startZeit) > waitForConnection) // 3 Sekunden Zeit für Verbindung mit dem Router
         {
             Serial.println("STA WLAN Verbindung fehlgeschlagen");
             flagError = true;
@@ -68,7 +54,112 @@ void CServer::init()
         Serial.print("STA IP ist: ");
         Serial.println(IP);
     }
+    else 
+    {
+        WiFi.disconnect();
+        WiFi.mode(WIFI_MODE_AP);
+    }
+    WiFi.softAP(ssidAP.c_str(), passwordAP.c_str());
+    myFlash.saveWlanAccessDataSta(ssidSTA, passwordSTA);
+}
+void CServer::setNewConnectionAP(String pSSID, String pPassword)
+{
+    ssidAP = pSSID;
+    passwordAP = pPassword;
+    WiFi.disconnect();
+    WiFi.mode(WIFI_MODE_AP);
+    WiFi.softAP(ssidAP.c_str(), passwordAP.c_str());
+    IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+    Serial.print("AP IP ist: ");
+    Serial.println(IP);
+    myFlash.saveWlanAccessDataAp(ssidAP, passwordAP);
+}
 
+void CServer::init()
+{
+    if(!SPIFFS.begin())                       // Dateien vom Flashspeicher des ESP32 lesen, inkl. der Webseite
+    {
+        Serial.println("An Error has occurred while mounting SPIFFS");  // Zum Debuggen
+        Serial.println("Sie muessen eine Webseite hochladen!"); // Zum Debuggen
+        //return;                               // Wenn keine Webseite hochgeladen wurde, wird kein WiFi eröffnet
+    }
+    myFlash.loadScannedNetworks(scannedNetworks, numberOfScannedNetworks);
+    if(numberOfScannedNetworks == 111)    // Achtung Bug wenn kein WLAN um einen rum ist
+    {
+        scanNetworks();
+        ESP.restart();  // Der ESP spinnt irgendwie nach dem Scannen
+    }
+    String localSSID_AP, localPasswordAP, localSSID_STA, localPasswordSTA;
+    myFlash.loadWlanAccessDataAp(localSSID_AP, localPasswordAP);
+    if (localSSID_AP != "") // wenn es gespeicherte Werte gibt, die default Werte ersetzen
+    {
+        ssidAP = localSSID_AP;
+        passwordAP = localPasswordAP;
+
+    }
+    myFlash.loadWlanAccessDataSta(localSSID_STA, localPasswordSTA);
+    if (localSSID_STA != "") // wenn es gespeicherte Werte gibt, die default Werte ersetzen
+    {
+        ssidSTA = localSSID_STA;
+        passwordSTA = localPasswordSTA;
+        WiFi.mode(WIFI_MODE_APSTA);
+        WiFi.begin(ssidSTA.c_str(), passwordSTA.c_str());
+        Serial.println("STA gestartet mit: " + ssidSTA + " " + passwordSTA);
+        
+        bool flagError = false;
+        unsigned long startZeit = millis();
+        while (WiFi.status() != WL_CONNECTED) 
+        {
+            if ( (millis() - startZeit) > waitForConnection) // 3 Sekunden Zeit für Verbindung mit dem Router
+            {
+                Serial.println("STA WLAN Verbindung fehlgeschlagen");
+                flagError = true;
+                break;
+            }
+        }
+        if (flagError == false)
+        {
+            Serial.println("");
+            Serial.println("Mit Router verbunden");
+            IP = WiFi.localIP();
+            Serial.print("STA IP ist: ");
+            Serial.println(IP);
+        }
+        else 
+        {
+            WiFi.disconnect();
+            WiFi.mode(WIFI_MODE_AP);
+        }
+        Serial.println("Starten AP (Access Point)…");
+        WiFi.softAP(ssidAP.c_str(), passwordAP.c_str(), 1, 0, 4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+        Serial.println("AP gestartet mit: " + ssidAP + " " + passwordAP);
+        //WiFi.softAP((char*)"PartyHart2",(char*)"9876543210");        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+        IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+        Serial.print("AP IP ist: ");
+        Serial.println(IP);
+    }
+    else // wenn es keine gespeicherten STA Werte gibt, nur einen AP starten
+    {
+        WiFi.mode(WIFI_MODE_AP);
+        Serial.println("Starten AP (Access Point)…");
+        WiFi.softAP(ssidAP.c_str(), passwordAP.c_str(), 1, 0, 4);        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+        Serial.println("AP gestartet mit: " + ssidAP + " " + passwordAP);
+        //WiFi.softAP((char*)"PartyHart2",(char*)"9876543210");        // WiFi.softAP(ssid, password, channel, hidden, max_connection), nur ein Client ist
+        IP = WiFi.softAPIP();                     // IP-Adresse auslesen
+        Serial.print("AP IP ist: ");
+        Serial.println(IP);
+    }
+    
+    // Ende Dateien vom Speicher laden
+
+    //scanNetworks();
+
+    // WiFi
+    
+    
+
+    
+    
     /*
     if (flagAP)
     {
@@ -102,10 +193,10 @@ void CServer::init()
         }
     }
     */
-    if(MDNS.begin(domain))
+    if(MDNS.begin(domain.c_str()))
     {
       Serial.println("DNS gestartet, erreichbar unter: ");
-      Serial.println("http://" + String(domain)+ ".local/");
+      Serial.println("http://" + domain + ".local/");
     }
     //Serial.print("IP-Adresse: ");
     //Serial.println(IP);                       // IP-Adresse ausgeben
@@ -138,14 +229,14 @@ void CServer::init()
         String JSONmessage;
         if (ON_STA_FILTER(request))
         {
-            sendenJSON["flagSTA"] = true;
+            sendenJSON["flagConnection"] = "STA";
             serializeJson(sendenJSON, JSONmessage);
             request->send(200, "application/json", JSONmessage);
             Serial.println("Aufruf von STA Client.");   // debug
         }
         else if (ON_AP_FILTER(request)) 
         {
-            sendenJSON["flagSTA"] = false;
+            sendenJSON["flagConnection"] = "AP";
             serializeJson(sendenJSON, JSONmessage);
             request->send(200, "application/json", JSONmessage);
             Serial.println("Aufruf von AP Client.");    // debug
@@ -153,7 +244,7 @@ void CServer::init()
         else
         {
             //request->send(200,"application/json","{\"message\":\"Welcome from Unknwon\"}");
-            sendenJSON["flagSTA"] = false;
+            sendenJSON["flagConnection"] = "ERROR";
             serializeJson(sendenJSON, JSONmessage);
             request->send(200, "application/json", JSONmessage);
             Serial.println("Aufruf von unbekannten Client.");    // debug
@@ -180,11 +271,11 @@ void CServer::init()
     server.on("/style_config.css", HTTP_GET, [](AsyncWebServerRequest *request){  // wenn der Client auf die Adresse: "192.168.4.1/config" zugreift
     request->send(SPIFFS, "/style_config.css", "text/css"); // wird die Webseite vom Flash Speicher geladen und an den Client geschickt
     });
-    /*
+    
     server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){   // wenn der Client auf die Adresse: "192.168.4.1/favicon.ico" zugreift
     request->send(SPIFFS, "/favicon.ico", "image/ico"); // wird das Favicon vom Flash Speicher geladen an an den Client geschickt.
     });
-    */
+    
     server.begin();                           // Server wird gestarten
     // Ende WiFi
 }
@@ -220,7 +311,24 @@ void CServer::onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, 
         DeserializationError fehlerJSON = deserializeJson(empfangenJSON, nachricht); // Nachricht aus dem Chararray "nachricht" ist das JSON Dokument "empfangenJSON" übertragen
         Serial.println(fehlerJSON.c_str());     // Fehler bei Lesen der JSON Nachricht 
         
-        if (empfangenJSON["energiesparmodus"].as<String>() == " ")  // wenn initiale Message von der Webseite kommt
+        if (empfangenJSON.containsKey("ssidAP"))
+        {
+            globalReceivedData.ssidAP = empfangenJSON["ssidAP"].as<String>();
+            globalReceivedData.passwordAP = empfangenJSON["passwordAP"].as<String>();
+            Serial.println(globalReceivedData.passwordAP);
+            Serial.println(globalReceivedData.ssidAP);
+            messageFlag = 4;
+        }
+        else if (empfangenJSON.containsKey("ssidSTA"))
+        {
+            globalReceivedData.ssidSTA = empfangenJSON["ssidSTA"].as<String>();
+            globalReceivedData.passwordSTA = empfangenJSON["passwordSTA"].as<String>();
+            Serial.println(globalReceivedData.passwordSTA);
+            Serial.println(globalReceivedData.ssidSTA);
+            messageFlag = 5;
+        }
+
+        else if (empfangenJSON["energiesparmodus"].as<String>() == " ")  // wenn initiale Message von der Webseite kommt
         {
             messageFlag = 3;
         }
@@ -263,6 +371,38 @@ void CServer::transmitData(DataSend mySendData)
         Serial.println("Fehler beim Schicken, kein Client verbunden");
     }
 }
+void CServer::transmitDataWIFI()
+{
+    if(isThereAnyClient())      // wenn die Verbindung zur Webseite besteht
+    {
+        
+        DynamicJsonDocument sendenJSON(4048);
+        JsonArray scannedNetworksJSON = sendenJSON.createNestedArray("scannedNetworks");
+        for (byte i = 0; i < numberOfScannedNetworks; i++)
+        {
+            scannedNetworksJSON.add(scannedNetworks[i]);
+        }
+        sendenJSON["ssidAP"] = ssidAP;
+        sendenJSON["passwordAP"] = passwordAP;
+        sendenJSON["ssidSTA"] = ssidSTA;
+        sendenJSON["passwordSTA"] = passwordSTA;
+        IPAddress localIP = WiFi.softAPIP();
+        sendenJSON["ipAP"] = WiFi.softAPIP().toString();
+        sendenJSON["ipSTA"] = WiFi.localIP().toString();
+    
+        String JSONmessage;
+        serializeJson(sendenJSON, JSONmessage);
+        //globalClient->text(JSONmessage);    // nur ein Client wird behandelt
+        ws.textAll(JSONmessage);  // alternative mehrere Clients bekommen selbe anzeige
+        // Serial.print("Gesendete Daten sind: "); // Zum Debuggen
+        // Serial.println(JSONmessage);  // Zum Debuggen
+        
+    }
+    else
+    {
+        Serial.println("Fehler beim Schicken, kein Client verbunden");
+    }
+}
 
 byte CServer::receiveData(DataReceive & myReceivedData)
 {
@@ -288,9 +428,21 @@ byte CServer::receiveData(DataReceive & myReceivedData)
     {
         return tempMessageFlag;
     }
-    else
+    else if (tempMessageFlag == 4)
     {
-        return 4;
+        myReceivedData.ssidAP = globalReceivedData.ssidAP;
+        myReceivedData.passwordAP = globalReceivedData.passwordAP;
+        return tempMessageFlag;
+    }
+    else if (tempMessageFlag == 5)
+    {
+        myReceivedData.ssidSTA = globalReceivedData.ssidSTA;
+        myReceivedData.passwordSTA = globalReceivedData.passwordSTA;
+        return tempMessageFlag;
+    }
+    else 
+    {
+        return 100;
     }
     
 }
@@ -311,7 +463,7 @@ void CServer::sendTOFData(float dataTOF1, float dataTOF2)
 {
     if(isThereAnyClient()) // wenn eine Verbindung zur Webseite besteht
     {
-        DynamicJsonDocument sendenJSON(1024);
+        DynamicJsonDocument sendenJSON(34);
         sendenJSON["tof1"] = dataTOF1;
         sendenJSON["tof2"] = dataTOF2;
         String JSONmessage;
@@ -334,4 +486,61 @@ bool CServer::isThereAnyClient()
     bool clientAvailable = ! myClients.isEmpty();
     //Serial.println(clientAvailable);     // Zum Debuggen
     return clientAvailable;        // gibt es kein Client --> false, gibt es Clients --> true
+}
+
+void CServer::scanNetworks()
+{
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
+    Serial.println("scan start");
+
+    // WiFi.scanNetworks will return the number of networks found
+    int n = WiFi.scanNetworks();
+    numberOfScannedNetworks = n;
+    Serial.println("scan done");
+    if (n == 0) 
+    {
+        Serial.println("no networks found");
+    } 
+    else 
+    {
+        Serial.print(n);
+        Serial.println(" networks found");
+        for (int i = 0; i < n; ++i) 
+        {
+            scannedNetworks[i] = WiFi.SSID(i);
+            // Print SSID and RSSI for each network found
+            Serial.print(i + 1);
+            Serial.print(": ");
+            Serial.print(WiFi.SSID(i));
+            Serial.print(" (");
+            Serial.print(WiFi.RSSI(i));
+            Serial.print(")");
+            Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+            delay(10);
+        }
+    }
+    WiFi.disconnect();
+    myFlash.saveScannedNetworks(scannedNetworks, numberOfScannedNetworks);
+}
+
+bool CServer::checkIsWorkingSTA(bool send)
+{
+    bool isActiveSTA_new = ( WiFi.status() == WL_CONNECTED ); 
+    if ( (isActiveSTA != isActiveSTA_new) || send)
+    {
+        if(isThereAnyClient()) // wenn eine Verbindung zur Webseite besteht
+        {
+            DynamicJsonDocument sendenJSON(32);
+            sendenJSON["isActiveSTA"] = isActiveSTA_new;
+            String JSONmessage;
+            serializeJson(sendenJSON, JSONmessage);
+            ws.textAll(JSONmessage);  // alternative mehrere Clients bekommen selbe anzeige
+        }
+        Serial.print("Status STA: ");
+        Serial.println(isActiveSTA_new);
+    }
+    isActiveSTA = isActiveSTA_new;
+    return isActiveSTA;
+    
 }

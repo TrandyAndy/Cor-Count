@@ -17,6 +17,12 @@ var maxSliderValue = 100;       // maximal mögliche Personenzahl für die Schie
     // dateTime = aktuelles Datum und Uhrzeit für die Statistik, Format: "Thu Dec 31 2020 12:22:02 GMT+0100 (CET)""
     // energiesparmodus: Status des Energiesparmodus: true = aktiv, false = deaktiviert
 var jsonData = {personenzahlAktuell: 0, personenzahlMax: 0, dateTime: " ", energiesparmodus: false};
+var passwordVisibleAP = false;
+var passwordVisibleSTA = false;
+var isActiveSTA = "";
+var AP_hinweise = "Personenzähler erreichbar unter <a href=\"http://counting-cube.local\">counting-cube.local</a> (Windows, macOS und iOS) und unter <a id=\"AP_IP\" href=\"#\">192.168.4.1</a> (Android)."
+var STA_hinweise = "Personenzähler erreichbar unter <a href=\"http://counting-cube.local\">counting-cube.local</a> (Windows, macOS und iOS) und unter <a id=\"STA_IP\" href=\"#\">192.168.4.1</a> (Android)."
+var ipAP = "", ipSTA = "";
 
 //////////////////////////////// Funktionen /////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +36,7 @@ window.onload = function(){     // Wird nach dem Laden der Webseite aufgerufen
     document.getElementById("einstellungen_personenzahlMax_label").innerHTML = wert;
     wert = document.getElementById("personenzahlAktuell").value;
     document.getElementById("einstellungen_personenzahlAktuell_label").innerHTML = wert;
+    onchangeComboBoxSSID(true);
     openWebsocket();            // Websocket starten
     aktualisiereAnzeige();
     sendDataToServer(true);
@@ -41,6 +48,7 @@ function openWebsocket(){
 
     ws.onopen = function() {        // Was soll passieren, wenn eine Verbindung hergestellt wird?
         console.log("ws.onopen");
+        checkConnection();
         //clearInterval(flagAutoConnect); // Autoconnect-Funktion deaktivieren
         //flagAutoConnect = false;    // Autoconnect Flag reseten   
         document.getElementById("einstellungen_status_wlan").innerHTML = "WIFI-Status: Verbunden";
@@ -92,6 +100,33 @@ function openWebsocket(){
                 flagGetTime = false;
             }
             aktualisiereAnzeige();
+        }
+        else if (message.hasOwnProperty("isActiveSTA")) {
+            if (message.isActiveSTA) {
+                isActiveSTA = "Ist aktiv";
+            }
+            else {
+                isActiveSTA = "Inaktiv";
+            }
+            checkConnection();
+        }
+        else if (message.hasOwnProperty("ssidAP")) {
+            document.getElementById("AP_ssid_textbox").value = message.ssidAP;
+            document.getElementById("AP_password_textbox").value = message.passwordAP;
+            //document.getElementById("STA_ssid_textbox").value = message.ssidSTA;
+            addElementToComboBox(message.ssidSTA, "saved");
+            document.getElementById("comboBoxSSID").value = message.ssidSTA;
+            message.scannedNetworks.forEach(element => {
+                addElementToComboBox(element, "scanned");
+            });
+            document.getElementById("STA_password_textbox").value = message.passwordSTA;
+            ipAP = message.ipAP;
+            ipSTA = message.ipSTA;
+            // document.getElementById("AP_IP").innerHTML = message.ipAP;
+            // document.getElementById("AP_IP").href = "http://" + message.ipAP;
+            // document.getElementById("STA_IP").innerHTML = message.ipSTA;
+            // document.getElementById("STA_IP").href = "http://" + message.ipSTA;
+            onchangeComboBoxSSID(true);
         }
     }         
 
@@ -238,11 +273,154 @@ function sendDataToServer(changedEvent) {
     console.log(nachricht); 
     ws.send(nachricht);
 }
+
+
+//////////// WLAN Settings /////////////////
+function onclickPasswordAP() {
+    var element = document.getElementById("eyeIconAP");
+    var textBox = document.getElementById("AP_password_textbox");
+    if (passwordVisibleAP) {
+        element.classList.remove("fa-eye-slash");
+        element.classList.add("fa-eye");
+        passwordVisibleAP = false;
+        textBox.type = "password";
+    }
+    else {
+        element.classList.remove("fa-eye");
+        element.classList.add("fa-eye-slash");
+        passwordVisibleAP = true;
+        textBox.type = "text";
+    }
+}
+
+function onclickPasswordSTA() {
+    var element = document.getElementById("eyeIconSTA");
+    var textBox = document.getElementById("STA_password_textbox");
+    if (passwordVisibleSTA) {
+        element.classList.remove("fa-eye-slash");
+        element.classList.add("fa-eye");
+        passwordVisibleSTA = false;
+        textBox.type = "password";
+    }
+    else {
+        element.classList.remove("fa-eye");
+        element.classList.add("fa-eye-slash");
+        passwordVisibleSTA = true;
+        textBox.type = "text";
+    }
+
+
+}
+
 function buttonSaveAP() {
-    document.getElementById("AP_IP").href = "http://www.google.de"
-    document.getElementById("AP_IP").innerHTML = "http://www.google.de"
-    console.log("tada!");
+    //checkConnection();
+
+    var config = {ssidAP: "", passwordAP: ""}
+    config.ssidAP = document.getElementById("AP_ssid_textbox").value;
+    config.passwordAP = document.getElementById("AP_password_textbox").value;
+    if (config.ssidAP == "") {
+        alert("Sie haben keine SSID eingeben.");
+        setFocus("AP_ssid_textbox");
+    }
+    else if (config.passwordAP == "") {
+        alert("Sie haben kein Passwort eingeben.");
+        setFocus("AP_password_textbox");
+    }
+    else if (config.passwordAP.length < 8) {     // Zu kurzen Passowert
+        alert("Das Passwort ist zu kurz. Es werden mind. 8 Zeichen benötigt.");
+        setFocus("AP_password_textbox");
+    }
+    else if (config.ssidAP.includes("?") || config.ssidAP.includes("\"") || config.ssidAP.includes("$") || config.ssidAP.includes("[") || config.ssidAP.includes("]") || config.ssidAP.includes("+") ) {
+        alert("Diese Zeichen sind in der SSID verboten: ? \" $ [ ] +");
+        setFocus("AP_ssid_textbox");
+    } 
+    else {
+        var nachricht = JSON.stringify(config);
+        console.log(nachricht);
+        ws.send(nachricht);
+    }
+    
+    
+    
+}
+
+
+function onchangeComboBoxSSID(flag=false) {
+    
+    console.log("test"); // debug
+    var element = document.getElementById("comboBoxSSID")
+    var savedNetworks = document.getElementById("groupSavedNetworks");
+    var foundNetworks = document.getElementById("groupFoundNetworks");
+    /*
+    console.log(savedNetworks.label);
+
+    var opt = document.createElement('option');
+    opt.innerHTML = 23;
+    element.appendChild(opt);
+    savedNetworks.appendChild(opt);
+    */
+
+    console.log(element.value); // debug
+    if(element.value == "Anderes Netzwerk verwenden") {
+        document.getElementById("STA_ssid_own").classList.remove("hide")
+        document.getElementById("STA_ssid_own").classList.add("show")
+        if (flag == false) {
+            setTimeout(setFocus.bind(null, "STA_ssid_textbox"), 500); // Textbox aktivieren
+        }
+        //setFocus("STA_ssid_textbox");   
+    }
+    else {
+        document.getElementById("STA_ssid_own").classList.remove("show")
+        document.getElementById("STA_ssid_own").classList.add("hide")
+    }
+}
+
+function addElementToComboBox(text, type) {
+    var savedNetworks = document.getElementById("groupSavedNetworks");
+    var foundNetworks = document.getElementById("groupFoundNetworks");
+    if (type == "saved") {
+        var opt = document.createElement('option');
+        opt.innerHTML = text;
+        savedNetworks.appendChild(opt)
+    } else {
+        var opt = document.createElement('option');
+        opt.innerHTML = text;
+        foundNetworks.appendChild(opt)
+    }
+}
+
+function setFocus(id) {
+    document.getElementById(id).focus();
+}
+
+function buttonSaveSTA(){
+    var config = {ssidSTA: "", passwordSTA: ""}
+    var element = document.getElementById("comboBoxSSID")
+    if(element.value == "Anderes Netzwerk verwenden") {
+        config.ssidSTA = document.getElementById("STA_ssid_textbox").value;
+    }
+    else {
+        config.ssidSTA = element.value;
+    }
+    config.passwordSTA = document.getElementById("STA_password_textbox").value;
+    var nachricht = JSON.stringify(config);
+    console.log(nachricht);
+    ws.send(nachricht);
+    /*
+    document.getElementById("AP_hinweise").innerHTML = "";
+    document.getElementById("AP_hinweise").style.height = "0%";
+    document.getElementById("STA_hinweise").innerHTML = "";
+    document.getElementById("STA_hinweise").style.height = "0%";
+    */
+}
+
+function checkConnection() {
+
+    //document.getElementById("AP_IP").href = "http://www.google.de"
+    //document.getElementById("AP_IP").innerHTML = "http://www.google.de"
+    //console.log("tada!");
     //var url = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.jso'
+    
     var url = "data";
     console.log("Die Url ist: ", url);
     fetch(url)
@@ -253,24 +431,71 @@ function buttonSaveAP() {
     })
     .then(function (data) {
         console.log(data);
-        console.log(data.flagSTA);
-        if (data.flagSTA) 
+        console.log(data.flagConnection);
+        if (data.flagConnection == "STA") 
         {
-            document.getElementById("AP_ssid_textbox").value = "Verbunden über STA"
+            document.getElementById("STA_status").innerHTML =  isActiveSTA + " und Sie sind damit verbunden";
+            document.getElementById("AP_status").innerHTML  = "Ist aktiv";
+            document.getElementById("STA_status").style.color = "#2ECC40";
+            document.getElementById("AP_status").style.color = "#2ECC40";
+            showAP_hinweise(false);
+            showSTA_hinweise(true);
         } 
-        else 
+        else if (data.flagConnection == "AP")
         {
-            document.getElementById("AP_ssid_textbox").value = "Verbunden über AP"
+            document.getElementById("STA_status").innerHTML =  isActiveSTA;
+            document.getElementById("AP_status").innerHTML  = "Ist aktiv und Sie sind damit verbunden";
+            document.getElementById("AP_status").style.color = "#2ECC40";
+            if (isActiveSTA == "Ist aktiv") {
+                document.getElementById("STA_status").style.color = "#2ECC40";
+                showSTA_hinweise(true);
+            }
+            else {
+                document.getElementById("STA_status").style.color = "#FFDC00";
+                showSTA_hinweise(false);
+            }
+            showAP_hinweise(true);
+            
+            
+        }
+        else {
+            document.getElementById("AP_status").innerHTML  = "nicht verbunden";
+            document.getElementById("STA_status").innerHTML = "nicht verbunden";
+            document.getElementById("AP_status").style.color = "#FFDC00";
+            document.getElementById("STA_status").style.color = "#FFDC00";
+            showAP_hinweise(false);
+            showSTA_hinweise(false);
         }
         
     })
     .catch((error) => {
         console.error('Error:', error);
     });
+    
 }
-function buttonSaveSTA(){
-    document.getElementById("AP_hinweise").innerHTML = "";
-    document.getElementById("AP_hinweise").style.height = "0%";
-    document.getElementById("STA_hinweise").innerHTML = "";
-    document.getElementById("STA_hinweise").style.height = "0%";
+
+function showAP_hinweise(flag) {
+    if (flag) {
+        document.getElementById("AP_hinweise").innerHTML = AP_hinweise;
+        document.getElementById("AP_hinweise").style.height = "13%";
+        document.getElementById("AP_IP").innerHTML = ipAP;
+        document.getElementById("AP_IP").href = "http://" + ipAP;
+    }
+    else {
+        document.getElementById("AP_hinweise").innerHTML = "";
+        document.getElementById("AP_hinweise").style.height = "0%";
+    }
+}
+
+function showSTA_hinweise(flag) {
+    if (flag) {
+        document.getElementById("STA_hinweise").innerHTML = STA_hinweise;
+        document.getElementById("STA_hinweise").style.height = "13%";
+        document.getElementById("STA_IP").innerHTML = ipSTA;
+        document.getElementById("STA_IP").href = "http://" + ipSTA;
+    }
+    else {
+        document.getElementById("STA_hinweise").innerHTML = "";
+        document.getElementById("STA_hinweise").style.height = "0%";
+    }
 }

@@ -37,7 +37,7 @@ a:hover {
     text-decoration: underline;
 }
 .normalText{
-    font-size: 2.5vmin;
+    font-size: 2.2vmin;
 }
 .button{
     width: 75%;
@@ -365,15 +365,17 @@ a:hover {
 .label{
     width: 25%;
     text-align: right;
-    margin-right: 20px;
+    margin-right: 3vw;
 }
 .inputElement{
-    width: 40%;
+    width: 55%;
+    display: flex;
+    max-width: 500px;
 }
 .textBox{
     width: 90%;
     text-align: left;
-    padding-left: 2%;
+    padding-left: 1%;
     height: 3vmin;
 }
 .buttonConfig{
@@ -405,6 +407,17 @@ a:hover {
 
 .settingsElement{
     height: 15%; /* Ansonten komischer Bug bei den Textboxen, wenn diese animiert werden. */
+}
+.eyeIcon {
+    width: 5vw;
+    transition: ease-in-out 0.2s;
+    color: #888;
+}
+.eyeIcon:hover {
+    color: var(--link);
+}
+.eyeIcon:active {
+    color: #2f85e6;
 }
 #wrapper{
     height: 100%;
@@ -453,4 +466,18 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+.hide {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s, height 0.5s linear;
+    height: 0;
+}
+.show {
+    visibility: visible;
+    opacity: 1;
+    height: 10%;
+    transition: visibility 0s, opacity 0.5s, height 0.5s linear;
 }

@@ -5,7 +5,7 @@
 var ws = null;                  // Variable für den Websocket
 var flagAutoConnect = false;    // Varialbe für die AutoConnect Funktion false = deaktiviert, true = aktiviert
 var flagFirstCall = true;       // Variable für den ersten Aufruf true = erster Aufruf, false = nicht erster Aufruf
-var maxDataPoints = 200;        // maximal angezeigte Daten im Graph
+var maxDataPoints = 100;        // maximal angezeigte Daten im Graph
 var csvFile = "Messwert; Datum; Uhrzeit; TOF1; TOF2\n";
 var indexMesswert = 1;
 var pause = false;
@@ -111,6 +111,7 @@ var dataPlot2 = new Chart(document.getElementById("myChart2").getContext('2d'), 
 
 window.onload = function () {     // Wird nach dem Laden der Webseite aufgerufen
     openWebsocket();            // Websocket starten
+    //window.setInterval(updateGraph,1000);
 }
 
 function openWebsocket() {
@@ -298,6 +299,10 @@ function deleteData(chart) {
     });
     chart.update();
 }
+/*function updateGraph() {
+    dataPlotTOF.update();
+    console.log("update");
+}*/
 /*
 
 var newDataset = {

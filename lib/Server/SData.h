@@ -3,7 +3,7 @@
  * @Email: diegruppetg@gmail.com
  * @Date: 2021-01-04 16:17:54
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-01-04 16:24:58
+ * @Last Modified time: 2021-06-04 16:36:04
  * @Description: Stucts für die Kommunikation mit der Webseite
  */
 
@@ -14,6 +14,12 @@ struct DataReceive
     int personenzahlAktuell;
     String dateTime;
     bool energiesparmodus;
+
+    // Wlan Einstellungen
+    String ssidAP;
+    String passwordAP;
+    String ssidSTA;
+    String passwordSTA;
 };
 
 struct DataSend
@@ -23,4 +29,7 @@ struct DataSend
     unsigned char akkustand;
     bool energiesparmodus;
     bool flagGetTime;
+
+    bool isActiveAP;
+    bool isActiveSTA;
 };

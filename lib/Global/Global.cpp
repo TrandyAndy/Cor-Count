@@ -1,5 +1,7 @@
 #include <Arduino.h>
-#include "CServer.h"
+#include "Global.h"
+//#include "CServer.h"
+//#include "CSaveLoad.h"
 
 // globale Variablen
 RTC_DATA_ATTR int aufwachZaehler = 0;   //Im RTC nciht von DeepSleep betroffen
@@ -11,4 +13,5 @@ bool flagGetTime = false;
 byte akkustand = 0;
 
 // globale Objekte
-CServer myServer((char*)"Stop&Go-vid",(char*)"COVID-19", (char*)"stopgovid");    // Cor-Count
+CServer myServer("Counting-Cube", "COVID-19", "counting-cube");    // Cor-Count
+CSaveLoad myFlash;
