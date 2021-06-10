@@ -45,6 +45,7 @@ CSensor ToF_innen(24);
 //CSignalLicht L(5);
 CSignalLicht Stop(Rot,LED_Rot);
 CSignalLicht Go(Gruen,LED_Gruen);
+CSignalLicht MultiMatrix(Rot,LED_Rot); //Farbe ist hier egal. LED_Rot Pin oder anderer verwenden.
 
 void checkIfNewMessageFromServer(); // Überprüft ob eine neue Nachricht von der Webseite vorliegt, falls ja wird diese gelesen und gespeichert
 void wakeupISR();
@@ -78,6 +79,7 @@ void setup()
   // Lichtschranke starten
   Wire.begin(SDA, SCL); //!!!!! Macht vill Probleme
   Lichtschranke.init();
+  MultiMatrix.init();
   // Init Batterie
   myBattery.init();
   // PIR PIN zum Aufwachen
@@ -130,11 +132,13 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   {
     Go.setLicht(false);
     Stop.setLicht(true);
+    MultiMatrix.SetSymbol_Cross();
   }
   else
   {
     Go.setLicht(true);
     Stop.setLicht(false);
+    MultiMatrix.SetSymbol_Arrow();
   }
   myServer.checkIsWorkingSTA();   // überprüft ob eine Verbindung zum Router besteht
 

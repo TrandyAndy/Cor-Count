@@ -1,0 +1,47 @@
+/* Corona-Ampel
+Ein System zum Zählen von Personenfluss durch Türen. 
+Insbensondere um die Corona-Beschränkungen erfüllen zu können. 
+Als Steuerung wird ein ESP32 der Firma Espressif eingesetzt.
+
+HIT Projekt WS20/21
+Version: 0.1  Datum: 05.12.20
+*/
+#include <Arduino.h>
+#include "Global.h"   //Global wird überall inkludiert.
+#include <Wire.h>
+#include "CSaveLoad.h"
+#include "CorCount.h"
+#include "CSensor.h"
+#include "CServer.h"  // Webserver auf dem ESP32
+#include "CCamera.h"  // Klasse für die Anbindung der Kamera
+#include "Global.h"
+#include "CTof.h"
+#include "CBattery.h"
+#include "CZaehler.h"
+
+
+
+
+CSignalLicht Stop(Rot,LED_Rot);
+CSignalLicht Go(Gruen,LED_Gruen);
+CSignalLicht MultiMatrix(Rot,LED_Rot);
+
+
+void setup()
+{
+    MultiMatrix.init();
+}
+
+//int i = 0;
+
+void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
+{ 
+
+    MultiMatrix.SetSymbol_Cross();
+    delay(1000);
+    MultiMatrix.SetSymbol_Arrow();
+    delay(1000);
+
+} // Loop Endeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeendeende
+
+

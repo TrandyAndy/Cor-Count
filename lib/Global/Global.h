@@ -57,7 +57,7 @@ extern CServer myServer;
 #define NiemandDa 0
 #define ImProzess 2
 #define LichtAn true
-#define Grundhelligkeit 50               //Grundwert für die LEDs in %
+#define Grundhelligkeit 50               //Grundwert für die LEDs in % (bis 255)
 #define Rot 0                            //RGB 0,1,2
 #define Gruen 1
 #define HelligkeitGain 10

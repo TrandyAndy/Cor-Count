@@ -1,8 +1,7 @@
 /*
-Allgemeine Funktionen 
+Allgemeine Funktionen Weake Up und Anzeige
 Autor: Andy
 */
-// Julian: Warum ist die Datei nicht in h und cpp aufgeteilt??????
 
 #pragma once
 //#include "Global.h"
@@ -10,6 +9,36 @@ Autor: Andy
 #include <Preferences.h>
 #include <Adafruit_NeoPixel.h>
 
+int Arrow[]={
+    0,0,0,1,1,0,0,0,
+    0,0,1,1,1,1,0,0,
+    0,1,1,1,1,1,1,0,
+    1,1,0,1,1,0,1,1,
+    1,0,0,1,1,0,0,1,
+    0,0,0,1,1,0,0,0,
+    0,0,0,1,1,0,0,0,
+    0,0,0,1,1,0,0,0
+};
+int Cross[]={
+    1,0,0,0,0,0,0,1,
+    0,1,0,0,0,0,1,0,
+    0,0,1,0,0,1,0,0,
+    0,0,0,1,1,0,0,0,
+    0,0,0,1,1,0,0,0,
+    0,0,1,0,0,1,0,0,
+    0,1,0,0,0,0,1,0,
+    1,0,0,0,0,0,0,1
+};
+int Cross2[]={
+    1,1,0,0,0,0,1,1,
+    1,1,1,0,0,1,1,1,
+    0,1,1,1,1,1,1,0,
+    0,0,1,1,1,1,0,0,
+    0,0,1,1,1,1,0,0,
+    0,1,1,1,1,1,1,0,
+    1,1,1,0,0,1,1,1,
+    1,1,0,0,0,0,1,1
+};
 
 void print_wakeup_reason(){
   esp_sleep_wakeup_cause_t wakeup_reason;
@@ -101,6 +130,42 @@ class CSignalLicht{
         altZustand=Zustand;
         //Serial.println(ring.getPixelColor(1)); //Debug
     };
+    void SetSymbol_Arrow() //Nix = Grün
+        {
+            SetSymbol_Arrow(Gruen);
+        };
+    void SetSymbol_Arrow(int pFarbe)
+        {
+            if (2==altZustand)
+                return;
+            mFarbe=pFarbe;
+            int Arr[]={0,0,0};
+            Arr[mFarbe]=Grundhelligkeit; //Das sind doch kein %
+            for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
+                ring.setPixelColor(i,Arr[0]*Arrow[i],Arr[1]*Arrow[i],Arr[2]*Arrow[i]);//  Set pixel's color (in RAM)
+                //delay(5);                           //  Pause for a moment
+            }
+            ring.show();                          //  Update strip to match
+            altZustand=2;
+        }
+    void SetSymbol_Cross() //Nix = Grün
+        {
+            SetSymbol_Cross(Rot);
+        };
+    void SetSymbol_Cross(int pFarbe)
+        {
+            if (3==altZustand)
+                return;
+            mFarbe=pFarbe;
+            int Arr[]={0,0,0};
+            Arr[mFarbe]=Grundhelligkeit; //Das sind doch kein %
+            for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
+                ring.setPixelColor(i,Arr[0]*Cross2[i],Arr[1]*Cross2[i],Arr[2]*Cross2[i]);//  Set pixel's color (in RAM)
+                //delay(5);                           //  Pause for a moment
+            }
+            ring.show(); 
+            altZustand=3;
+        }
     void init(){
         ring.begin(); // Initialize NeoPixel strip object (REQUIRED)
         ring.show();  // Initialize all pixels to 'off'
@@ -108,7 +173,7 @@ class CSignalLicht{
     private:
     Adafruit_NeoPixel ring; //Wir in der Liste gemacht
     int mFarbe=2;
-    int altZustand=-1; //Damit es inital immer schaltet.
+    int altZustand=-1; //Damit es inital immer schaltet. 0=Aus 1=An 2=Pfeil 3=Kreuz
     //int CSignalZaehler=5;
     static int CSignalZaehler;    //public?                  //Instanzen Zählen Nur Deklatration möglich!
 };
