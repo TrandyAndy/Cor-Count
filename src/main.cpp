@@ -58,10 +58,10 @@ void setup()
   // Kamera starten:
   myCamera.init();     // Pins der Kamera werden aktiviert
   myCamera.wakeUpCamera();  // Kamera ESP32 aufwecken
-
+  Serial.println("Before Flash init");
   // Flash starten
   myFlash.init();
-
+  Serial.println("After Flash init");
   // Webserver starten:
 
   // Mit Router verbinden:

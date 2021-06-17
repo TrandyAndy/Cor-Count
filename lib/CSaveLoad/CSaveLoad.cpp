@@ -77,10 +77,13 @@ void CSaveLoad::loadScannedNetworks(String (& scannedNetworks)[20], byte & numbe
 {
     byte number = preferences.getUChar("number", 111);
     numberOfScannedNetworks = number;
-    for (byte i = 0; i < number; i++)
+    if (number != 111)
     {
-        String name = "network" + (String) i;
-        scannedNetworks[i] = preferences.getString(name.c_str(), "");
-        Serial.println(scannedNetworks[i]);
+         for (byte i = 0; i < number; i++)
+        {
+            String name = "network" + (String) i;
+            scannedNetworks[i] = preferences.getString(name.c_str(), "");
+            Serial.println(scannedNetworks[i]);
+        }
     }
 }
