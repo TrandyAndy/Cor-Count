@@ -1,287 +1,192 @@
+/*
+ * @Author: JLS666
+ * @Email: -
+ * @Date: 2021-06-26 11:16:12
+ * @Last Modified by: JLS666
+ * @Last Modified time: 2021-06-26 11:28:17
+ * @Description: TOF program, programmed von Khariyah modified by Julian
+ */
+
+
 #include "CTof.h"
-#include "Global.h"
-
-bool ISR_Flag1=0;
-bool ISR_Flag2=0;
-
-unsigned long startTime = 0;
-
-void CTof::ISR_ToF1()
-{
-  //Serial.println("ISR1 erkannt");
-    if (currRange1 < prevRange1 - Hysteresis)                                                 // Person/Objekt wurde erkannt
-  {
-    //Serial.println("currRange1 < prevRange1 - Hysteresis");
-    prevRange1 = currRange1;
-    Signal1 = 1;
-  }
-  else if (prevRange1 - Hysteresis <= currRange1 && currRange1 <= prevRange1 + Hysteresis)  // Person/Objekt befindet sich noch im Feld
-  {
-    //Serial.println("prevRange1 - Hysteresis <= currRange1 && currRange1 <= prevRange1 + Hysteresis");
-    //get_Direction();
-  }
-  else if (currRange1 > prevRange1 + Hysteresis)                                            // Person/Objekt hat das Feld verlassen
-  {
-    //Serial.println(currRange1);
-    //Serial.println(prevRange1);
-    //Serial.println("currRange1 > prevRange1 + Hysteresis");
-    prevRange1 = currRange1;
-    Signal1 = 0;
-  }
-  else
-  {
-    //Serial.print("currRange1 :");
-    //Serial.print(currRange1);
-    //Serial.print(" prevRange1: ");
-    //Serial.println(prevRange1);
-  }
-  //Serial.print("Signal1: ");
-  //Serial.println(Signal1);
-  
-}
-
-void CTof::ISR_ToF2() 
-{
-  //Serial.println("ISR2 erkannt");
-  if (currRange2 < prevRange2 - Hysteresis)                                                 // Person/Objekt wurde erkannt
-  {
-    //Serial.println("currRange2 < prevRange2 - Hysteresis");
-    prevRange2 = currRange2;
-    Signal2 = 2;
-  }
-  else if (prevRange2 - Hysteresis <= currRange2 && currRange2 <= prevRange2 - Hysteresis)  // Person/Objekt befindet sich noch im Feld
-  {
-    //Serial.println("prevRange2 - Hysteresis <= currRange2 && currRange2 <= prevRange2 - Hysteresis");
-    //get_Direction();
-  }
-  else if (currRange2 > prevRange2 + Hysteresis)                                            // Person/Objekt hat das Feld verlassen
-  {
-    //Serial.println("currRange2 > prevRange2 + Hysteresis");
-    prevRange2 = currRange2;
-    Signal2 = 0;                                                                           // eventuell abfrage ob Signal2 kleiner null ?  Ou of range drinne lassen
-  }
-  else
-  {
-    //Serial.print("currRange2 :");
-    //Serial.print(currRange2);
-    //Serial.print(" prevRange2: ");
-    //Serial.println(prevRange2);
-  }
-  //Serial.print("Signal2: ");
-  //Serial.println(Signal2);
-
-}
-
-void CTof::ISR1()
-{
-  ISR_Flag1=true;
-}
-void CTof::ISR2()
-{
-  ISR_Flag2=true;
-}
 
 void CTof::init()
 {
-  pinMode(SHT_LOX1, OUTPUT);
-  pinMode(SHT_LOX2, OUTPUT);
-
-  //Serial.println("Shutdown pins inited...");
-
-  digitalWrite(SHT_LOX1, LOW);
-  digitalWrite(SHT_LOX2, LOW);
-
-  //Serial.println("Both in reset mode...(pins are low)");
-  
-  
-  //Serial.println("Starting...");
-  setID();
-  
-  attachInterrupt(TOF1_PIN, ISR1, RISING);
-  attachInterrupt(TOF2_PIN, ISR2, RISING);
-}
-
-void CTof::run()
-{
-    read_dual_sensors();
-    //Richtung=get_Direction(); //Wir arbeine direkt mir get Dir.
-
-    //ISR Flag abfragen
-    if(ISR_Flag1)
-    {
-      ISR_ToF1();
-      ISR_Flag1=false;
+    Wire.begin(SDA,SCL);
+    Wire.setClock(400000); // use 400 kHz I2C
+    /*  // Julian: is not needed
+    // Initialize display, if fail, stuck inside for loop
+    if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+        Serial.println(F("SSD1306 allocation failed"));
+        for(;;);
     }
-    if(ISR_Flag2)
+    */
+    // Hold on initializing sensor (500ms)
+    // If sensor fails to initialize, stuck inside while loop
+    sensor.setTimeout(500);
+    if (!sensor.init())
     {
-      ISR_ToF2();
-      ISR_Flag2=false;
+        Serial.println("Failed to detect and initialize sensor!");
+        // while (1);   // Julian: is not needed
     }
-}
-
-int CTof::get_Direction()         //prevNumbers
-{
-  direction_number = 0;
-  sum = Signal1 + Signal2;
-
-  if(sum != prevSum || (prevSum == 0 && sum == 0)) 
-  {
-    numbers[numbersCounter] = sum;
-    prevSum = sum;
     
-    if (numbersCounter >= 4)
+    // Use long distance mode and allow up to 50000 us (50 ms) for a measurement.
+    // You can change these settings to adjust the performance of the sensor, but
+    // the minimum timing budget is 20 ms for short distance mode and 33 ms for
+    // medium and long distance modes. See the VL53L1X datasheet for more
+    // information on range and timing limits.
+    sensor.setDistanceMode(VL53L1X::Medium);
+    sensor.setMeasurementTimingBudget(33000);
+
+    // <-- Disable continuous measurement mode -->
+    // Start continuous readings at a rate of one measurement every 50 ms (the
+    // inter-measurement period). This period should be at least as long as the
+    // timing budget.
+    //sensor.startContinuous(100);  // Julian: Why is that commented out?
+
+    // Wait 1s before starting to get sensor baseline 
+    delay(1000);    // Julian: Is this necessary?
+    
+    // Sensor 1 Baseline
+    for (int i = 0; i < 100; i++)
     {
-      prevNumbers = numbers[numbersCounter];
-      numbersCounter = 0;
+        sensor_readout_1 = read_sensor_1();
+        baseline_sensor_1 = (baseline_sensor_1 + sensor_readout_1) / 2;   // Julian: Should this be arithmetic mean?
+        // Arithmetic mean:
+        baseline_sensor_1 = baseline_sensor_1 + sensor_readout_1;           
+    }   
+    baseline_sensor_1 = baseline_sensor_1 / 100;
+
+    Serial.print("---Sensor 1 Baseline--->");
+    Serial.println(baseline_sensor_1);
+    delay(200);     // Julian: Is this necessary?
+
+    // Sensor 2 Baseline
+    for (int i = 0; i < 100; i++)
+    {
+        sensor_readout_2 = read_sensor_2();
+        baseline_sensor_2 = (baseline_sensor_2 + sensor_readout_2)/2;   // Julian: Should this be arithmetic mean?
+        // Arithmetic mean:
+        baseline_sensor_2 = baseline_sensor_2 + sensor_readout_2;  
+    }
+    baseline_sensor_2 = baseline_sensor_2 /  100;
+    Serial.print("---Sensor 2 Baseline--->");
+    Serial.println(baseline_sensor_2);
+    delay(200);     // Julian: Is this necessary?
+
+    threshold_sensor_1 = 0.6 * baseline_sensor_1;
+    threshold_sensor_2 = 0.6 * baseline_sensor_2;
+    Serial.print("---Sensor 1 Threshold--->");
+    Serial.println(threshold_sensor_1);
+    Serial.print("---Sensor 2 Threshold--->");
+    Serial.println(threshold_sensor_2);
+}
+int8_t CTof::run()
+{
+    sensor.readSingle(true);
+  
+    if ( (String) VL53L1X::rangeStatusToString(sensor.ranging_data.range_status) == (String) "wrap target fail" || 
+        (String) VL53L1X::rangeStatusToString(sensor.ranging_data.range_status) == (String) "out of bounds fail")
+    {
+        /*  // Julian: is not needed
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setCursor(15,5);
+        display.print("Detection");
+        display.setCursor(15,30);
+        display.print("FAIL");
+        display.setTextSize(2);
+        display.display();
+        */
+        Serial.println("Measurement Failed"); 
     }
     else
     {
-      numbersCounter++;
-    }
-    
-  }
+        /* // Julian: is not needed
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setCursor(20,5);
+        display.println("Distance:");
+        display.setCursor(20,30);
+        display.print(sensor.ranging_data.range_mm);
+        display.print("mm");
+        display.setTextSize(2);
+        display.display();
+        */
+        Serial.print("Distance: ");
+        Serial.print(sensor.ranging_data.range_mm);
+        Serial.println("mm");
 
-  if((numbers[0] == 0 && numbers[1] == 1 && numbers[2] == 3 && numbers[3] == 2 && numbers[4] == 0) || 
-  ((numbers[0] == 0 && numbers[1] == 0 && numbers[2] == 1 && numbers[3] == 3 && numbers[4] == 2) /*&& prevNumbers == 0*/) || 
-  (numbers[0] == 2 && numbers[1] == 0 && numbers[2] == 0 && numbers[3] == 1 && numbers[4] == 3) || 
-  (numbers[0] == 3 && numbers[1] == 2 && numbers[2] == 0 && numbers[3] == 0 && numbers[4] == 1) || 
-  (numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 2 && numbers[3] == 0 && numbers[4] == 0))
-  {
-    //Serial.println("------------------------------------------ Raus");
-    direction_number = -1;
-    setNumbers();
-  }
-  else if((numbers[0] == 0 && numbers[1] == 2 && numbers[2] == 3 && numbers[3] == 1 && numbers[4] == 0) || 
-  (numbers[0] == 0 && numbers[1] == 0 && numbers[2] == 2 && numbers[3] == 3 && numbers[4] == 1) || 
-  (numbers[0] == 1 && numbers[1] == 0 && numbers[2] == 0 && numbers[3] == 2 && numbers[4] == 3) || 
-  (numbers[0] == 3 && numbers[1] == 1 && numbers[2] == 0 && numbers[3] == 0 && numbers[4] == 2) || 
-  (numbers[0] == 2 && numbers[1] == 3 && numbers[2] == 1 && numbers[3] == 0 && numbers[4] == 0))
-  {
-    //Serial.println("------------------------------------------ Rein");
-    direction_number = 1;
-    setNumbers();
-  }
-  else if((numbers[0] == 0 && numbers[1] == 1 && numbers[2] == 3 && numbers[3] == 1 && numbers[4] == 0) || 
-  (numbers[0] == 0 && numbers[1] == 0 && numbers[2] == 1 && numbers[3] == 3 && numbers[4] == 1) || 
-  (numbers[0] == 1 && numbers[1] == 0 && numbers[2] == 0 && numbers[3] == 1 && numbers[4] == 3) || 
-  (numbers[0] == 3 && numbers[1] == 1 && numbers[2] == 0 && numbers[3] == 0 && numbers[4] == 1) || 
-  (numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 1 && numbers[3] == 0 && numbers[4] == 0))
-  {
-    //Serial.println("Raus und doch wieder rein");
-    direction_number = 0;
-    setNumbers();
-  }
-  else if((numbers[0] == 0 && numbers[1] == 1 && numbers[2] == 3 && numbers[3] == 2 && numbers[4] == 3) || 
-  (numbers[0] == 1 && numbers[1] == 0 && numbers[2] == 0 && numbers[3] == 0 && numbers[4] == 1) || 
-  (numbers[0] == 3 && numbers[1] == 2 && numbers[2] == 3 && numbers[3] == 1 && numbers[4] == 1) || 
-  ((numbers[0] == 0 && numbers[1] == 0 && numbers[2] == 1 && numbers[3] == 3 && numbers[4] == 2) && prevNumbers == 1) || 
-  (numbers[0] == 3 && numbers[1] == 3 && numbers[2] == 1 && numbers[3] == 0 && numbers[4] == 0) ||
-  (numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 2 && numbers[3] == 2 && numbers[4] == 3) || 
-  (numbers[0] == 1 && numbers[1] == 0 && numbers[2] == 0 && numbers[3] == 1 && numbers[4] == 3) || 
-  (numbers[0] == 3 && numbers[1] == 2 && numbers[2] == 3 && numbers[3] == 1 && numbers[4] == 0) || 
-  (numbers[0] == 0 && numbers[1] == 1 && numbers[2] == 1 && numbers[3] == 3 && numbers[4] == 2) || 
-  (numbers[0] == 3 && numbers[1] == 1 && numbers[2] == 0 && numbers[3] == 0 && numbers[4] == 0))
-  {
-    //Serial.println("Rein und doch wieder raus");
-    direction_number = 0;
-    setNumbers();
-  }
+        sensor_readout_1 = read_sensor_1();
+        sensor_readout_2 = read_sensor_2();
 
-  //Serial.println(numbers[]);
+        // Either sensor 1 or 2 has dropped below threshold! MUST INVESTIGATE DIS.
+        if (sensor_readout_1 < threshold_sensor_1 || sensor_readout_2 < threshold_sensor_2)
+        {
+            // Check whether sensor 1 or 2 is triggered first, and save the state of the one that is triggered first
+            if (sensor_readout_1 < threshold_sensor_1 && trig_sensor_1 == false && trig_sensor_2 == false)
+            {
+                trig_sensor_1 = true;
+            }
+            else if (sensor_readout_2 < threshold_sensor_2 && trig_sensor_1 == false && trig_sensor_2 == false)
+            {
+                trig_sensor_2 = true;
+            }
 
-  return direction_number;
+            // Since one of the sensors have been triggered, now we just wait for the other sensor to trigger
+            // We set in the end for both triggers to be true, so we can reset the cycle in the while loop below
+            else if (trig_sensor_1 == true && sensor_readout_2 < threshold_sensor_2 && trig_sensor_2 == false)
+            {
+                people_counter++;
+                trig_sensor_2 = true;
+                Serial.print("People going in! # people inside -->");
+                Serial.println(people_counter);
+                return 1; // in
+            }
+            else if (trig_sensor_2 == true && sensor_readout_1 < threshold_sensor_1 && trig_sensor_1 == false)
+            {
+                people_counter--;
+                trig_sensor_1 = true;
+                Serial.print("People going out! # people inside -->");
+                // Prevents counter from going below zero
+                if (people_counter < 0)
+                {
+                    people_counter = 0;
+                }
+                Serial.println(people_counter);
+                return -1; // out
+            }
+        }
+        
+    //    Serial.printf("%d, %d, %d \n",sensor_readout_1, sensor_readout_2, people_counter);
+
+        // Resets trigger when both engaged & both sensors above threshold value
+        if (trig_sensor_1 == true && trig_sensor_2 == true)  // Julian: Replaced while with if
+        {
+            sensor_readout_1 = read_sensor_1();
+            sensor_readout_2 = read_sensor_2();
+
+            // Waits for both sensor readouts to rise above threshold
+            // Prevents accidental counting when somebody is standing / stationary underneath sensor
+            if (sensor_readout_1 > threshold_sensor_1 && sensor_readout_2 > threshold_sensor_2)
+            {
+                trig_sensor_1 = false;
+                trig_sensor_2 = false;
+            }
+        } // if (formerly while)
+    } 
+    return 0;   //  nothing
 }
-
-void CTof::setID() 
+int CTof::read_sensor_1()
 {
-  // all reset
-  digitalWrite(SHT_LOX1, LOW);    
-  digitalWrite(SHT_LOX2, LOW);
-  delay(10);
-  // all unreset
-  digitalWrite(SHT_LOX1, HIGH);
-  digitalWrite(SHT_LOX2, HIGH);
-  delay(10);
+  sensor.setROISize(6, 6);
+  sensor.setROICenter(231);
+  return sensor.readSingle(true);
+} // Reads Sensor 1 and returns an int
 
-  // activating LOX1 and reseting LOX2
-  digitalWrite(SHT_LOX1, HIGH);
-  digitalWrite(SHT_LOX2, LOW);
-
-  // initing LOX1
-  if(!lox1.begin(LOX1_ADDRESS)) {
-    Serial.println("Failed to boot first VL53L0X");
-    Error1=true;
-  }
-  delay(10);
-
-  // activating LOX2
-  digitalWrite(SHT_LOX2, HIGH);
-  delay(10);
-
-  //initing LOX2
-  if(!lox2.begin(LOX2_ADDRESS)) {
-    Serial.println("Failed to boot second VL53L0X");
-    Error2=true;
-  }
-}
-
-void CTof::read_dual_sensors() 
+int CTof::read_sensor_2()
 {
-  if(Error1||Error2)
-    return;
-  lox1.rangingTest(&measure1, false); // pass in 'true' to get debug data printout!
-  lox2.rangingTest(&measure2, false); // pass in 'true' to get debug data printout!
-
-  if (millis() - startTime > 1000)
-  {
-    myServer.sendTOFData(measure1.RangeMilliMeter,measure2.RangeMilliMeter);
-    //myServer.sendDebugMessage("Range Status Sensor 1: " + (String) measure1.RangeStatus);
-    //myServer.sendDebugMessage("Range Status Sensor 2: " + (String) measure2.RangeStatus);
-    startTime = millis();
-  }
-
-
-  // print sensor one reading
-  //Serial.print(F("1: "));
-  if(measure1.RangeStatus != 4) {               // if not out of range
-    currRange1 = measure1.RangeMilliMeter;
-    //Serial.print(currRange1);
-  } else {
-    //Serial.println(F("1: Out of range"));
-    currRange1 = 1800;
-  }
-  
-  //Serial.print(F(" "));
-
-  // print sensor two reading
-  //Serial.print(F("2: "));
-  if(measure2.RangeStatus != 4) {
-    //Serial.print(measure2.RangeMilliMeter);
-    currRange2 = measure2.RangeMilliMeter;
-  } else {
-    //Serial.println(F("2: Out of range"));
-    currRange2 = 1800;
-  }
-
-  if (firstMeasurement)
-  {
-    prevRange1 = currRange1;
-    prevRange2 = currRange2;
-    firstMeasurement = false;
-  }
-  
-  //Serial.println();
-}
-
-void CTof::setNumbers()
-{
-  for(int i = 0; i < sizeof(numbers)/sizeof(numbers[0]); i++)
-  {
-    numbers[i] = 0;
-  }
-  /*
-  Serial.print("  size of numbers "); 
-  Serial.print(sizeof(numbers)); 
-  Serial.print("sizeof(numbers)/sizeof(numbers[0])  "); 
-  Serial.println(sizeof(numbers)/sizeof(numbers[0])); */
-}
+  sensor.setROISize(6, 6);
+  sensor.setROICenter(167);
+  return sensor.readSingle(true);
+} // Reads Sensor 2 and returns an int

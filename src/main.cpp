@@ -31,7 +31,7 @@ CCamera myCamera(pinCamereaEventEntry, pinCameraEventExit, pinCameraWakeUp);
 bool once = true;
 
 //Tof Obj erstellen:
-CTof Lichtschranke;
+CTof myTOF;
 
 // Batterie Objekt erstellen:
 CBattery myBattery(pinBattery);
@@ -76,9 +76,14 @@ void setup()
   // delay(10000);
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
+
+
   // Lichtschranke starten
-  Wire.begin(SDA, SCL); //!!!!! Macht vill Probleme
-  Lichtschranke.init();
+  //Wire.begin(SDA, SCL); //!!!!! Macht vill Probleme
+ // Lichtschranke.init();
+ myTOF.init();
+
+
   MultiMatrix.init();
   // Init Batterie
   myBattery.init();
@@ -116,7 +121,7 @@ void setup()
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
 { 
   checkIfNewMessageFromServer();
-  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
+  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), myCamera.run()); // Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
@@ -127,7 +132,7 @@ void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplo
   }
   akkustand = myBattery.getBatteryLevel();
   //Serial.printf("Batterieladezustand: %d %% \n",akkustand); // debug
-  Lichtschranke.run();
+  // Lichtschranke.run();
   if (menschenImRaum>=menschenImRaumMax) //Wichtigste if im ganzen System
   {
     Go.setLicht(false);

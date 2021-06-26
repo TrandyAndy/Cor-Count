@@ -39,6 +39,7 @@ extern int menschenImRaumMax;  // maximale Personenzahl im Raum
 extern bool energiesparmodus;
 extern bool flagGetTime;
 extern byte akkustand;
+extern bool tooBrightForTof;
 
 
 //Global Objekte:
