@@ -71,6 +71,7 @@ void setup()
 
   
   myServer.init();     // Server wird gestartet
+  myServer.setNewConnectionSTA("FRITZ!Box 7590 UP","45525509900873963179");
   //myServer.setNewConnectionAP((char *) "hallowasgehtHALLO", (char *) "123456789");
   
   // delay(10000);
