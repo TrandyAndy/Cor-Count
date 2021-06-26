@@ -3,7 +3,7 @@
  * @Email: -
  * @Date: 2021-06-26 11:16:12
  * @Last Modified by: JLS666
- * @Last Modified time: 2021-06-26 11:28:17
+ * @Last Modified time: 2021-06-26 12:03:22
  * @Description: TOF program, programmed von Khariyah modified by Julian
  */
 
@@ -28,6 +28,7 @@ void CTof::init()
     {
         Serial.println("Failed to detect and initialize sensor!");
         // while (1);   // Julian: is not needed
+        return; // Sonst teil irgendjemand durch 0
     }
     
     // Use long distance mode and allow up to 50000 us (50 ms) for a measurement.
@@ -35,9 +36,9 @@ void CTof::init()
     // the minimum timing budget is 20 ms for short distance mode and 33 ms for
     // medium and long distance modes. See the VL53L1X datasheet for more
     // information on range and timing limits.
+    
     sensor.setDistanceMode(VL53L1X::Medium);
     sensor.setMeasurementTimingBudget(33000);
-
     // <-- Disable continuous measurement mode -->
     // Start continuous readings at a rate of one measurement every 50 ms (the
     // inter-measurement period). This period should be at least as long as the
@@ -46,7 +47,6 @@ void CTof::init()
 
     // Wait 1s before starting to get sensor baseline 
     delay(1000);    // Julian: Is this necessary?
-    
     // Sensor 1 Baseline
     for (int i = 0; i < 100; i++)
     {
@@ -54,7 +54,7 @@ void CTof::init()
         baseline_sensor_1 = (baseline_sensor_1 + sensor_readout_1) / 2;   // Julian: Should this be arithmetic mean?
         // Arithmetic mean:
         baseline_sensor_1 = baseline_sensor_1 + sensor_readout_1;           
-    }   
+    }  
     baseline_sensor_1 = baseline_sensor_1 / 100;
 
     Serial.print("---Sensor 1 Baseline--->");
