@@ -122,7 +122,7 @@ void setup()
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
 { 
   checkIfNewMessageFromServer();
-  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), myCamera.run()); // Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
+  int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), myTOF.run()); // Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
   menschenImRaum += zaehlerAenderung;
   if(zaehlerAenderung != 0)
   {
