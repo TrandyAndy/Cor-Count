@@ -25,7 +25,7 @@ Autor: Andy
 #define pinCamereaEventEntry 33 
 #define pinCameraEventExit 25
 #define pinCameraWakeUp 26
-#define SDA 16                //  (23)
+#define SDA 19           //  (23)
 #define SCL 18          //SDA pin 23 and SCL pin 19 work fine also using lolin 32 lite. (18)
 
 
