@@ -29,6 +29,7 @@ private:
 public:
     void init();
     int8_t run();   // 0 = nothing, 1 = in -1 = out
+    bool checkBrightness();
 /*    void run();
     //int getErgebnis();
     int get_Direction(); //0=nix 1=rein -1=raus */
