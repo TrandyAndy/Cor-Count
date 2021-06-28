@@ -113,9 +113,11 @@ int8_t CTof::run()
         display.setTextSize(2);
         display.display();
         */
-        Serial.print("Distance: ");
-        Serial.print(sensor.ranging_data.range_mm);
-        Serial.println("mm");
+        Serial.print("Distance: "); // debug
+        Serial.print(sensor.ranging_data.range_mm); // debug
+        Serial.println("mm");   // debug
+        Serial.print("sensorStatus: "); // debug
+        Serial.println(VL53L1X::rangeStatusToString(sensor.ranging_data.range_status)); // debug
 
         sensor_readout_1 = read_sensor_1();
         sensor_readout_2 = read_sensor_2();
