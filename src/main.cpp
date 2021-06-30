@@ -74,7 +74,7 @@ void setup()
   myServer.setNewConnectionSTA("FRITZ!Box 7590 UP","45525509900873963179");
   //myServer.setNewConnectionAP((char *) "hallowasgehtHALLO", (char *) "123456789");
   
-  // delay(10000);
+  delay(35);
   // hier müssen noch die gespeicherten Daten geschickt werden
   // myServer.transmitData(mySendData);
 
@@ -121,6 +121,7 @@ void setup()
 
 void loop() //Looplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplooplupi
 { 
+ //delay(100);
   checkIfNewMessageFromServer();
   int8_t zaehlerAenderung = myZaehler.updateZaehler(myCamera.run(), myTOF.run()); // Lichtschranke.get_Direction());  // Sensor Fusion, mit Kamera und Sensor Ergebnis aufrufen
   menschenImRaum += zaehlerAenderung;

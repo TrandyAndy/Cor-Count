@@ -20,7 +20,7 @@ int8_t CZaehler::updateZaehler(int8_t cameraEvent, int8_t tofEvent)
     // end of debug message 
     myServer.sendDebugMessage("Sensor hat was erkannt: " + (String)tofEvent);
     myServer.sendDebugMessage("Kamera hat was erkannt: " + (String)cameraEvent);
-    return cameraEvent+tofEvent; //temp
+    //return cameraEvent+tofEvent; //temp
     if (tooBrightForTof)
     {
       return cameraEvent;
